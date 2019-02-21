@@ -3,7 +3,7 @@
  * Plugin Name: Optimizo
  * Plugin URI:  https://www.optimizo.lk
  * Description: Automatic optimization for your website
- * Version:     0.0.3
+ * Version:     0.0.4
  * Author:      Minhaz Irphan
  * Author URI:  https://minhaz.winauthority.com
  * License:     GPL2
@@ -18,7 +18,21 @@ if (!defined('ABSPATH')){
 
 class Optimizo {
     function activation(){
-        echo "This plugin is activated fam!";
+    	$path = ABSPATH;
+    	//Checking if it's installed in a sub-directory
+
+	    if($this->is_sub_directory_install()){
+	    	$path = $this->get_ABSPATH();
+	    }
+
+	    if (is_plugin_active($path.'/wp-content/plugins/Optimizo/optimizo.php')){
+
+	    } else {
+		    add_action( 'admin_notices', 'display_error_message' );
+	    }
+
+	    //Finding and setting the .htaccess file to the $htaccess_file variable for later use
+	    $htaccess_file = @file_get_contents($path.".htaccess");
     }
 
     function deactivation(){
@@ -28,14 +42,48 @@ class Optimizo {
     function uninstall(){
 
     }
+
+
+	public function is_sub_directory_install(){
+		if(strlen(site_url()) > strlen(home_url())){
+			return true;
+		}
+		return false;
+	}
+
+	public function get_ABSPATH(){
+		$path = ABSPATH;
+		$websiteUrl = site_url();
+		$websiteHomeUrl = home_url();
+		$diff = str_replace($websiteHomeUrl, "", $websiteUrl);
+		$diff = trim($diff,"/");
+
+		$pos = strrpos($path, $diff);
+
+		if($pos !== false){
+			$path = substr_replace($path, "", $pos, strlen($diff));
+			$path = trim($path,"/");
+			$path = "/".$path."/";
+		}
+		return $path;
+	}
+
+}
+
+function display_message_on_activation(){
+	?>
+	<div class="notice notice-info">
+		<p><?php _e( 'Thank you for installing Optimizo. Your website is in good hands!'); ?></p>
+	</div>
+	<?php
 }
 
 if (class_exists('Optimizo')){
+	add_action( 'admin_notices', 'display_message_on_activation' );
     $optimizo = new Optimizo();
+} else {
+
 }
 
 register_activation_hook( __FILE__, array( $optimizo, 'activation' ) );
-
-//define( 'OPTIMIZO__PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
-
-//require_once (OPTIMIZO__PLUGIN_DIR . 'class.optimizo.php');
+register_deactivation_hook( __FILE__, array( $optimizo, 'deactivation' ) );
