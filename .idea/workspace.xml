@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="5f3587ba-2adc-43f4-a239-8b0a52445a84" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/class.optimizo.php" beforeDir="false" afterPath="$PROJECT_DIR$/class.optimizo.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/optimizo.php" beforeDir="false" afterPath="$PROJECT_DIR$/optimizo.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -16,8 +17,8 @@
       <file leaf-file-name="optimizo.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/optimizo.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1026">
-              <caret line="93" column="1" selection-start-line="93" selection-start-column="1" selection-end-line="93" selection-end-column="1" />
+            <state relative-caret-position="480">
+              <caret line="38" selection-start-line="38" selection-end-line="39" />
               <folding>
                 <element signature="e#6#313#0#PHP" expanded="true" />
               </folding>
@@ -25,20 +26,29 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="wp-config.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="wp-config.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../../../wp-config.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
+            <state relative-caret-position="180">
               <caret line="29" lean-forward="true" selection-start-line="29" selection-end-line="29" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="class.optimizo.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="class.optimizo.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/class.optimizo.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="28" selection-start-line="28" selection-end-line="28" />
+            <state relative-caret-position="-219">
+              <caret line="73" column="60" selection-start-line="73" selection-start-column="60" selection-end-line="73" selection-end-column="60" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".htaccess" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../../../.htaccess">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="435">
+              <caret line="29" column="22" lean-forward="true" selection-start-line="29" selection-start-column="22" selection-end-line="29" selection-end-column="22" />
             </state>
           </provider>
         </entry>
@@ -54,8 +64,8 @@
         <option value="$PROJECT_DIR$/index.php" />
         <option value="$PROJECT_DIR$/../../../wp-settings.php" />
         <option value="$PROJECT_DIR$/optimizo.php" />
-        <option value="$PROJECT_DIR$/class.optimizo.php" />
         <option value="$PROJECT_DIR$/../../../wp-config.php" />
+        <option value="$PROJECT_DIR$/class.optimizo.php" />
       </list>
     </option>
   </component>
@@ -136,12 +146,12 @@
       <workItem from="1550992017657" duration="2721000" />
       <workItem from="1551071558084" duration="2250000" />
       <workItem from="1551117549456" duration="99000" />
-      <workItem from="1551161502176" duration="9995000" />
+      <workItem from="1551161502176" duration="12298000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="28216000" />
+    <option name="totallyTimeSpent" value="30519000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
@@ -513,25 +523,32 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/optimizo.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1026">
-          <caret line="93" column="1" selection-start-line="93" selection-start-column="1" selection-end-line="93" selection-end-column="1" />
+        <state relative-caret-position="480">
+          <caret line="38" selection-start-line="38" selection-end-line="39" />
           <folding>
             <element signature="e#6#313#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/class.optimizo.php">
+    <entry file="file://$PROJECT_DIR$/../../../wp-config.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="28" selection-start-line="28" selection-end-line="28" />
+        <state relative-caret-position="180">
+          <caret line="29" lean-forward="true" selection-start-line="29" selection-end-line="29" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../../../wp-config.php">
+    <entry file="file://$PROJECT_DIR$/../../../.htaccess">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="29" lean-forward="true" selection-start-line="29" selection-end-line="29" />
+        <state relative-caret-position="435">
+          <caret line="29" column="22" lean-forward="true" selection-start-line="29" selection-start-column="22" selection-end-line="29" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/class.optimizo.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-219">
+          <caret line="73" column="60" selection-start-line="73" selection-start-column="60" selection-end-line="73" selection-end-column="60" />
         </state>
       </provider>
     </entry>

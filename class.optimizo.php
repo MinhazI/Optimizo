@@ -6,8 +6,8 @@
  * Time: 10:54 AM
  */
 
-class OptimizoClass{
-	function addToWPConfig(){
+class OptimizoClass {
+	function addToWPConfig() {
 
 		/*
 		 * This is a function which will be used to add anything to WordPress WP-Config file which includes all the configurations for a WordPress installation.
@@ -16,34 +16,109 @@ class OptimizoClass{
 
 		$wp_config_file = @file_get_contents( ABSPATH . "wp-config.php" );
 
-		if(preg_match("/Optimizo's configuration for cache/", $wp_config_file)){
+		if ( preg_match( "/Optimizo's configuration for cache/", $wp_config_file ) ) {
 
-		}
-		else if(preg_match("/WP_CACHE/", $wp_config_file)){
+		} else if ( preg_match( "/WP_CACHE/", $wp_config_file ) ) {
 			$wp_config_file = @file_get_contents( ABSPATH . "wp-config.php" );
-			$wp_config_file = str_replace( "define('WP_CACHE', true);", "/** Optimizo's configuration for cache **/ \ndefine('WP_CACHE', true);", $wp_config_file);
-			if (! @file_put_contents( ABSPATH . "wp-config.php", $wp_config_file ) ) {
+			$wp_config_file = str_replace( "define('WP_CACHE', true);", "/** Optimizo's configuration for cache **/ \ndefine('WP_CACHE', true);", $wp_config_file );
+			if ( ! @file_put_contents( ABSPATH . "wp-config.php", $wp_config_file ) ) {
 
 			}
 		} else {
 			$wp_config_file = str_replace( "/** MySQL hostname */", "/** Optimizo's configuration for cache **/ \ndefine('WP_CACHE', true);\n\n/** MySQL hostname */", $wp_config_file );
 
-			if (! @file_put_contents( ABSPATH . "wp-config.php", $wp_config_file ) ) {
+			if ( ! @file_put_contents( ABSPATH . "wp-config.php", $wp_config_file ) ) {
 
 			}
 		}
 	}
 
-	function writeToHtaccess(){
+	function writeToHtaccess() {
 
 		/*
 		 * This function will be used to write the rewrite access rules and other rules for caching and G-Zip to the server's .htaccess file
 		 */
 
+		if ( ! file_exists( ABSPATH . ".htaccess" ) ) {
+			$htaccessData = "# BEGIN Optimizo's rules"."\n".
+			                '<FilesMatch "\.(webm|ogg|mp4|ico|pdf|flv|jpg|jpeg|png|gif|webp|js|css|swf|x-html|css|xml|js|woff|woff2|ttf|svg|eot)(\.gz)?$">'."\n".
+			                '<IfModule mod_expires.c>'."\n".
+			                'AddType application/font-woff2 .woff2'."\n".
+			                'ExpiresActive On'."\n".
+			                'ExpiresDefault A0'."\n".
+			                'ExpiresByType video/webm A10368000'."\n".
+			                'ExpiresByType video/ogg A10368000'."\n".
+			                'ExpiresByType video/mp4 A10368000'."\n".
+			                'ExpiresByType image/webp A10368000'."\n".
+			                'ExpiresByType image/gif A10368000'."\n".
+			                'ExpiresByType image/png A10368000'."\n".
+			                'ExpiresByType image/jpg A10368000'."\n".
+			                'ExpiresByType image/jpeg A10368000'."\n".
+			                'ExpiresByType image/ico A10368000'."\n".
+			                'ExpiresByType image/svg+xml A10368000'."\n".
+			                'ExpiresByType text/css A10368000'."\n".
+			                'ExpiresByType text/javascript A10368000'."\n".
+			                'ExpiresByType application/javascript A10368000'."\n".
+			                'ExpiresByType application/x-javascript A10368000'."\n".
+			                'ExpiresByType application/font-woff2 A10368000'."\n".
+			                '</IfModule>'."\n".
+			                '<IfModule mod_headers.c>'."\n".
+			                'Header set Expires "max-age=A10368000, public"'."\n".
+			                'Header unset ETag'."\n".
+			                'Header set Connection keep-alive'."\n".
+			                'FileETag None'."\n".
+			                '</IfModule>'."\n".
+			                '</FilesMatch>'."\n".
+			                "# END Optimizo's rules"."\n";
+
+			file_put_contents(ABSPATH . ".htaccess", $htaccessData);
+
+
+
+			fclose(ABSPATH . ".htaccess");
+		} else {
+			$htaccessData = "# BEGIN Optimizo's rules"."\n".
+			                '<FilesMatch "\.(webm|ogg|mp4|ico|pdf|flv|jpg|jpeg|png|gif|webp|js|css|swf|x-html|css|xml|js|woff|woff2|ttf|svg|eot)(\.gz)?$">'."\n".
+			                '<IfModule mod_expires.c>'."\n".
+			                'AddType application/font-woff2 .woff2'."\n".
+			                'ExpiresActive On'."\n".
+			                'ExpiresDefault A0'."\n".
+			                'ExpiresByType video/webm A10368000'."\n".
+			                'ExpiresByType video/ogg A10368000'."\n".
+			                'ExpiresByType video/mp4 A10368000'."\n".
+			                'ExpiresByType image/webp A10368000'."\n".
+			                'ExpiresByType image/gif A10368000'."\n".
+			                'ExpiresByType image/png A10368000'."\n".
+			                'ExpiresByType image/jpg A10368000'."\n".
+			                'ExpiresByType image/jpeg A10368000'."\n".
+			                'ExpiresByType image/ico A10368000'."\n".
+			                'ExpiresByType image/svg+xml A10368000'."\n".
+			                'ExpiresByType text/css A10368000'."\n".
+			                'ExpiresByType text/javascript A10368000'."\n".
+			                'ExpiresByType application/javascript A10368000'."\n".
+			                'ExpiresByType application/x-javascript A10368000'."\n".
+			                'ExpiresByType application/font-woff2 A10368000'."\n".
+			                '</IfModule>'."\n".
+			                '<IfModule mod_headers.c>'."\n".
+			                'Header set Expires "max-age=A10368000, public"'."\n".
+			                'Header unset ETag'."\n".
+			                'Header set Connection keep-alive'."\n".
+			                'FileETag None'."\n".
+			                '</IfModule>'."\n".
+			                '</FilesMatch>'."\n".
+			                "# END Optimizo's rules"."\n";
+
+			file_put_contents(ABSPATH . ".htaccess", $htaccessData);
+
+
+
+			fclose(ABSPATH . ".htaccess");
+		}
+
 	}
 
 
-	function deactivate(){
+	function deactivate() {
 
 		/*
 		 * This is the function that will be used and called upon the deactivation of the plugin.

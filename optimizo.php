@@ -36,6 +36,7 @@ class Optimizo {
 		$optimizoClass = new OptimizoClass();
 
 		$optimizoClass->addToWPConfig();
+		$optimizoClass->writeToHtaccess();
 
 	}
 
