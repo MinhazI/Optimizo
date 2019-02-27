@@ -14,16 +14,14 @@ class OptimizoClass{
 		 * Currently it only includes the function to add the "WP-CACHE" as true in the file.
 		 */
 
-
 		$wp_config_file = @file_get_contents( ABSPATH . "wp-config.php" );
 
-		$wp_config_contents = @file_get_contents( ABSPATH . "wp-config.php" );
+		if(preg_match("/Optimizo's configuration for cache/", $wp_config_file)){
 
-		$word = "define('WP_CACHE', true);";
-
-		if(preg_match(".*".$word."*.", $wp_config_contents)){
+		}
+		else if(preg_match("/WP_CACHE/", $wp_config_file)){
 			$wp_config_file = @file_get_contents( ABSPATH . "wp-config.php" );
-			$wp_config_file = str_replace( "define('WP_CACHE', true);", "/** Optimizo's configuration for cache **/ \ndefine('WP_CACHE', false);\n\n", $wp_config_file);
+			$wp_config_file = str_replace( "define('WP_CACHE', true);", "/** Optimizo's configuration for cache **/ \ndefine('WP_CACHE', true);", $wp_config_file);
 			if (! @file_put_contents( ABSPATH . "wp-config.php", $wp_config_file ) ) {
 
 			}
