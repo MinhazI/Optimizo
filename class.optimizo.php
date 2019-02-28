@@ -41,36 +41,67 @@ class OptimizoClass {
 
 		if ( ! file_exists( ABSPATH . ".htaccess" ) ) {
 			$htaccessData = "# BEGIN Optimizo's rules"."\n".
-			                '<FilesMatch "\.(webm|ogg|mp4|ico|pdf|flv|jpg|jpeg|png|gif|webp|js|css|swf|x-html|css|xml|js|woff|woff2|ttf|svg|eot)(\.gz)?$">'."\n".
-			                '<IfModule mod_expires.c>'."\n".
-			                'AddType application/font-woff2 .woff2'."\n".
-			                'ExpiresActive On'."\n".
-			                'ExpiresDefault A0'."\n".
-			                'ExpiresByType video/webm A10368000'."\n".
-			                'ExpiresByType video/ogg A10368000'."\n".
-			                'ExpiresByType video/mp4 A10368000'."\n".
-			                'ExpiresByType image/webp A10368000'."\n".
-			                'ExpiresByType image/gif A10368000'."\n".
-			                'ExpiresByType image/png A10368000'."\n".
-			                'ExpiresByType image/jpg A10368000'."\n".
-			                'ExpiresByType image/jpeg A10368000'."\n".
-			                'ExpiresByType image/ico A10368000'."\n".
-			                'ExpiresByType image/svg+xml A10368000'."\n".
-			                'ExpiresByType text/css A10368000'."\n".
-			                'ExpiresByType text/javascript A10368000'."\n".
-			                'ExpiresByType application/javascript A10368000'."\n".
-			                'ExpiresByType application/x-javascript A10368000'."\n".
-			                'ExpiresByType application/font-woff2 A10368000'."\n".
-			                '</IfModule>'."\n".
-			                '<IfModule mod_headers.c>'."\n".
-			                'Header set Expires "max-age=A10368000, public"'."\n".
-			                'Header unset ETag'."\n".
-			                'Header set Connection keep-alive'."\n".
-			                'FileETag None'."\n".
-			                '</IfModule>'."\n".
+			                    '<FilesMatch "\.(webm|ogg|mp4|ico|pdf|flv|jpg|jpeg|png|gif|webp|js|css|swf|x-html|css|xml|js|woff|woff2|ttf|svg|eot)(\.gz)?$">'."\n".
+			                        '<IfModule mod_expires.c>'."\n".
+			                            'AddType application/font-woff2 .woff2'."\n".
+			                            'ExpiresActive On'."\n".
+			                            'ExpiresDefault A0'."\n".
+			                            'ExpiresByType video/webm A10368000'."\n".
+			                            'ExpiresByType video/ogg A10368000'."\n".
+			                            'ExpiresByType video/mp4 A10368000'."\n".
+			                            'ExpiresByType image/webp A10368000'."\n".
+			                            'ExpiresByType image/gif A10368000'."\n".
+			                            'ExpiresByType image/png A10368000'."\n".
+			                            'ExpiresByType image/jpg A10368000'."\n".
+			                            'ExpiresByType image/jpeg A10368000'."\n".
+			                            'ExpiresByType image/ico A10368000'."\n".
+			                            'ExpiresByType image/svg+xml A10368000'."\n".
+			                            'ExpiresByType text/css A10368000'."\n".
+			                            'ExpiresByType text/javascript A10368000'."\n".
+			                            'ExpiresByType application/javascript A10368000'."\n".
+			                            'ExpiresByType application/x-javascript A10368000'."\n".
+			                            'ExpiresByType application/font-woff2 A10368000'."\n".
+			                        '</IfModule>'."\n".
+			                        '<IfModule mod_headers.c>'."\n".
+			                            'Header set Expires "max-age=A10368000, public"'."\n".
+			                            'Header unset ETag'."\n".
+			                            'Header set Connection keep-alive'."\n".
+			                            'FileETag None'."\n".
+			                        '</IfModule>'."\n".
 			                '</FilesMatch>'."\n".
+			                '<IfModule mod_deflate.c>'."\n".
+			                    "# Compress HTML, CSS, JavaScript, Text, XML and fonts"."\n".
+			                    'AddOutputFilterByType DEFLATE application/javascript'."\n".
+			                    'AddOutputFilterByType DEFLATE application/rss+xml'."\n".
+			                    'AddOutputFilterByType DEFLATE application/vnd.ms-fontobject'."\n".
+			                    'AddOutputFilterByType DEFLATE application/x-font'."\n".
+			                    'AddOutputFilterByType DEFLATE application/x-font-opentype'."\n".
+			                    'AddOutputFilterByType DEFLATE application/x-font-otf'."\n".
+			                    'AddOutputFilterByType DEFLATE application/x-font-truetype'."\n".
+			                    'AddOutputFilterByType DEFLATE application/x-font-ttf'."\n".
+			                    'AddOutputFilterByType DEFLATE application/x-javascript'."\n".
+			                    'AddOutputFilterByType DEFLATE application/xhtml+xml'."\n".
+			                    'AddOutputFilterByType DEFLATE application/xml'."\n".
+			                    'AddOutputFilterByType DEFLATE font/opentype'."\n".
+			                    'AddOutputFilterByType DEFLATE font/otf'."\n".
+			                    'AddOutputFilterByType DEFLATE font/ttf'."\n".
+			                    'AddOutputFilterByType DEFLATE image/svg+xml'."\n".
+			                    'AddOutputFilterByType DEFLATE image/x-icon'."\n".
+			                    'AddOutputFilterByType DEFLATE text/css'."\n".
+			                    'AddOutputFilterByType DEFLATE text/html'."\n".
+			                    'AddOutputFilterByType DEFLATE text/javascript'."\n".
+			                    'AddOutputFilterByType DEFLATE text/plain'."\n".
+			                    'AddOutputFilterByType DEFLATE text/xml'."\n".
+
+			                    "# Remove browser bugs (only needed for really old browsers)"."\n".
+                                'BrowserMatch ^Mozilla/4 gzip-only-text/html'."\n".
+                                'BrowserMatch ^Mozilla/4\.0[678] no-gzip'."\n".
+                                'BrowserMatch \bMSIE !no-gzip !gzip-only-text/html'."\n".
+                                'Header append Vary User-Agent'."\n".
+							'</IfModule>'."\n".
 			                "# END Optimizo's rules"."\n";
 
+			fopen(ABSPATH .".htaccess", "x+");
 			file_put_contents(ABSPATH . ".htaccess", $htaccessData);
 
 
@@ -106,6 +137,36 @@ class OptimizoClass {
 			                'FileETag None'."\n".
 			                '</IfModule>'."\n".
 			                '</FilesMatch>'."\n".
+			                '<IfModule mod_deflate.c>'."\n".
+			                "# Compress HTML, CSS, JavaScript, Text, XML and fonts"."\n".
+			                'AddOutputFilterByType DEFLATE application/javascript'."\n".
+			                'AddOutputFilterByType DEFLATE application/rss+xml'."\n".
+			                'AddOutputFilterByType DEFLATE application/vnd.ms-fontobject'."\n".
+			                'AddOutputFilterByType DEFLATE application/x-font'."\n".
+			                'AddOutputFilterByType DEFLATE application/x-font-opentype'."\n".
+			                'AddOutputFilterByType DEFLATE application/x-font-otf'."\n".
+			                'AddOutputFilterByType DEFLATE application/x-font-truetype'."\n".
+			                'AddOutputFilterByType DEFLATE application/x-font-ttf'."\n".
+			                'AddOutputFilterByType DEFLATE application/x-javascript'."\n".
+			                'AddOutputFilterByType DEFLATE application/xhtml+xml'."\n".
+			                'AddOutputFilterByType DEFLATE application/xml'."\n".
+			                'AddOutputFilterByType DEFLATE font/opentype'."\n".
+			                'AddOutputFilterByType DEFLATE font/otf'."\n".
+			                'AddOutputFilterByType DEFLATE font/ttf'."\n".
+			                'AddOutputFilterByType DEFLATE image/svg+xml'."\n".
+			                'AddOutputFilterByType DEFLATE image/x-icon'."\n".
+			                'AddOutputFilterByType DEFLATE text/css'."\n".
+			                'AddOutputFilterByType DEFLATE text/html'."\n".
+			                'AddOutputFilterByType DEFLATE text/javascript'."\n".
+			                'AddOutputFilterByType DEFLATE text/plain'."\n".
+			                'AddOutputFilterByType DEFLATE text/xml'."\n".
+
+			                "# Remove browser bugs (only needed for really old browsers)"."\n".
+			                'BrowserMatch ^Mozilla/4 gzip-only-text/html'."\n".
+			                'BrowserMatch ^Mozilla/4\.0[678] no-gzip'."\n".
+			                'BrowserMatch \bMSIE !no-gzip !gzip-only-text/html'."\n".
+			                'Header append Vary User-Agent'."\n".
+			                '</IfModule>'."\n".
 			                "# END Optimizo's rules"."\n";
 
 			file_put_contents(ABSPATH . ".htaccess", $htaccessData);
