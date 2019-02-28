@@ -17,6 +17,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 
 class Optimizo {
+
+    function __construct() {
+	    $path = ABSPATH;
+	    //Checking if it's installed in a sub-directory
+
+	    if ( $this->is_sub_directory_install() ) {
+		    $path = $this->get_ABSPATH();
+	    }
+
+        require_once ('adminToolBar.php');
+
+	    $toolbar = new optimizoAdminToolbar();
+
+	    $toolbar->addToolbar();
+
+    }
+
 	function activation() {
 		$path = ABSPATH;
 		//Checking if it's installed in a sub-directory

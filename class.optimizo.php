@@ -171,8 +171,6 @@ class OptimizoClass {
 
 			file_put_contents(ABSPATH . ".htaccess", $htaccessData);
 
-
-
 			fclose(ABSPATH . ".htaccess");
 		}
 
