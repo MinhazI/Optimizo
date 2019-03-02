@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5f3587ba-2adc-43f4-a239-8b0a52445a84" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/class.optimizo.php" beforeDir="false" afterPath="$PROJECT_DIR$/class.optimizo.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -38,8 +37,8 @@
       <file leaf-file-name="class.optimizo.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/class.optimizo.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="421">
-              <caret line="110" column="72" selection-start-line="110" selection-start-column="72" selection-end-line="110" selection-end-column="72" />
+            <state relative-caret-position="665">
+              <caret line="181" column="9" lean-forward="true" selection-start-line="181" selection-start-column="9" selection-end-line="181" selection-end-column="9" />
             </state>
           </provider>
         </entry>
@@ -168,12 +167,12 @@
       <workItem from="1551161502176" duration="12298000" />
       <workItem from="1551331717752" duration="1485000" />
       <workItem from="1551333611639" duration="1612000" />
-      <workItem from="1551556516711" duration="717000" />
+      <workItem from="1551556516711" duration="1065000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="34333000" />
+    <option name="totallyTimeSpent" value="34681000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
@@ -566,8 +565,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/class.optimizo.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="421">
-          <caret line="110" column="72" selection-start-line="110" selection-start-column="72" selection-end-line="110" selection-end-column="72" />
+        <state relative-caret-position="665">
+          <caret line="181" column="9" lean-forward="true" selection-start-line="181" selection-start-column="9" selection-end-line="181" selection-end-column="9" />
         </state>
       </provider>
     </entry>

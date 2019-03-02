@@ -108,7 +108,7 @@ class OptimizoClass {
 
 			fclose(ABSPATH . ".htaccess");
 		} else {
-			$htaccessData = "# This is if the file was already exisitng BEGIN Optimizo's rules"."\n".
+			$htaccessData = "#BEGIN Optimizo's rules"."\n".
 			                '<FilesMatch "\.(webm|ogg|mp4|ico|pdf|flv|jpg|jpeg|png|gif|webp|js|css|swf|x-html|css|xml|js|woff|woff2|ttf|svg|eot)(\.gz)?$">'."\n".
 			                '<IfModule mod_expires.c>'."\n".
 			                'AddType application/font-woff2 .woff2'."\n".
@@ -169,9 +169,16 @@ class OptimizoClass {
 			                '</IfModule>'."\n".
 			                "# END Optimizo's rules"."\n";
 
-			file_put_contents(ABSPATH . ".htaccess", $htaccessData);
+//			file_put_contents(ABSPATH . ".htaccess", $htaccessData);
 
-			fclose(ABSPATH . ".htaccess");
+			$htaccessContents = @file_get_contents( ABSPATH . ".htaccess" );
+			$htaccessReplacement = str_replace( "# END WordPress", "# END WordPress\n\n".$htaccessData, $htaccessContents);
+
+			if ( ! @file_put_contents( ABSPATH . ".htaccess", $htaccessReplacement ) ) {
+
+			}
+
+//			fclose(ABSPATH . ".htaccess");
 		}
 
 	}
