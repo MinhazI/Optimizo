@@ -37,8 +37,8 @@
       <file leaf-file-name="class.optimizo.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/class.optimizo.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="665">
-              <caret line="181" column="9" lean-forward="true" selection-start-line="181" selection-start-column="9" selection-end-line="181" selection-end-column="9" />
+            <state relative-caret-position="2441">
+              <caret line="179" column="58" selection-start-line="179" selection-start-column="58" selection-end-line="179" selection-end-column="58" />
             </state>
           </provider>
         </entry>
@@ -167,12 +167,12 @@
       <workItem from="1551161502176" duration="12298000" />
       <workItem from="1551331717752" duration="1485000" />
       <workItem from="1551333611639" duration="1612000" />
-      <workItem from="1551556516711" duration="1065000" />
+      <workItem from="1551556516711" duration="1385000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="34681000" />
+    <option name="totallyTimeSpent" value="35001000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
@@ -565,8 +565,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/class.optimizo.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="665">
-          <caret line="181" column="9" lean-forward="true" selection-start-line="181" selection-start-column="9" selection-end-line="181" selection-end-column="9" />
+        <state relative-caret-position="2441">
+          <caret line="179" column="58" selection-start-line="179" selection-start-column="58" selection-end-line="179" selection-end-column="58" />
         </state>
       </provider>
     </entry>
