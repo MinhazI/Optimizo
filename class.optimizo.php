@@ -37,6 +37,9 @@ class OptimizoClass {
 
 		/*
 		 * This function will be used to write the rewrite access rules and other rules for caching and G-Zip to the server's .htaccess file
+		 * The first part of the IF condition is to see if the WordPress installation directory has the .htaccess file which includes the rules for any server.
+		 * IF the server doesn't include it, Optimizo will automatically create and save the .htaccess file on the server and it will also include the rules for caching and GZip and other stuff to reduce the PLT
+		 * IF the server does include .htaccess file, Optimizo will just add the rules that are essential to help reduction of PLT and it will save the file.
 		 */
 
 		if ( ! file_exists( ABSPATH . ".htaccess" ) ) {
