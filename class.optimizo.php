@@ -108,7 +108,7 @@ class OptimizoClass {
 
 			fclose(ABSPATH . ".htaccess");
 		} else {
-			$htaccessData = "# BEGIN Optimizo's rules"."\n".
+			$htaccessData = "# This is if the file was already exisitng BEGIN Optimizo's rules"."\n".
 			                '<FilesMatch "\.(webm|ogg|mp4|ico|pdf|flv|jpg|jpeg|png|gif|webp|js|css|swf|x-html|css|xml|js|woff|woff2|ttf|svg|eot)(\.gz)?$">'."\n".
 			                '<IfModule mod_expires.c>'."\n".
 			                'AddType application/font-woff2 .woff2'."\n".
