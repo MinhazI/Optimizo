@@ -14,11 +14,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="optimizo.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="optimizo.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/optimizo.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="5" selection-start-column="5" selection-end-column="5" />
+            <state relative-caret-position="227">
+              <caret line="64" column="37" selection-start-line="64" selection-start-column="37" selection-end-line="64" selection-end-column="37" />
               <folding>
                 <element signature="e#6#313#0#PHP" expanded="true" />
               </folding>
@@ -35,11 +35,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="class.optimizo.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="class.optimizo.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/class.optimizo.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="540">
-              <caret line="41" column="157" selection-start-line="41" selection-start-column="157" selection-end-line="41" selection-end-column="157" />
+            <state relative-caret-position="606">
+              <caret line="202" column="78" lean-forward="true" selection-start-line="202" selection-start-column="78" selection-end-line="202" selection-end-column="78" />
             </state>
           </provider>
         </entry>
@@ -63,10 +63,12 @@
       <list>
         <option value="$PROJECT_DIR$/index.php" />
         <option value="$PROJECT_DIR$/../../../wp-settings.php" />
-        <option value="$PROJECT_DIR$/optimizo.php" />
         <option value="$PROJECT_DIR$/adminToolBar.php" />
+        <option value="/private/var/folders/9f/168m7dcn2jjds75q34cbv6fm0000gn/T/fz3temp-2/.htaccess" />
+        <option value="/private/var/folders/9f/168m7dcn2jjds75q34cbv6fm0000gn/T/fz3temp-2/wp-config.php" />
         <option value="$PROJECT_DIR$/../../../wp-config.php" />
         <option value="$PROJECT_DIR$/class.optimizo.php" />
+        <option value="$PROJECT_DIR$/optimizo.php" />
       </list>
     </option>
   </component>
@@ -100,24 +102,6 @@
             <path>
               <item name="Optimizo" type="b2602c69:ProjectViewProjectNode" />
               <item name="fyp" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Optimizo" type="b2602c69:ProjectViewProjectNode" />
-              <item name="fyp" type="462c0819:PsiDirectoryNode" />
-              <item name="wp-content" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Optimizo" type="b2602c69:ProjectViewProjectNode" />
-              <item name="fyp" type="462c0819:PsiDirectoryNode" />
-              <item name="wp-content" type="462c0819:PsiDirectoryNode" />
-              <item name="plugins" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Optimizo" type="b2602c69:ProjectViewProjectNode" />
-              <item name="fyp" type="462c0819:PsiDirectoryNode" />
-              <item name="wp-content" type="462c0819:PsiDirectoryNode" />
-              <item name="plugins" type="462c0819:PsiDirectoryNode" />
-              <item name="Optimizo" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -169,27 +153,28 @@
       <workItem from="1551331717752" duration="1485000" />
       <workItem from="1551333611639" duration="1612000" />
       <workItem from="1551556516711" duration="2343000" />
-      <workItem from="1551566501030" duration="326000" />
+      <workItem from="1551566501030" duration="4707000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="36285000" />
+    <option name="totallyTimeSpent" value="40666000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20347223" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" weight="0.32970026" />
-      <window_info anchor="right" id="Database" order="3" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Run" order="2" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="7" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20347223" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="right" id="Database" order="3" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32900944" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -198,7 +183,6 @@
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Find" order="1" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -216,20 +200,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../../../wp-settings.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1110">
-          <caret line="81" column="77" selection-start-line="81" selection-start-column="77" selection-end-line="81" selection-end-column="77" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/index.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="19" selection-start-line="8" selection-start-column="19" selection-end-line="8" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/class.optimizo.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
@@ -527,13 +497,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../../../.htaccess">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="435">
-          <caret line="29" column="22" lean-forward="true" selection-start-line="29" selection-start-column="22" selection-end-line="29" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../../../wp-admin/includes/plugin.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="274">
@@ -548,6 +511,23 @@
         </state>
       </provider>
     </entry>
+    <entry file="file:///private/var/folders/9f/168m7dcn2jjds75q34cbv6fm0000gn/T/fz3temp-2/.htaccess">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="15" selection-start-line="9" selection-start-column="15" selection-end-line="9" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../.htaccess">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file:///private/var/folders/9f/168m7dcn2jjds75q34cbv6fm0000gn/T/fz3temp-2/wp-config.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="29" lean-forward="true" selection-start-line="29" selection-end-line="29" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/../../../wp-config.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="165">
@@ -555,20 +535,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/optimizo.php">
+    <entry file="file://$PROJECT_DIR$/class.optimizo.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="5" selection-start-column="5" selection-end-column="5" />
-          <folding>
-            <element signature="e#6#313#0#PHP" expanded="true" />
-          </folding>
+        <state relative-caret-position="606">
+          <caret line="202" column="78" lean-forward="true" selection-start-line="202" selection-start-column="78" selection-end-line="202" selection-end-column="78" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/class.optimizo.php">
+    <entry file="file://$PROJECT_DIR$/optimizo.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="41" column="157" selection-start-line="41" selection-start-column="157" selection-end-line="41" selection-end-column="157" />
+        <state relative-caret-position="227">
+          <caret line="64" column="37" selection-start-line="64" selection-start-column="37" selection-end-line="64" selection-end-column="37" />
+          <folding>
+            <element signature="e#6#313#0#PHP" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

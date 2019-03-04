@@ -195,17 +195,16 @@ class OptimizoClass {
 
 	function deactivate() {
 
-		/*
-		 * This is the function that will be used and called upon the deactivation of the plugin.
-		 * Currently this function removes the "WP-CACHE" statement from the WP-Config file if it's available.
-		 */
-
-		$wp_config_file = @file_get_contents( ABSPATH . "wp-config.php" );
-
-		$wp_config_file = str_replace( "/** Optimizo's configuration for cache **/ \ndefine('WP_CACHE', true);", null, $wp_config_file );
-
-		if ( ! @file_put_contents( ABSPATH . "wp-config.php", $wp_config_file ) ) {
-			add_action( 'admin_notices', 'failed_to_add_wp_config' );
+		function deactivate() {
+			/*
+			 * This is the function that will be used and called upon the deactivation of the plugin.
+			 * Currently this function removes the "WP-CACHE" statement from the WP-Config file if it's available.
+			 */
+			$wp_config_file = @file_get_contents( ABSPATH . "wp-config.php" );
+			$wp_config_file = str_replace( "/** Optimizo's configuration for cache **/ \ndefine('WP_CACHE', true);", null, $wp_config_file );
+			if ( ! @file_put_contents( ABSPATH . "wp-config.php", $wp_config_file ) ) {
+				add_action( 'admin_notices', 'failed_to_add_wp_config' );
+			}
 		}
 	}
 }
