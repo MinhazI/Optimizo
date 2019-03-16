@@ -7,6 +7,19 @@
  */
 
 class OptimizoClass {
+
+	function activate() {
+		$this->addToWPConfig();
+		$this->writeToHtaccess();
+	}
+
+	function deactivate() {
+
+		$this->removeFromWPConfig();
+		$this->removeFromHtaccess();
+
+	}
+
 	function addToWPConfig() {
 
 		/*
@@ -25,8 +38,8 @@ class OptimizoClass {
 
 			}
 		} else {
+			$wp_config_file = @file_get_contents( ABSPATH . "wp-config.php" );
 			$wp_config_file = str_replace( "/** MySQL hostname */", "/** Optimizo's configuration for cache **/ \ndefine('WP_CACHE', true);\n\n/** MySQL hostname */", $wp_config_file );
-
 			if ( ! @file_put_contents( ABSPATH . "wp-config.php", $wp_config_file ) ) {
 
 			}
@@ -114,7 +127,7 @@ class OptimizoClass {
 			                '</IfModule>' . "\n" .
 			                "# END Optimizo's rules" . "\n";
 
-			fopen( ABSPATH . ".htaccess", "x+" );
+			fopen( ABSPATH . ".htaccess", "r+" );
 			file_put_contents( ABSPATH . ".htaccess", $htaccessData );
 
 
@@ -191,14 +204,7 @@ class OptimizoClass {
 
 	}
 
-	function deactivate() {
-
-		$this->removeFromWPConfig();
-		$this->removeFromHtaccess();
-
-	}
-
-	function removeFromWPConfig(){
+	function removeFromWPConfig() {
 		/*
 		 * This is the function that will be used and called upon the deactivation of the plugin.
 		 * Currently this function removes the "WP-CACHE" statement from the WP-Config file if it's available.
@@ -211,12 +217,12 @@ class OptimizoClass {
 		}
 	}
 
-	function removeFromHtaccess(){
+	function removeFromHtaccess() {
 		/*
 		 * This is the function that will remove all the custom added rules from .htaccess file which was added upon the activation of the plugin.
 		 */
 
-		$htaccess_file = @file_get_contents(ABSPATH . ".htaccess");
+		$htaccess_file = @file_get_contents( ABSPATH . ".htaccess" );
 
 		$htaccessData = "#BEGIN Optimizo's rules" . "\n" .
 		                '<FilesMatch "\.(webm|ogg|mp4|ico|pdf|flv|jpg|jpeg|png|gif|webp|js|css|swf|x-html|css|xml|js|woff|woff2|ttf|svg|eot)(\.gz)?$">' . "\n" .
@@ -279,10 +285,71 @@ class OptimizoClass {
 		                '</IfModule>' . "\n" .
 		                "# END Optimizo's rules" . "\n";
 
-		$htaccess_file = str_replace($htaccessData, null, $htaccess_file);
+		$htaccess_file = str_replace( $htaccessData, null, $htaccess_file );
 
 		if ( ! @file_put_contents( ABSPATH . ".htaccess", $htaccess_file ) ) {
 
 		}
 	}
+
+	function minifyJS() {
+
+	}
+
+	function minifyCSS() {
+
+	}
+
+	function createCache() {
+
+		$cacheDir = get_site_url() . '/wp-content/cache';
+
+		if ( ! is_dir( $cacheDir ) ) {
+			if ( @mkdir( get_site_url() . '/wp-content/cache', 0755 ) ) {
+				$startTime = microtime( true );
+
+
+				add_action( 'wp', array( $this, "detect_current_page_type" ) );
+				add_action( 'get_footer', array( $this, "detect_current_page_type" ) );
+				add_action( 'get_footer', array( $this, "wp_print_scripts_action" ) );
+
+				ob_start( array( $this, "callback" ) );
+			}
+		} else {
+			$startTime = microtime( true );
+
+
+			add_action( 'wp', array( $this, "detect_current_page_type" ) );
+			add_action( 'get_footer', array( $this, "detect_current_page_type" ) );
+			add_action( 'get_footer', array( $this, "wp_print_scripts_action" ) );
+
+			ob_start( array( $this, "callback" ) );
+		}
+	}
+
+	function getWebsiteHTTPResponse( $url ) {
+		if ( $url == null ) {
+			return false;
+		}
+
+		$curl = curl_init( url );
+		curl_setopt( $curl, CURLOPT_TIMEOUT, 5 );
+		curl_setopt( $curl, CURLOPT_CONNECTTIMEOUT, 3 );
+		curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
+
+		$websiteData = curl_exec( $curl );
+
+		$httpResponseCode = curl_getinfo( $curl, $websiteData );
+
+		curl_close( $curl );
+
+		if ( $httpResponseCode >= 200 && $httpResponseCode < 300 ) {
+			return true;
+		} else {
+			return false;
+		}
+
+	}
+
+
 }
