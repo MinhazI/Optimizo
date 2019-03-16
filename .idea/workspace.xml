@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5f3587ba-2adc-43f4-a239-8b0a52445a84" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/class.optimizo.php" beforeDir="false" afterPath="$PROJECT_DIR$/class.optimizo.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/optimizo.php" beforeDir="false" afterPath="$PROJECT_DIR$/optimizo.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -27,8 +25,8 @@
       <file leaf-file-name="minify-html.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../minify-html-markup/minify-html.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="480">
-              <caret line="32" selection-start-line="32" selection-end-line="36" selection-end-column="1" />
+            <state relative-caret-position="271">
+              <caret line="24" column="40" selection-start-line="24" selection-start-column="40" selection-end-line="24" selection-end-column="40" />
               <folding>
                 <element signature="e#6#364#0#PHP" expanded="true" />
               </folding>
@@ -36,11 +34,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="class.optimizo.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="class.optimizo.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/class.optimizo.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="47" lean-forward="true" selection-start-line="47" selection-end-line="47" />
+            <state relative-caret-position="165">
+              <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
               <folding>
                 <element signature="n#addToWPConfig#0;n#OptimizoClass#0;n#!!top" />
                 <element signature="n#writeToHtaccess#0;n#OptimizoClass#0;n#!!top" />
@@ -53,11 +51,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="optimizo.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="optimizo.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/optimizo.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="16" column="37" selection-start-line="16" selection-start-column="37" selection-end-line="16" selection-end-column="37" />
+            <state relative-caret-position="331">
+              <caret line="120" column="25" selection-start-line="120" selection-start-column="25" selection-end-line="120" selection-end-column="25" />
             </state>
           </provider>
         </entry>
@@ -97,8 +95,8 @@
         <option value="$PROJECT_DIR$/../../../wp-config.php" />
         <option value="$PROJECT_DIR$/../minify-html-markup/minify-html.php" />
         <option value="$PROJECT_DIR$/class.minifyHTML.php" />
-        <option value="$PROJECT_DIR$/optimizo.php" />
         <option value="$PROJECT_DIR$/class.optimizo.php" />
+        <option value="$PROJECT_DIR$/optimizo.php" />
       </list>
     </option>
   </component>
@@ -215,12 +213,12 @@
       <workItem from="1552458302117" duration="4851000" />
       <workItem from="1552560751724" duration="7260000" />
       <workItem from="1552650522916" duration="954000" />
-      <workItem from="1552716626920" duration="8255000" />
+      <workItem from="1552716626920" duration="8385000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="73737000" />
+    <option name="totallyTimeSpent" value="73867000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
@@ -359,16 +357,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../minify-html-markup/minify-html.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="32" selection-start-line="32" selection-end-line="36" selection-end-column="1" />
-          <folding>
-            <element signature="e#6#364#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/class.minifyHTML.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="741">
@@ -376,17 +364,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/optimizo.php">
+    <entry file="file://$PROJECT_DIR$/../minify-html-markup/minify-html.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="16" column="37" selection-start-line="16" selection-start-column="37" selection-end-line="16" selection-end-column="37" />
+        <state relative-caret-position="271">
+          <caret line="24" column="40" selection-start-line="24" selection-start-column="40" selection-end-line="24" selection-end-column="40" />
+          <folding>
+            <element signature="e#6#364#0#PHP" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/class.optimizo.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="47" lean-forward="true" selection-start-line="47" selection-end-line="47" />
+        <state relative-caret-position="165">
+          <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
           <folding>
             <element signature="n#addToWPConfig#0;n#OptimizoClass#0;n#!!top" />
             <element signature="n#writeToHtaccess#0;n#OptimizoClass#0;n#!!top" />
@@ -395,6 +386,13 @@
             <element signature="n#createCache#0;n#OptimizoClass#0;n#!!top" />
             <element signature="n#getWebsiteHTTPResponse#0;n#OptimizoClass#0;n#!!top" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/optimizo.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="331">
+          <caret line="120" column="25" selection-start-line="120" selection-start-column="25" selection-end-line="120" selection-end-column="25" />
         </state>
       </provider>
     </entry>

@@ -118,16 +118,11 @@ register_deactivation_hook( __FILE__, array( $optimizo, 'deactivation' ) );
 add_action( 'init', 'init_minify_html', 1 );
 
 function init_minify_html() {
-	$optmizoHTMLMinifier = new optimizoHTMLMinifier();
-	$optmizoHTMLMinifier->minifyHTML();
-}
-
-function minifyHTML() {
-	ob_start( 'minifyHTMLOutput' );
+	ob_start( 'minifyHTML' );
 }
 
 // Adding a callback function to get access to the website's source code.
-function minifyHTMLOutput( $buffer ) {
+function minifyHTML( $buffer ) {
 	if ( substr( ltrim( $buffer ), 0, 5 ) == '<?xml' ) {
 		return ( $buffer );
 	}
