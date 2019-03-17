@@ -11,6 +11,7 @@ class OptimizoClass {
 	function activate() {
 		$this->addToWPConfig();
 		$this->writeToHtaccess();
+		$this->createCache();
 	}
 
 	function deactivate() {
@@ -292,39 +293,56 @@ class OptimizoClass {
 		}
 	}
 
-	function minifyJS() {
-
-	}
-
 	function minifyCSS() {
 
 	}
 
 	function createCache() {
 
-		$cacheDir = get_site_url() . '/wp-content/cache';
+//		$cacheDir = WP_CONTENT_DIR . '/optimizoCache';
 
-		if ( ! is_dir( $cacheDir ) ) {
-			if ( @mkdir( get_site_url() . '/wp-content/cache', 0755 ) ) {
-				$startTime = microtime( true );
+		$ctime = time();
+		$upload = array();
 
+		$upload['basedir'] =  WP_CONTENT_DIR . '/optimizoCache';
+		$upload['baseurl'] =  WP_CONTENT_DIR . '/optimizoCache';
 
-				add_action( 'wp', array( $this, "detect_current_page_type" ) );
-				add_action( 'get_footer', array( $this, "detect_current_page_type" ) );
-				add_action( 'get_footer', array( $this, "wp_print_scripts_action" ) );
+		# create
+		$uploadsdir  = $upload['basedir'];
+		$uploadsurl  = $upload['baseurl'];
+		$cachebase   = $uploadsdir.'/'.$ctime;
+		$cachebaseurl  = $uploadsurl.'/'.$ctime;
+		$cachedir    = $cachebase.'/out';
+		$tmpdir      = $cachebase.'/tmp';
+		$headerdir   = $cachebase.'/header';
+		$cachedirurl = $cachebaseurl.'/out';
 
-				ob_start( array( $this, "callback" ) );
-			}
-		} else {
-			$startTime = microtime( true );
-
-
-			add_action( 'wp', array( $this, "detect_current_page_type" ) );
-			add_action( 'get_footer', array( $this, "detect_current_page_type" ) );
-			add_action( 'get_footer', array( $this, "wp_print_scripts_action" ) );
-
-			ob_start( array( $this, "callback" ) );
+		# get permissions from uploads directory
+		$dir_perms = 0777;
+		if(is_dir($uploadsdir.'/cache') && function_exists('stat')) {
+			if ($stat = @stat($uploadsdir.'/cache')) { $dir_perms = $stat['mode'] & 0007777; }
 		}
+
+		# mkdir and check if umask requires chmod
+		$dirs = array($cachebase, $cachedir, $tmpdir, $headerdir);
+		foreach ($dirs as $target) {
+			if(!is_dir($target)) {
+				if (@mkdir($target, $dir_perms, true)){
+					if ($dir_perms != ($dir_perms & ~umask())){
+						$folder_parts = explode( '/', substr($target, strlen(dirname($target)) + 1 ));
+						for ($i = 1, $c = count($folder_parts ); $i <= $c; $i++){
+							@chmod(dirname($target) . '/' . implode( '/', array_slice( $folder_parts, 0, $i ) ), $dir_perms );
+						}
+					}
+				} else {
+					# fallback
+					wp_mkdir_p($target);
+				}
+			}
+		}
+
+		# return
+		return array('cachebase'=>$cachebase,'tmpdir'=>$tmpdir, 'cachedir'=>$cachedir, 'cachedirurl'=>$cachedirurl, 'headerdir'=>$headerdir);
 	}
 
 	function getWebsiteHTTPResponse( $url ) {
@@ -351,5 +369,209 @@ class OptimizoClass {
 
 	}
 
+	function returnFullURL( $src, $wp_domain, $wp_home ) {
+		# preserve empty source handles
+		$furl = trim( $src );
+		if ( empty( $furl ) ) {
+			return $furl;
+		}
+
+# some fixes
+		$furl = str_ireplace( array( '&#038;', '&amp;' ), '&', $furl );
+
+		$default_protocol = get_option( 'fastvelocity_min_default_protocol', 'dynamic' );
+		if ( $default_protocol == 'dynamic' || empty( $default_protocol ) ) {
+			if ( ( isset( $_SERVER['HTTPS'] ) && ( $_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1 ) ) || ( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' ) ) {
+				$default_protocol = 'https://';
+			} else {
+				$default_protocol = 'http://';
+			}
+		} else {
+			$default_protocol = $default_protocol . '://';
+		}
+
+#make sure wp_home doesn't have a forward slash
+		$wp_home = rtrim( $wp_home, '/' );
+
+# apply some filters
+		if ( substr( $furl, 0, 2 ) === "//" ) {
+			$furl = $default_protocol . ltrim( $furl, "/" );
+		}  # protocol only
+		if ( substr( $furl, 0, 4 ) === "http" && stripos( $furl, $wp_domain ) === false ) {
+			return $furl;
+		} # return if external domain
+		if ( substr( $furl, 0, 4 ) !== "http" && stripos( $furl, $wp_domain ) !== false ) {
+			$furl = $wp_home . '/' . ltrim( $furl, "/" );
+		} # protocol + home
+
+# prevent double forward slashes in the middle
+		$furl = str_ireplace( '###', '://', str_ireplace( '//', '/', str_ireplace( '://', '###', $furl ) ) );
+
+# consider different wp-content directory
+		$proceed = 0;
+		if ( ! empty( $wp_home ) ) {
+			$alt_wp_content = basename( $wp_home );
+			if ( substr( $furl, 0, strlen( $alt_wp_content ) ) === $alt_wp_content ) {
+				$proceed = 1;
+			}
+		}
+
+# protocol + home for relative paths
+		if ( substr( $furl, 0, 12 ) === "/wp-includes" || substr( $furl, 0, 9 ) === "/wp-admin" || substr( $furl, 0, 11 ) === "/wp-content" || $proceed == 1 ) {
+			$furl = $wp_home . '/' . ltrim( $furl, "/" );
+		}
+
+# make sure there is a protocol prefix as required
+		$furl = $default_protocol . str_ireplace( array( 'http://', 'https://' ), '', $furl ); # enforce protocol
+
+# no query strings
+		if ( stripos( $furl, '.js?v' ) !== false ) {
+			$furl = stristr( $furl, '.js?v', true ) . '.js';
+		} # no query strings
+		if ( stripos( $furl, '.css?v' ) !== false ) {
+			$furl = stristr( $furl, '.css?v', true ) . '.css';
+		} # no query strings
+
+# make sure there is a protocol prefix as required
+		$furl = $this->compatURL( $furl ); # enforce protocol
+
+		return $furl;
+	}
+
+	function minifyInArray( $furl, $ignore ) {
+		$furl = str_ireplace( array( 'http://', 'https://' ), '//', $furl ); # better compatibility
+		$furl = strtok( urldecode( rawurldecode( $furl ) ), '?' ); # no query string, decode entities
+
+		if ( ! empty( $furl ) && is_array( $ignore ) ) {
+			foreach ( $ignore as $i ) {
+				$i = str_ireplace( array( 'http://', 'https://' ), '//', $i ); # better compatibility
+				$i = strtok( urldecode( rawurldecode( $i ) ), '?' ); # no query string, decode entities
+				$i = trim( trim( trim( rtrim( $i, '/' ) ), '*' ) ); # wildcard char removal
+				if ( stripos( $furl, $i ) !== false ) {
+					return true;
+				}
+			}
+		}
+	}
+
+	function checkIfInternalLink( $furl, $wp_home, $noxtra = null ) {
+		if ( substr( $furl, 0, strlen( $wp_home ) ) === $wp_home ) {
+			return true;
+		}
+		if ( stripos( $furl, $wp_home ) !== false ) {
+			return true;
+		}
+		if ( isset( $_SERVER['HTTP_HOST'] ) && stripos( $furl, preg_replace( '/:\d+$/', '', $_SERVER['HTTP_HOST'] ) ) !== false ) {
+			return true;
+		}
+		if ( isset( $_SERVER['SERVER_NAME'] ) && stripos( $furl, preg_replace( '/:\d+$/', '', $_SERVER['SERVER_NAME'] ) ) !== false ) {
+			return true;
+		}
+		if ( isset( $_SERVER['SERVER_ADDR'] ) && stripos( $furl, preg_replace( '/:\d+$/', '', $_SERVER['SERVER_ADDR'] ) ) !== false ) {
+			return true;
+		}
+
+		# allow specific external urls to be merged
+		if ( $noxtra === null ) {
+			$merge_allowed_urls = array_map( 'trim', explode( PHP_EOL, get_option( 'fastvelocity_min_merge_allowed_urls', '' ) ) );
+			if ( is_array( $merge_allowed_urls ) && strlen( implode( $merge_allowed_urls ) ) > 0 ) {
+				foreach ( $merge_allowed_urls as $e ) {
+					if ( stripos( $furl, $e ) !== false && ! empty( $e ) ) {
+						return true;
+					}
+				}
+			}
+		}
+
+		return false;
+	}
+
+	function getWPProtocol( $url ) {
+		global $wp_domain;
+		$url = ltrim( str_ireplace( array( 'http://', 'https://' ), '', $url ), '/' ); # better compatibility
+
+		# enforce protocol if needed
+		$default_protocol = get_option( 'fastvelocity_min_default_protocol', 'dynamic' );
+		if ( $default_protocol == 'dynamic' || empty( $default_protocol ) ) {
+			if ( ( isset( $_SERVER['HTTPS'] ) && ( $_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1 ) ) || ( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' ) ) {
+				$default_protocol = 'https://';
+			} else {
+				$default_protocol = 'http://';
+			}
+		} else {
+			$default_protocol = $default_protocol . '://';
+		}
+
+		# return
+		return $default_protocol . $url;
+	}
+
+	function fixPermissions( $file ) {
+		if ( function_exists( 'stat' ) ) {
+			if ( $stat = @stat( dirname( $file ) ) ) {
+				$perms = $stat['mode'] & 0007777;
+				@chmod( $file, $perms );
+
+//				clearstatcache();
+				return true;
+			}
+		}
+
+
+		# get permissions from parent directory
+		$perms = 0777;
+		if ( function_exists( 'stat' ) ) {
+			if ( $stat = @stat( dirname( $file ) ) ) {
+				$perms = $stat['mode'] & 0007777;
+			}
+		}
+
+		if ( file_exists( $file ) ) {
+			if ( $perms != ( $perms & ~umask() ) ) {
+				$folder_parts = explode( '/', substr( $file, strlen( dirname( $file ) ) + 1 ) );
+				for ( $i = 1, $c = count( $folder_parts ); $i <= $c; $i ++ ) {
+					@chmod( dirname( $file ) . '/' . implode( '/', array_slice( $folder_parts, 0, $i ) ), $perms );
+				}
+			}
+		}
+
+		return true;
+	}
+
+	function compatURL( $code ) {
+
+		if ( ( isset( $_SERVER['HTTPS'] ) && ( $_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1 ) ) || ( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' ) ) {
+			$default_protocol = 'https://';
+		} else {
+			$default_protocol = 'http://';
+		}
+		$code = str_ireplace( array( 'http://', 'https://' ), $default_protocol, $code );
+		$code = str_ireplace( $default_protocol . 'www.w3.org', 'http://www.w3.org', $code );
+
+		return $code;
+
+	}
+
+	function getTempStore($key){
+		$cachepath = $this->createCache();
+		$tmpdir = $cachepath['tmpdir'];
+		$f = $tmpdir.'/'.$key.'.transient';
+		clearstatcache();
+		if(file_exists($f)) {
+			return file_get_contents($f);
+		} else {
+			return false;
+		}
+	}
+
+	function setTempStore($key, $code){
+		if(is_null($code) || empty($code)) { return false; }
+		$cachepath = $this->createCache();
+		$tmpdir = $cachepath['tmpdir'];
+		$f = $tmpdir.'/'.$key.'.transient';
+		file_put_contents($f, $code);
+		fastvelocity_fix_permission_bits($f);
+		return true;
+	}
 
 }

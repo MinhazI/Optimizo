@@ -221,3 +221,201 @@ function minifyHTML( $buffer ) {
 /**
  * HTML minifying code ends here
  */
+
+add_action( 'wp_print_scripts', 'minifyHeaderJS', PHP_INT_MAX );
+
+function minifyHeaderJS() {
+	$optimizoClass = new OptimizoClass();
+
+	global $wp_scripts, $wp_domain, $wp_home, $ignore;
+	if ( ! is_object( $wp_scripts ) ) {
+		return false;
+	}
+	$scripts = wp_clone( $wp_scripts );
+	$scripts->all_deps( $scripts->queue );
+	$header = array();
+
+	# mark as done (as we go)
+	$done = $scripts->done;
+
+	# get groups of handles
+	foreach ( $scripts->to_do as $handle ) :
+
+		# is it a footer script?
+		$is_footer = 0;
+		if ( isset( $wp_scripts->registered[ $handle ]->extra["group"] ) || isset( $wp_scripts->registered[ $handle ]->args ) ) {
+			$is_footer = 1;
+		}
+
+		# skip footer scripts for now
+		if ( $is_footer != 1 ) {
+
+			# get full url
+			$furl = $optimizoClass->returnFullURL( $wp_scripts->registered[ $handle ]->src, $wp_domain, $wp_home );
+
+			# inlined scripts without file
+			if ( empty( $furl ) ) {
+				continue;
+			}
+
+			# skip ignore list, scripts with conditionals, external scripts
+			if ( ( ! $optimizoClass->minifyInArray( $furl, $ignore ) && ! isset( $wp_scripts->registered[ $handle ]->extra["conditional"] ) && $optimizoClass->checkIfInternalLink( $furl, $wp_home ) ) || empty( $furl ) ) {
+
+				# process
+				if ( isset( $header[ count( $header ) - 1 ]['handle'] ) || count( $header ) == 0 ) {
+					array_push( $header, array( 'handles' => array() ) );
+				}
+
+				# push it to the array
+				array_push( $header[ count( $header ) - 1 ]['handles'], $handle );
+
+				# external and ignored scripts
+			} else {
+				array_push( $header, array( 'handle' => $handle ) );
+			}
+
+			# make sure that the scripts skipped here, show up in the footer
+		} else {
+			$furl = $optimizoClass->returnFullURL( $wp_scripts->registered[ $handle ]->src, $wp_domain, $wp_home );
+
+			# inlined scripts without file
+			if ( empty( $furl ) ) {
+				wp_enqueue_script( $handle, false );
+			} else {
+				wp_enqueue_script( $handle, $furl, array(), null, true );
+			}
+		}
+	endforeach;
+
+	$cacheDir = WP_CONTENT_DIR . '/optimizoCache';
+
+	# loop through header scripts and merge
+	for ( $i = 0, $l = count( $header ); $i < $l; $i ++ ) {
+		if ( ! isset( $header[ $i ]['handle'] ) ) {
+
+			# static cache file info + done
+			$done = array_merge( $done, $header[ $i ]['handles'] );
+			$hash = 'header-' . hash( 'adler32', implode( '', $header[ $i ]['handles'] ) );
+
+			# create cache files and urls
+			$file     = $cacheDir . '/' . $hash . '.min.js';
+			$file_url = $optimizoClass->getWPProtocol( $cacheDir . '/' . $hash . '.min.js' );
+
+			# generate a new cache file
+//				clearstatcache();
+			if ( ! file_exists( $file ) ) {
+
+				# code and log initialization
+				$log  = '';
+				$code = '';
+
+				# minify and write to file
+				foreach ( $header[ $i ]['handles'] as $handle ) :
+					if ( ! empty( $wp_scripts->registered[ $handle ]->src ) ) {
+
+						# get furl per handle
+						$furl = $optimizoClass->returnFullURL( $wp_scripts->registered[ $handle ]->src, $wp_domain, $wp_home );
+
+						# inlined scripts without file
+						if ( empty( $furl ) ) {
+							continue;
+						}
+
+						# print url
+						$printurl = str_ireplace( array( site_url(), home_url(), 'http:', 'https:' ), '', $furl );
+
+						# download, minify, cache
+						$tkey = 'js-' . hash( 'adler32', $handle . $furl ) . '.js';
+						$json = false;
+						$json = $optimizoClass->getTempStore( $tkey );
+						if ( $json === false ) {
+//							$json = fvm_download_and_minify( $furl, null, $disable_js_minification, 'js', $handle );
+//							if ( $fvm_debug == true ) {
+//								echo "<!-- FVM DEBUG: Uncached file processing now for $handle / $furl -->" . PHP_EOL;
+//							}
+							$optimizoClass->setTempStore( $tkey, $json);
+						}
+
+						# decode
+						$res = json_decode( $json, true );
+
+						# response has failed
+						if ( $res['status'] != true ) {
+							$log .= $res['log'];
+							continue;
+						}
+
+						# append code to merged file
+						$code .= $res['code'];
+						$log  .= $res['log'];
+
+						# Add extra data from wp_add_inline_script before
+						if ( ! empty( $wp_scripts->registered[ $handle ]->extra ) ) {
+							if ( ! empty( $wp_scripts->registered[ $handle ]->extra['before'] ) ) {
+								$code .= PHP_EOL . implode( PHP_EOL, $wp_scripts->registered[ $handle ]->extra['before'] );
+							}
+						}
+
+						# consider dependencies on handles with an empty src
+					} else {
+						wp_dequeue_script( $handle );
+						wp_enqueue_script( $handle );
+					}
+				endforeach;
+
+				# prepare log
+				$log = "PROCESSED on " . date( 'r' ) . PHP_EOL . $log . "PROCESSED from " . home_url( add_query_arg( null, null ) ) . PHP_EOL;
+
+				# generate cache, write log
+				if ( ! empty( $code ) ) {
+					file_put_contents( $file . '.txt', $log );
+					file_put_contents( $file, $code );
+					file_put_contents( $file . '.gz', gzencode( file_get_contents( $file ), 9 ) );
+
+					# permissions
+					$optimizoClass->fixPermissions( $file . '.txt' );
+					$optimizoClass->fixPermissions( $file );
+					$optimizoClass->fixPermissions( $file . '.gz' );
+
+					# brotli static support
+					if ( function_exists( 'brotli_compress' ) ) {
+						file_put_contents( $file . '.br', brotli_compress( file_get_contents( $file ), 11 ) );
+						$optimizoClass->fixPermissions( $file . '.br' );
+					}
+				}
+			}
+
+			# register minified file
+			wp_register_script( "optimizo-header-$i", $file_url, array(), null, false );
+
+			# add all extra data from wp_localize_script
+			$data = array();
+			foreach ( $header[ $i ]['handles'] as $handle ) {
+				if ( isset( $wp_scripts->registered[ $handle ]->extra['data'] ) ) {
+					$data[] = $wp_scripts->registered[ $handle ]->extra['data'];
+				}
+			}
+			if ( count( $data ) > 0 ) {
+				$wp_scripts->registered["optimizo-header-$i"]->extra['data'] = implode( PHP_EOL, $data );
+			}
+
+			# enqueue file, if not empty
+			if ( file_exists( $file ) && ( filesize( $file ) > 0 || count( $data ) > 0 ) ) {
+				wp_enqueue_script( "optimizo-header-$i" );
+			} else {
+				# file could not be generated, output something meaningful
+				echo "<!-- ERROR: FVM was not allowed to save it's cache on - $file -->";
+				echo "<!-- Please check if the path above is correct and ensure your server has writting permission there! -->";
+				echo "<!-- If you found a bug, please report this on https://wordpress.org/support/plugin/fast-velocity-minify/ -->";
+			}
+
+			# other scripts need to be requeued for the order of files to be kept
+		} else {
+			wp_dequeue_script( $header[ $i ]['handle'] );
+			wp_enqueue_script( $header[ $i ]['handle'] );
+		}
+	}
+
+	# remove from queue
+	$wp_scripts->done = $done;
+}
