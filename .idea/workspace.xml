@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5f3587ba-2adc-43f4-a239-8b0a52445a84" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/optimizo.php" beforeDir="false" afterPath="$PROJECT_DIR$/optimizo.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -16,7 +17,7 @@
       <file leaf-file-name="wp-config.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../../../wp-config.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="441">
+            <state relative-caret-position="870">
               <caret line="75" column="36" selection-start-line="75" selection-start-column="36" selection-end-line="75" selection-end-column="36" />
             </state>
           </provider>
@@ -30,79 +31,18 @@
               <folding>
                 <element signature="n#deactivate#0;n#OptimizoClass#0;n#!!top" />
                 <element signature="n#addToWPConfig#0;n#OptimizoClass#0;n#!!top" />
-                <element signature="e#318#569#0#PHP" />
-                <element signature="e#643#1442#0#PHP" />
-                <element signature="e#732#1442#0#PHP" />
-                <element signature="e#1014#1095#0#PHP" />
-                <element signature="e#1100#1442#0#PHP" />
-                <element signature="e#1357#1438#0#PHP" />
                 <element signature="n#writeToHtaccess#0;n#OptimizoClass#0;n#!!top" />
-                <element signature="e#1480#2135#0#PHP" />
-                <element signature="e#2139#11347#0#PHP" />
-                <element signature="e#6965#11347#0#PHP" />
-                <element signature="e#11261#11343#0#PHP" />
                 <element signature="n#removeFromWPConfig#0;n#OptimizoClass#0;n#!!top" />
-                <element signature="e#11388#11593#0#PHP" />
-                <element signature="e#11798#11938#0#PHP" />
                 <element signature="n#removeFromHtaccess#0;n#OptimizoClass#0;n#!!top" />
-                <element signature="e#11978#12127#0#PHP" />
-                <element signature="e#16305#16380#0#PHP" />
                 <element signature="n#minifyCSS#0;n#OptimizoClass#0;n#!!top" />
                 <element signature="n#createCache#0;n#OptimizoClass#0;n#!!top" />
-                <element signature="e#17594#17765#0#PHP" />
-                <element signature="e#17779#17833#0#PHP" />
                 <element signature="n#removeCache#0;n#OptimizoClass#0;n#!!top" />
                 <element signature="n#getWebsiteHTTPResponse#0;n#OptimizoClass#0;n#!!top" />
-                <element signature="e#18040#18082#0#PHP" />
-                <element signature="e#18386#18494#0#PHP" />
-                <element signature="e#18467#18494#0#PHP" />
                 <element signature="n#returnFullURL#0;n#OptimizoClass#0;n#!!top" />
-                <element signature="e#18616#18660#0#PHP" />
-                <element signature="e#18054#18470#0#PHP" />
-                <element signature="e#18126#18408#0#PHP" />
-                <element signature="e#18364#18408#0#PHP" />
-                <element signature="e#18412#18470#0#PHP" />
-                <element signature="e#18597#18692#0#PHP" />
-                <element signature="e#18691#18793#0#PHP" />
-                <element signature="e#18823#18957#0#PHP" />
-                <element signature="e#19186#19357#0#PHP" />
-                <element signature="e#19259#19354#0#PHP" />
-                <element signature="e#19397#19600#0#PHP" />
-                <element signature="e#19781#19879#0#PHP" />
-                <element signature="e#19900#20001#0#PHP" />
                 <element signature="n#minifyInArray#0;n#OptimizoClass#0;n#!!top" />
-                <element signature="e#20420#20829#0#PHP" />
-                <element signature="e#20471#20826#0#PHP" />
-                <element signature="e#20761#20822#0#PHP" />
                 <element signature="n#checkIfInternalLink#0;n#OptimizoClass#0;n#!!top" />
-                <element signature="e#20911#20991#0#PHP" />
-                <element signature="e#20994#21059#0#PHP" />
-                <element signature="e#21062#21205#0#PHP" />
-                <element signature="e#21208#21355#0#PHP" />
-                <element signature="e#21358#21505#0#PHP" />
-                <element signature="e#21553#21940#0#PHP" />
-                <element signature="e#21705#21936#0#PHP" />
-                <element signature="e#21798#21931#0#PHP" />
-                <element signature="e#21843#21925#0#PHP" />
                 <element signature="n#getWPProtocol#0;n#OptimizoClass#0;n#!!top" />
-                <element signature="e#22999#23415#0#PHP" />
-                <element signature="e#23071#23353#0#PHP" />
-                <element signature="e#23309#23353#0#PHP" />
-                <element signature="e#23357#23415#0#PHP" />
-                <element signature="n#FixPermissions#0;n#OptimizoClass#0;n#!!top" />
-                <element signature="e#29423#29632#0#PHP" />
-                <element signature="e#29489#29629#0#PHP" />
-                <element signature="e#29696#29837#0#PHP" />
-                <element signature="e#29706#29791#0#PHP" />
-                <element signature="e#29841#30158#0#PHP" />
-                <element signature="e#29868#30155#0#PHP" />
-                <element signature="e#29988#30151#0#PHP" />
                 <element signature="n#compatURL#0;n#OptimizoClass#0;n#!!top" />
-                <element signature="e#23714#23996#0#PHP" />
-                <element signature="e#23952#23996#0#PHP" />
-                <element signature="n#tempStore#0;n#OptimizoClass#0;n#!!top" />
-                <element signature="e#24916#24998#0#PHP" />
-                <element signature="e#24973#24998#0#PHP" />
                 <element signature="n#setTempStore#0;n#OptimizoClass#0;n#!!top" />
               </folding>
             </state>
@@ -112,28 +52,8 @@
       <file leaf-file-name="fvm.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../fast-velocity-minify/fvm.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2465">
+            <state relative-caret-position="21900">
               <caret line="1483" selection-start-line="1483" selection-end-line="1483" />
-              <folding>
-                <element signature="e#26191#26212#0#HTML" expanded="true" />
-                <element signature="e#50283#50304#0#HTML" expanded="true" />
-                <element signature="e#53041#53062#0#HTML" expanded="true" />
-                <element signature="e#55759#55780#0#HTML" expanded="true" />
-                <element signature="e#56694#56715#0#HTML" expanded="true" />
-                <element signature="e#57887#57908#0#HTML" expanded="true" />
-                <element signature="e#59142#59163#0#HTML" expanded="true" />
-                <element signature="e#60370#60391#0#HTML" expanded="true" />
-                <element signature="e#61622#61643#0#HTML" expanded="true" />
-                <element signature="e#62810#62831#0#HTML" expanded="true" />
-                <element signature="e#64509#64530#0#HTML" expanded="true" />
-                <element signature="e#67205#67226#0#HTML" expanded="true" />
-                <element signature="e#70826#70830#0#HTML" expanded="true" />
-                <element signature="e#70900#70904#0#HTML" expanded="true" />
-                <element signature="e#71041#71045#0#HTML" expanded="true" />
-                <element signature="e#71134#71138#0#HTML" expanded="true" />
-                <element signature="e#71387#71408#0#HTML" expanded="true" />
-                <element signature="e#73243#73264#0#HTML" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -141,11 +61,8 @@
       <file leaf-file-name="optimizo.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/optimizo.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="200">
-              <caret line="34" column="91" selection-start-line="34" selection-start-column="91" selection-end-line="34" selection-end-column="91" />
-              <folding>
-                <element signature="e#2616#5120#0#PHP" />
-              </folding>
+            <state relative-caret-position="75">
+              <caret line="5" column="21" selection-start-line="5" selection-start-column="21" selection-end-line="5" selection-end-column="21" />
             </state>
           </provider>
         </entry>
@@ -153,45 +70,30 @@
       <file leaf-file-name="functions.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../fast-velocity-minify/inc/functions.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
+            <state relative-caret-position="2250">
               <caret line="1716" column="52" selection-start-line="1716" selection-start-column="52" selection-end-line="1716" selection-end-column="52" />
               <folding>
                 <element signature="e#50#136#0#PHP" />
                 <element signature="e#1209#13890#0#PHP" />
                 <element signature="n#fvm_function_available#0;n#!!top" />
                 <element signature="e#13992#14042#0#PHP" />
-                <element signature="e#12364#12504#0#PHP" />
                 <element signature="n#fastvelocity_plugin_activate#0;n#!!top" />
-                <element signature="e#12672#12807#0#PHP" />
-                <element signature="e#12863#14532#0#PHP" />
                 <element signature="e#14742#15082#0#PHP" />
-                <element signature="e#13318#13404#0#PHP" />
                 <element signature="e#15210#15765#0#PHP" />
                 <element signature="e#15876#16320#0#PHP" />
                 <element signature="n#fastvelocity_plugin_deactivate#0;n#!!top" />
-                <element signature="e#14710#14908#0#PHP" />
                 <element signature="n#fastvelocity_plugin_uninstall#0;n#!!top" />
-                <element signature="e#15049#15630#0#PHP" />
-                <element signature="e#15305#15454#0#PHP" />
                 <element signature="e#17251#17339#0#PHP" />
-                <element signature="e#15481#15625#0#PHP" />
                 <element signature="n#fvm_is_local_domain#0;n#!!top" />
-                <element signature="e#16152#16283#0#PHP" />
                 <element signature="e#18309#18522#0#PHP" />
-                <element signature="e#16573#16766#0#PHP" />
                 <element signature="e#18695#18771#0#PHP" />
                 <element signature="n#fastvelocity_min_get_hurl#0;n#!!top" />
                 <element signature="e#18956#18998#0#PHP" />
-                <element signature="e#17138#17522#0#PHP" />
-                <element signature="e#17204#17464#0#PHP" />
                 <element signature="e#19473#19517#0#PHP" />
-                <element signature="e#17467#17522#0#PHP" />
                 <element signature="e#19688#19781#0#PHP" />
                 <element signature="e#19800#19902#0#PHP" />
                 <element signature="e#19932#20066#0#PHP" />
-                <element signature="e#18188#18339#0#PHP" />
                 <element signature="e#20368#20463#0#PHP" />
-                <element signature="e#18378#18565#0#PHP" />
                 <element signature="e#20890#20988#0#PHP" />
                 <element signature="e#21009#21110#0#PHP" />
                 <element signature="n#fvm_internal_url#0;n#!!top" />
@@ -200,159 +102,45 @@
                 <element signature="e#21504#21645#0#PHP" />
                 <element signature="e#21647#21792#0#PHP" />
                 <element signature="e#21794#21939#0#PHP" />
-                <element signature="e#19749#20078#0#PHP" />
-                <element signature="e#19886#20076#0#PHP" />
-                <element signature="e#19967#20074#0#PHP" />
                 <element signature="e#22272#22352#0#PHP" />
                 <element signature="n#fastvelocity_min_in_arrayi#0;n#!!top" />
-                <element signature="e#20370#20744#0#PHP" />
-                <element signature="e#20415#20740#0#PHP" />
                 <element signature="e#23010#23071#0#PHP" />
                 <element signature="n#fvm_compat_urls#0;n#!!top" />
-                <element signature="e#20948#21338#0#PHP" />
-                <element signature="e#21016#21276#0#PHP" />
                 <element signature="e#23597#23641#0#PHP" />
-                <element signature="e#21280#21338#0#PHP" />
                 <element signature="n#fastvelocity_min_minify_css_string#0;n#!!top" />
                 <element signature="e#24183#24243#0#PHP" />
                 <element signature="n#fvm_server_is_windows#0;n#!!top" />
-                <element signature="e#21969#22064#0#PHP" />
                 <element signature="e#24403#24472#0#PHP" />
-                <element signature="e#22066#22193#0#PHP" />
-                <element signature="e#22128#22190#0#PHP" />
                 <element signature="e#24997#25128#0#PHP" />
                 <element signature="e#25025#25125#0#PHP" />
-                <element signature="e#22756#22877#0#PHP" />
-                <element signature="e#22839#22877#0#PHP" />
                 <element signature="e#25605#25661#0#PHP" />
                 <element signature="e#25663#25745#0#PHP" />
                 <element signature="n#fastvelocity_min_minify_js_string#0;n#!!top" />
-                <element signature="e#23546#23673#0#PHP" />
                 <element signature="n#fastvelocity_min_minify_html#0;n#!!top" />
                 <element signature="n#fastvelocity_min_html_compression_finish#0;n#!!top" />
                 <element signature="n#fastvelocity_min_html_compression_start#0;n#!!top" />
                 <element signature="e#26740#26801#0#PHP" />
                 <element signature="n#fastvelocity_remove_redundant_shortlink#0;n#!!top" />
                 <element signature="n#fastvelocity_min_get_css#0;n#!!top" />
-                <element signature="e#24771#24916#0#PHP" />
-                <element signature="e#25238#25365#0#PHP" />
-                <element signature="e#25325#25365#0#PHP" />
-                <element signature="e#25437#25625#0#PHP" />
                 <element signature="e#28085#28191#0#PHP" />
                 <element signature="e#28091#28184#0#PHP" />
                 <element signature="e#28097#28182#1#PHP" />
                 <element signature="e#28111#28149#0#PHP" />
                 <element signature="e#28303#28395#0#PHP" />
                 <element signature="n#fvm_download_and_minify#0;n#!!top" />
-                <element signature="e#28655#28717#0#PHP" />
-                <element signature="e#28719#28788#0#PHP" />
-                <element signature="e#28802#28876#0#PHP" />
-                <element signature="e#28878#28944#0#PHP" />
-                <element signature="e#28966#29072#0#PHP" />
-                <element signature="e#29033#29072#0#PHP" />
-                <element signature="e#29099#29302#0#PHP" />
-                <element signature="e#26642#28107#0#PHP" />
-                <element signature="e#26683#28104#0#PHP" />
-                <element signature="e#26838#27370#0#PHP" />
-                <element signature="e#26865#27094#0#PHP" />
-                <element signature="e#26982#27094#0#PHP" />
-                <element signature="e#29981#30078#0#PHP" />
-                <element signature="e#27569#28101#0#PHP" />
-                <element signature="e#27596#27825#0#PHP" />
-                <element signature="e#27713#27825#0#PHP" />
-                <element signature="e#30778#30875#0#PHP" />
-                <element signature="e#28197#28808#0#PHP" />
-                <element signature="e#28343#28536#0#PHP" />
-                <element signature="e#28442#28536#0#PHP" />
-                <element signature="e#31532#31629#0#PHP" />
-                <element signature="e#28850#29593#0#PHP" />
-                <element signature="e#29020#29590#0#PHP" />
-                <element signature="e#29113#29310#0#PHP" />
-                <element signature="e#29214#29310#0#PHP" />
-                <element signature="e#32357#32456#0#PHP" />
-                <element signature="e#29676#31097#0#PHP" />
-                <element signature="e#29832#30363#0#PHP" />
-                <element signature="e#29859#30087#0#PHP" />
-                <element signature="e#29975#30087#0#PHP" />
-                <element signature="e#33181#33276#0#PHP" />
-                <element signature="e#30562#31094#0#PHP" />
-                <element signature="e#30589#30818#0#PHP" />
-                <element signature="e#30706#30818#0#PHP" />
-                <element signature="e#33959#34054#0#PHP" />
-                <element signature="e#34247#34382#0#PHP" />
                 <element signature="n#fastvelocity_min_concatenate_google_fonts_allowed#0;n#!!top" />
-                <element signature="e#31650#31707#0#PHP" />
                 <element signature="n#fastvelocity_min_concatenate_google_fonts#0;n#!!top" />
-                <element signature="e#31929#32628#0#PHP" />
-                <element signature="e#31976#32625#0#PHP" />
-                <element signature="e#32318#32621#0#PHP" />
-                <element signature="e#32397#32537#0#PHP" />
-                <element signature="e#32431#32530#0#PHP" />
-                <element signature="e#32543#32621#0#PHP" />
-                <element signature="e#32651#32697#0#PHP" />
-                <element signature="e#32775#34237#0#PHP" />
-                <element signature="e#32835#33389#0#PHP" />
-                <element signature="e#33123#33381#0#PHP" />
-                <element signature="e#33255#33306#0#PHP" />
-                <element signature="e#33312#33381#0#PHP" />
-                <element signature="e#33323#33376#0#PHP" />
-                <element signature="e#33469#33902#0#PHP" />
-                <element signature="e#33692#33894#0#PHP" />
-                <element signature="e#33830#33894#0#PHP" />
-                <element signature="e#33841#33889#0#PHP" />
-                <element signature="e#34013#34231#0#PHP" />
-                <element signature="e#34104#34231#0#PHP" />
-                <element signature="e#34309#34546#0#PHP" />
-                <element signature="e#34338#34543#0#PHP" />
-                <element signature="e#34443#34521#0#PHP" />
-                <element signature="e#34588#34726#0#PHP" />
-                <element signature="e#34647#34723#0#PHP" />
-                <element signature="e#34739#34849#0#PHP" />
-                <element signature="e#34824#34849#0#PHP" />
                 <element signature="n#fastvelocity_min_disable_wp_emojicons#0;n#!!top" />
                 <element signature="n#fastvelocity_disable_emojis_tinymce#0;n#!!top" />
-                <element signature="e#35453#35564#0#PHP" />
-                <element signature="e#35538#35564#0#PHP" />
                 <element signature="n#fastvelocity_escape_double#0;n#!!top" />
                 <element signature="n#fastvelocity_remove_cssjs_ver#0;n#!!top" />
-                <element signature="e#39313#39391#0#PHP" />
                 <element signature="n#fvm_get_protocol#0;n#!!top" />
-                <element signature="e#36469#36996#0#PHP" />
-                <element signature="e#36609#36993#0#PHP" />
-                <element signature="e#36796#36919#0#PHP" />
-                <element signature="e#36927#36993#0#PHP" />
-                <element signature="e#37110#37500#0#PHP" />
-                <element signature="e#37178#37438#0#PHP" />
-                <element signature="e#40811#40855#0#PHP" />
-                <element signature="e#37442#37500#0#PHP" />
                 <element signature="n#fvm_safename#0;n#!!top" />
-                <element signature="e#37705#37749#0#PHP" />
-                <element signature="e#37804#37845#0#PHP" />
                 <element signature="n#fastvelocity_escape_url_js#0;n#!!top" />
                 <element signature="n#fastvelocity_exclude_contents#0;n#!!top" />
-                <element signature="e#38209#39049#0#PHP" />
-                <element signature="e#42659#42738#0#PHP" />
-                <element signature="e#42686#42735#0#PHP" />
-                <element signature="e#42850#42964#0#PHP" />
-                <element signature="e#42877#42961#0#PHP" />
                 <element signature="n#fastvelocity_default_ignore#0;n#!!top" />
-                <element signature="e#39545#40302#0#PHP" />
-                <element signature="e#39884#40004#0#PHP" />
-                <element signature="e#43641#43756#0#PHP" />
-                <element signature="e#43703#43752#0#PHP" />
-                <element signature="e#43759#43871#0#PHP" />
-                <element signature="e#43818#43867#0#PHP" />
-                <element signature="e#43913#43940#0#PHP" />
                 <element signature="n#fastvelocity_ie_blacklist#0;n#!!top" />
-                <element signature="e#44316#44381#0#PHP" />
-                <element signature="e#44356#44381#0#PHP" />
                 <element signature="n#fastvelocity_download#0;n#!!top" />
-                <element signature="e#44754#44887#0#PHP" />
-                <element signature="e#44775#44885#0#PHP" />
-                <element signature="e#41269#41389#0#PHP" />
-                <element signature="e#41342#41386#0#PHP" />
-                <element signature="e#41403#41509#0#PHP" />
-                <element signature="e#41544#41611#0#PHP" />
               </folding>
             </state>
           </provider>
@@ -422,9 +210,8 @@
     </packageJsonPaths>
   </component>
   <component name="ProjectFrameBounds" fullScreen="true">
-    <option name="y" value="23" />
     <option name="width" value="1440" />
-    <option name="height" value="808" />
+    <option name="height" value="900" />
   </component>
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -434,6 +221,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -441,22 +229,10 @@
               <item name="Optimizo" type="b2602c69:ProjectViewProjectNode" />
               <item name="fyp" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="Optimizo" type="b2602c69:ProjectViewProjectNode" />
-              <item name="fyp" type="462c0819:PsiDirectoryNode" />
-              <item name="wp-content" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Optimizo" type="b2602c69:ProjectViewProjectNode" />
-              <item name="fyp" type="462c0819:PsiDirectoryNode" />
-              <item name="wp-content" type="462c0819:PsiDirectoryNode" />
-              <item name="optimizoCache" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -510,12 +286,13 @@
       <workItem from="1552560751724" duration="7260000" />
       <workItem from="1552650522916" duration="954000" />
       <workItem from="1552716626920" duration="8654000" />
-      <workItem from="1552804563474" duration="22544000" />
+      <workItem from="1552804563474" duration="22945000" />
+      <workItem from="1552980796679" duration="596000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="96680000" />
+    <option name="totallyTimeSpent" value="97677000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
@@ -589,20 +366,9 @@
     <entry file="file:///private/var/folders/9f/168m7dcn2jjds75q34cbv6fm0000gn/T/fz3temp-2/contact-mail.php" />
     <entry file="file:///private/var/folders/9f/168m7dcn2jjds75q34cbv6fm0000gn/T/fz3temp-2/process.inc.php" />
     <entry file="file:///private/var/folders/9f/168m7dcn2jjds75q34cbv6fm0000gn/T/fz3temp-2/timeline.inc.php" />
-    <entry file="file://$PROJECT_DIR$/../minify-html-markup/readme.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/../minify-html-markup/readme.txt" />
     <entry file="file://$PROJECT_DIR$/class.minifyHTML.php" />
-    <entry file="file://$PROJECT_DIR$/../minify-html-markup/minify-html.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="271">
-          <caret line="24" column="40" selection-start-line="24" selection-start-column="40" selection-end-line="24" selection-end-column="40" />
-          <folding>
-            <element signature="e#6#364#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/../minify-html-markup/minify-html.php" />
     <entry file="file://$PROJECT_DIR$/../autoptimize/classes/autoptimizeCSSmin.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="426">
@@ -627,143 +393,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../../mmr/781d3a99-1538980151.js.log">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../mmr/3d491508-1546613392.css.log">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../mmr/c74c58ac-1541316863.css.log">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/../../mmr/781d3a99-1538980151.js.log" />
+    <entry file="file://$PROJECT_DIR$/../../mmr/3d491508-1546613392.css.log" />
+    <entry file="file://$PROJECT_DIR$/../../mmr/c74c58ac-1541316863.css.log" />
     <entry file="file://$PROJECT_DIR$/../merge-minify-refresh/merge-minify-refresh.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2159">
           <caret line="470" column="12" selection-start-line="470" selection-start-column="12" selection-end-line="470" selection-end-column="12" />
-          <folding>
-            <element signature="e#1438#2021#0#PHP" />
-            <element signature="e#2117#2205#0#PHP" />
-            <element signature="e#2215#2414#0#PHP" />
-            <element signature="e#2597#2654#0#PHP" />
-            <element signature="e#2710#2929#0#PHP" />
-            <element signature="e#2823#2929#0#PHP" />
-            <element signature="n#should_mmr#0;n#MergeMinifyRefresh#0;n#!!top" />
-            <element signature="e#5201#5350#0#PHP" />
-            <element signature="n#mmr_files_callback#0;n#MergeMinifyRefresh#0;n#!!top" />
-            <element signature="e#5415#5689#0#PHP" />
-            <element signature="e#5544#5689#0#PHP" />
-            <element signature="e#5822#7377#0#PHP" />
-            <element signature="e#5853#7373#0#PHP" />
-            <element signature="e#6022#6126#0#PHP" />
-            <element signature="e#6194#6269#0#PHP" />
-            <element signature="e#6320#6506#0#PHP" />
-            <element signature="e#6340#6418#0#PHP" />
-            <element signature="e#6424#6500#0#PHP" />
-            <element signature="e#6516#6586#0#PHP" />
-            <element signature="e#6678#7204#0#PHP" />
-            <element signature="e#6794#7198#0#PHP" />
-            <element signature="e#6871#7198#0#PHP" />
-            <element signature="e#6956#7198#0#PHP" />
-            <element signature="e#7041#7198#0#PHP" />
-            <element signature="e#7123#7198#0#PHP" />
-            <element signature="n#clear_scheduled#0;n#MergeMinifyRefresh#0;n#!!top" />
-            <element signature="e#7599#7750#0#PHP" />
-            <element signature="e#7686#7750#0#PHP" />
-            <element signature="e#7754#7983#0#PHP" />
-            <element signature="e#7781#7979#0#PHP" />
-            <element signature="n#plugin_deactivate#0;n#MergeMinifyRefresh#0;n#!!top" />
-            <element signature="e#8061#8126#0#PHP" />
-            <element signature="n#rrmdir#0;n#MergeMinifyRefresh#0;n#!!top" />
-            <element signature="e#8167#8352#0#PHP" />
-            <element signature="e#8223#8348#0#PHP" />
-            <element signature="n#load_admin_jscss#0;n#MergeMinifyRefresh#0;n#!!top" />
-            <element signature="e#8418#8487#0#PHP" />
-            <element signature="n#admin_menu#0;n#MergeMinifyRefresh#0;n#!!top" />
-            <element signature="n#mmr_register_settings#0;n#MergeMinifyRefresh#0;n#!!top" />
-            <element signature="n#merge_minify_refresh_settings#0;n#MergeMinifyRefresh#0;n#!!top" />
-            <element signature="e#9402#9535#0#PHP" />
-            <element signature="n#remove_cssjs_ver#0;n#MergeMinifyRefresh#0;n#!!top" />
-            <element signature="n#http2push_reseource#0;n#MergeMinifyRefresh#0;n#!!top" />
-            <element signature="e#12904#12968#0#PHP" />
-            <element signature="e#13035#13098#0#PHP" />
-            <element signature="e#13102#13249#0#PHP" />
-            <element signature="n#host_match#0;n#MergeMinifyRefresh#0;n#!!top" />
-            <element signature="e#13351#13391#0#PHP" />
-            <element signature="e#13483#13578#0#PHP" />
-            <element signature="e#13551#13578#0#PHP" />
-            <element signature="n#remove_scheme#0;n#MergeMinifyRefresh#0;n#!!top" />
-            <element signature="n#start_buffer#0;n#MergeMinifyRefresh#0;n#!!top" />
-            <element signature="n#fix_wp_subfolder#0;n#MergeMinifyRefresh#0;n#!!top" />
-            <element signature="e#13989#14213#0#PHP" />
-            <element signature="e#14332#14751#0#PHP" />
-            <element signature="n#inspect_stylescripts_footer#0;n#MergeMinifyRefresh#0;n#!!top" />
-            <element signature="e#15293#15344#0#PHP" />
-            <element signature="e#15350#15596#0#PHP" />
-            <element signature="e#15730#15783#0#PHP" />
-            <element signature="e#16580#19463#0#PHP" />
-            <element signature="e#16706#18535#0#PHP" />
-            <element signature="e#17012#17471#0#PHP" />
-            <element signature="e#17069#17462#0#PHP" />
-            <element signature="e#17226#17361#0#PHP" />
-            <element signature="e#17372#17462#0#PHP" />
-            <element signature="e#17517#17776#0#PHP" />
-            <element signature="e#17939#18179#0#PHP" />
-            <element signature="e#18195#18465#0#PHP" />
-            <element signature="e#18658#19366#0#PHP" />
-            <element signature="e#18740#18949#0#PHP" />
-            <element signature="e#18867#18949#0#PHP" />
-            <element signature="e#19030#19149#0#PHP" />
-            <element signature="e#19158#19366#0#PHP" />
-            <element signature="e#19374#19463#0#PHP" />
-            <element signature="e#19473#20904#0#PHP" />
-            <element signature="e#19530#19723#0#PHP" />
-            <element signature="e#19586#19715#0#PHP" />
-            <element signature="e#19732#20138#0#PHP" />
-            <element signature="e#19940#20138#0#PHP" />
-            <element signature="e#20216#20330#0#PHP" />
-            <element signature="e#20400#20904#0#PHP" />
-            <element signature="e#20420#20840#0#PHP" />
-            <element signature="e#20635#20840#0#PHP" />
-            <element signature="e#20944#21314#0#PHP" />
-            <element signature="e#20967#21308#0#PHP" />
-            <element signature="e#21145#21308#0#PHP" />
-            <element signature="e#22040#22176#0#PHP" />
-            <element signature="e#22185#22214#0#PHP" />
-            <element signature="e#22420#22631#0#PHP" />
-            <element signature="e#22528#22625#0#PHP" />
-            <element signature="e#22859#24221#0#PHP" />
-            <element signature="e#23122#23391#0#PHP" />
-            <element signature="e#23403#23758#0#PHP" />
-            <element signature="e#23513#23727#0#PHP" />
-            <element signature="e#23637#23727#0#PHP" />
-            <element signature="e#23791#23892#0#PHP" />
-            <element signature="e#23963#24080#0#PHP" />
-            <element signature="e#24087#24221#0#PHP" />
-            <element signature="n#compress_css_action#0;n#MergeMinifyRefresh#0;n#!!top" />
-            <element signature="e#24877#25010#0#PHP" />
-            <element signature="e#25388#27414#0#PHP" />
-            <element signature="e#25924#26646#0#PHP" />
-            <element signature="e#26055#26192#0#PHP" />
-            <element signature="e#26408#26646#0#PHP" />
-            <element signature="e#26652#27414#0#PHP" />
-            <element signature="e#27057#27192#0#PHP" />
-            <element signature="n#human_filesize#0;n#MergeMinifyRefresh#0;n#!!top" />
-            <element signature="n#gzip_file#0;n#MergeMinifyRefresh#0;n#!!top" />
-            <element signature="e#27786#28032#0#PHP" />
-            <element signature="e#27970#28028#0#PHP" />
-            <element signature="n#refreshed#0;n#MergeMinifyRefresh#0;n#!!top" />
-            <element signature="e#28124#28205#0#PHP" />
-          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file:///private/var/folders/9f/168m7dcn2jjds75q34cbv6fm0000gn/T/fz3temp-2/index.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="21" column="45" selection-start-line="21" selection-start-column="45" selection-end-line="21" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file:///private/var/folders/9f/168m7dcn2jjds75q34cbv6fm0000gn/T/fz3temp-2/index.php" />
     <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/stubs/Core/Core.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="274">
@@ -787,37 +427,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../../../wp-config.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="441">
+        <state relative-caret-position="870">
           <caret line="75" column="36" selection-start-line="75" selection-start-column="36" selection-end-line="75" selection-end-column="36" />
         </state>
       </provider>
     </entry>
-    <entry file="file:///private/var/folders/9f/168m7dcn2jjds75q34cbv6fm0000gn/T/fz3temp-2/header.inc.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="302">
-          <caret line="25" column="250" selection-start-line="25" selection-start-column="250" selection-end-line="25" selection-end-column="250" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///private/var/folders/9f/168m7dcn2jjds75q34cbv6fm0000gn/T/fz3temp-2/awards.inc.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" column="16" selection-start-line="13" selection-start-column="16" selection-end-line="13" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../optimizoCache/1552975653/tmp/js-e629131e.js.transient">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../optimizoCache/1552976091/tmp/js-e629131e.js.transient">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../optimizoCache/1552976091/tmp/js-392218e6.js.transient">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../optimizoCache/1552976091/tmp/js-37020f0d.js.transient">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file:///private/var/folders/9f/168m7dcn2jjds75q34cbv6fm0000gn/T/fz3temp-2/header.inc.php" />
+    <entry file="file:///private/var/folders/9f/168m7dcn2jjds75q34cbv6fm0000gn/T/fz3temp-2/awards.inc.php" />
+    <entry file="file://$PROJECT_DIR$/../../optimizoCache/1552975653/tmp/js-e629131e.js.transient" />
+    <entry file="file://$PROJECT_DIR$/../../optimizoCache/1552976091/tmp/js-e629131e.js.transient" />
+    <entry file="file://$PROJECT_DIR$/../../optimizoCache/1552976091/tmp/js-392218e6.js.transient" />
+    <entry file="file://$PROJECT_DIR$/../../optimizoCache/1552976091/tmp/js-37020f0d.js.transient" />
     <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/stubs/standard/standard_7.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="274">
@@ -829,80 +449,11 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="300">
           <caret line="129" column="36" selection-start-line="129" selection-start-column="36" selection-end-line="129" selection-end-column="36" />
-          <folding>
-            <element signature="n#fastvelocity_fix_permission_bits#0;n#!!top" />
-            <element signature="e#104#313#0#PHP" />
-            <element signature="e#170#310#0#PHP" />
-            <element signature="e#377#518#0#PHP" />
-            <element signature="e#522#839#0#PHP" />
-            <element signature="e#549#836#0#PHP" />
-            <element signature="e#669#832#0#PHP" />
-            <element signature="n#fvm_cachepath#0;n#!!top" />
-            <element signature="e#1112#1702#0#PHP" />
-            <element signature="e#1331#1702#0#PHP" />
-            <element signature="e#1548#1698#0#PHP" />
-            <element signature="e#2168#2349#0#PHP" />
-            <element signature="e#2452#2912#0#PHP" />
-            <element signature="e#2482#2910#0#PHP" />
-            <element signature="e#2507#2907#0#PHP" />
-            <element signature="e#2550#2854#0#PHP" />
-            <element signature="e#2682#2849#0#PHP" />
-            <element signature="e#2859#2907#0#PHP" />
-            <element signature="n#fvm_cache_increment#0;n#!!top" />
-            <element signature="n#fvm_purge_all#0;n#!!top" />
-            <element signature="n#fvm_purge_old#0;n#!!top" />
-            <element signature="e#4348#4717#0#PHP" />
-            <element signature="e#4393#4690#0#PHP" />
-            <element signature="e#4504#4682#0#PHP" />
-            <element signature="e#4601#4677#0#PHP" />
-            <element signature="n#fastvelocity_purge_onsave#0;n#!!top" />
-            <element signature="e#4814#4949#0#PHP" />
-            <element signature="n#fastvelocity_purge_all_global#0;n#!!top" />
-            <element signature="e#5041#5126#0#PHP" />
-            <element signature="n#fvm_get_transient#0;n#!!top" />
-            <element signature="e#5316#5398#0#PHP" />
-            <element signature="e#5373#5398#0#PHP" />
-            <element signature="n#fvm_set_transient#0;n#!!top" />
-            <element signature="n#fastvelocity_get_cachestats#0;n#!!top" />
-            <element signature="e#5864#6193#0#PHP" />
-            <element signature="e#6018#6079#0#PHP" />
-            <element signature="e#6129#6193#0#PHP" />
-            <element signature="n#fastvelocity_rrmdir#0;n#!!top" />
-            <element signature="e#6289#6543#0#PHP" />
-            <element signature="e#6348#6540#0#PHP" />
-            <element signature="e#6370#6536#0#PHP" />
-            <element signature="e#6425#6536#0#PHP" />
-            <element signature="n#fastvelocity_format_filesize#0;n#!!top" />
-            <element signature="n#fastvelocity_godaddy_request#0;n#!!top" />
-            <element signature="n#fvm_purge_others#0;n#!!top" />
-            <element signature="e#7556#7617#0#PHP" />
-            <element signature="e#7647#7862#0#PHP" />
-            <element signature="e#7887#8106#0#PHP" />
-            <element signature="e#8126#8338#0#PHP" />
-            <element signature="e#8365#8663#0#PHP" />
-            <element signature="e#8681#8891#0#PHP" />
-            <element signature="e#8913#9117#0#PHP" />
-            <element signature="e#9137#9335#0#PHP" />
-            <element signature="e#9362#9597#0#PHP" />
-            <element signature="e#9620#9847#0#PHP" />
-            <element signature="e#9869#10087#0#PHP" />
-            <element signature="e#10147#10521#0#PHP" />
-            <element signature="e#10229#10518#0#PHP" />
-            <element signature="e#10545#10763#0#PHP" />
-            <element signature="e#10784#11546#0#PHP" />
-            <element signature="e#11091#11544#0#PHP" />
-            <element signature="e#11258#11540#0#PHP" />
-            <element signature="e#11581#11804#0#PHP" />
-          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../../optimizoCache/1552977884/tmp/js-e629131e.js.transient">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../optimizoCache/1552977884/tmp/js-37020f0d.js.transient">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/../../optimizoCache/1552977884/tmp/js-e629131e.js.transient" />
+    <entry file="file://$PROJECT_DIR$/../../optimizoCache/1552977884/tmp/js-37020f0d.js.transient" />
     <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/stubs/zlib/zlib.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="274">
@@ -912,72 +463,37 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../fast-velocity-minify/fvm.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2465">
+        <state relative-caret-position="21900">
           <caret line="1483" selection-start-line="1483" selection-end-line="1483" />
-          <folding>
-            <element signature="e#26191#26212#0#HTML" expanded="true" />
-            <element signature="e#50283#50304#0#HTML" expanded="true" />
-            <element signature="e#53041#53062#0#HTML" expanded="true" />
-            <element signature="e#55759#55780#0#HTML" expanded="true" />
-            <element signature="e#56694#56715#0#HTML" expanded="true" />
-            <element signature="e#57887#57908#0#HTML" expanded="true" />
-            <element signature="e#59142#59163#0#HTML" expanded="true" />
-            <element signature="e#60370#60391#0#HTML" expanded="true" />
-            <element signature="e#61622#61643#0#HTML" expanded="true" />
-            <element signature="e#62810#62831#0#HTML" expanded="true" />
-            <element signature="e#64509#64530#0#HTML" expanded="true" />
-            <element signature="e#67205#67226#0#HTML" expanded="true" />
-            <element signature="e#70826#70830#0#HTML" expanded="true" />
-            <element signature="e#70900#70904#0#HTML" expanded="true" />
-            <element signature="e#71041#71045#0#HTML" expanded="true" />
-            <element signature="e#71134#71138#0#HTML" expanded="true" />
-            <element signature="e#71387#71408#0#HTML" expanded="true" />
-            <element signature="e#73243#73264#0#HTML" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../fast-velocity-minify/inc/functions.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
+        <state relative-caret-position="2250">
           <caret line="1716" column="52" selection-start-line="1716" selection-start-column="52" selection-end-line="1716" selection-end-column="52" />
           <folding>
             <element signature="e#50#136#0#PHP" />
             <element signature="e#1209#13890#0#PHP" />
             <element signature="n#fvm_function_available#0;n#!!top" />
             <element signature="e#13992#14042#0#PHP" />
-            <element signature="e#12364#12504#0#PHP" />
             <element signature="n#fastvelocity_plugin_activate#0;n#!!top" />
-            <element signature="e#12672#12807#0#PHP" />
-            <element signature="e#12863#14532#0#PHP" />
             <element signature="e#14742#15082#0#PHP" />
-            <element signature="e#13318#13404#0#PHP" />
             <element signature="e#15210#15765#0#PHP" />
             <element signature="e#15876#16320#0#PHP" />
             <element signature="n#fastvelocity_plugin_deactivate#0;n#!!top" />
-            <element signature="e#14710#14908#0#PHP" />
             <element signature="n#fastvelocity_plugin_uninstall#0;n#!!top" />
-            <element signature="e#15049#15630#0#PHP" />
-            <element signature="e#15305#15454#0#PHP" />
             <element signature="e#17251#17339#0#PHP" />
-            <element signature="e#15481#15625#0#PHP" />
             <element signature="n#fvm_is_local_domain#0;n#!!top" />
-            <element signature="e#16152#16283#0#PHP" />
             <element signature="e#18309#18522#0#PHP" />
-            <element signature="e#16573#16766#0#PHP" />
             <element signature="e#18695#18771#0#PHP" />
             <element signature="n#fastvelocity_min_get_hurl#0;n#!!top" />
             <element signature="e#18956#18998#0#PHP" />
-            <element signature="e#17138#17522#0#PHP" />
-            <element signature="e#17204#17464#0#PHP" />
             <element signature="e#19473#19517#0#PHP" />
-            <element signature="e#17467#17522#0#PHP" />
             <element signature="e#19688#19781#0#PHP" />
             <element signature="e#19800#19902#0#PHP" />
             <element signature="e#19932#20066#0#PHP" />
-            <element signature="e#18188#18339#0#PHP" />
             <element signature="e#20368#20463#0#PHP" />
-            <element signature="e#18378#18565#0#PHP" />
             <element signature="e#20890#20988#0#PHP" />
             <element signature="e#21009#21110#0#PHP" />
             <element signature="n#fvm_internal_url#0;n#!!top" />
@@ -986,159 +502,45 @@
             <element signature="e#21504#21645#0#PHP" />
             <element signature="e#21647#21792#0#PHP" />
             <element signature="e#21794#21939#0#PHP" />
-            <element signature="e#19749#20078#0#PHP" />
-            <element signature="e#19886#20076#0#PHP" />
-            <element signature="e#19967#20074#0#PHP" />
             <element signature="e#22272#22352#0#PHP" />
             <element signature="n#fastvelocity_min_in_arrayi#0;n#!!top" />
-            <element signature="e#20370#20744#0#PHP" />
-            <element signature="e#20415#20740#0#PHP" />
             <element signature="e#23010#23071#0#PHP" />
             <element signature="n#fvm_compat_urls#0;n#!!top" />
-            <element signature="e#20948#21338#0#PHP" />
-            <element signature="e#21016#21276#0#PHP" />
             <element signature="e#23597#23641#0#PHP" />
-            <element signature="e#21280#21338#0#PHP" />
             <element signature="n#fastvelocity_min_minify_css_string#0;n#!!top" />
             <element signature="e#24183#24243#0#PHP" />
             <element signature="n#fvm_server_is_windows#0;n#!!top" />
-            <element signature="e#21969#22064#0#PHP" />
             <element signature="e#24403#24472#0#PHP" />
-            <element signature="e#22066#22193#0#PHP" />
-            <element signature="e#22128#22190#0#PHP" />
             <element signature="e#24997#25128#0#PHP" />
             <element signature="e#25025#25125#0#PHP" />
-            <element signature="e#22756#22877#0#PHP" />
-            <element signature="e#22839#22877#0#PHP" />
             <element signature="e#25605#25661#0#PHP" />
             <element signature="e#25663#25745#0#PHP" />
             <element signature="n#fastvelocity_min_minify_js_string#0;n#!!top" />
-            <element signature="e#23546#23673#0#PHP" />
             <element signature="n#fastvelocity_min_minify_html#0;n#!!top" />
             <element signature="n#fastvelocity_min_html_compression_finish#0;n#!!top" />
             <element signature="n#fastvelocity_min_html_compression_start#0;n#!!top" />
             <element signature="e#26740#26801#0#PHP" />
             <element signature="n#fastvelocity_remove_redundant_shortlink#0;n#!!top" />
             <element signature="n#fastvelocity_min_get_css#0;n#!!top" />
-            <element signature="e#24771#24916#0#PHP" />
-            <element signature="e#25238#25365#0#PHP" />
-            <element signature="e#25325#25365#0#PHP" />
-            <element signature="e#25437#25625#0#PHP" />
             <element signature="e#28085#28191#0#PHP" />
             <element signature="e#28091#28184#0#PHP" />
             <element signature="e#28097#28182#1#PHP" />
             <element signature="e#28111#28149#0#PHP" />
             <element signature="e#28303#28395#0#PHP" />
             <element signature="n#fvm_download_and_minify#0;n#!!top" />
-            <element signature="e#28655#28717#0#PHP" />
-            <element signature="e#28719#28788#0#PHP" />
-            <element signature="e#28802#28876#0#PHP" />
-            <element signature="e#28878#28944#0#PHP" />
-            <element signature="e#28966#29072#0#PHP" />
-            <element signature="e#29033#29072#0#PHP" />
-            <element signature="e#29099#29302#0#PHP" />
-            <element signature="e#26642#28107#0#PHP" />
-            <element signature="e#26683#28104#0#PHP" />
-            <element signature="e#26838#27370#0#PHP" />
-            <element signature="e#26865#27094#0#PHP" />
-            <element signature="e#26982#27094#0#PHP" />
-            <element signature="e#29981#30078#0#PHP" />
-            <element signature="e#27569#28101#0#PHP" />
-            <element signature="e#27596#27825#0#PHP" />
-            <element signature="e#27713#27825#0#PHP" />
-            <element signature="e#30778#30875#0#PHP" />
-            <element signature="e#28197#28808#0#PHP" />
-            <element signature="e#28343#28536#0#PHP" />
-            <element signature="e#28442#28536#0#PHP" />
-            <element signature="e#31532#31629#0#PHP" />
-            <element signature="e#28850#29593#0#PHP" />
-            <element signature="e#29020#29590#0#PHP" />
-            <element signature="e#29113#29310#0#PHP" />
-            <element signature="e#29214#29310#0#PHP" />
-            <element signature="e#32357#32456#0#PHP" />
-            <element signature="e#29676#31097#0#PHP" />
-            <element signature="e#29832#30363#0#PHP" />
-            <element signature="e#29859#30087#0#PHP" />
-            <element signature="e#29975#30087#0#PHP" />
-            <element signature="e#33181#33276#0#PHP" />
-            <element signature="e#30562#31094#0#PHP" />
-            <element signature="e#30589#30818#0#PHP" />
-            <element signature="e#30706#30818#0#PHP" />
-            <element signature="e#33959#34054#0#PHP" />
-            <element signature="e#34247#34382#0#PHP" />
             <element signature="n#fastvelocity_min_concatenate_google_fonts_allowed#0;n#!!top" />
-            <element signature="e#31650#31707#0#PHP" />
             <element signature="n#fastvelocity_min_concatenate_google_fonts#0;n#!!top" />
-            <element signature="e#31929#32628#0#PHP" />
-            <element signature="e#31976#32625#0#PHP" />
-            <element signature="e#32318#32621#0#PHP" />
-            <element signature="e#32397#32537#0#PHP" />
-            <element signature="e#32431#32530#0#PHP" />
-            <element signature="e#32543#32621#0#PHP" />
-            <element signature="e#32651#32697#0#PHP" />
-            <element signature="e#32775#34237#0#PHP" />
-            <element signature="e#32835#33389#0#PHP" />
-            <element signature="e#33123#33381#0#PHP" />
-            <element signature="e#33255#33306#0#PHP" />
-            <element signature="e#33312#33381#0#PHP" />
-            <element signature="e#33323#33376#0#PHP" />
-            <element signature="e#33469#33902#0#PHP" />
-            <element signature="e#33692#33894#0#PHP" />
-            <element signature="e#33830#33894#0#PHP" />
-            <element signature="e#33841#33889#0#PHP" />
-            <element signature="e#34013#34231#0#PHP" />
-            <element signature="e#34104#34231#0#PHP" />
-            <element signature="e#34309#34546#0#PHP" />
-            <element signature="e#34338#34543#0#PHP" />
-            <element signature="e#34443#34521#0#PHP" />
-            <element signature="e#34588#34726#0#PHP" />
-            <element signature="e#34647#34723#0#PHP" />
-            <element signature="e#34739#34849#0#PHP" />
-            <element signature="e#34824#34849#0#PHP" />
             <element signature="n#fastvelocity_min_disable_wp_emojicons#0;n#!!top" />
             <element signature="n#fastvelocity_disable_emojis_tinymce#0;n#!!top" />
-            <element signature="e#35453#35564#0#PHP" />
-            <element signature="e#35538#35564#0#PHP" />
             <element signature="n#fastvelocity_escape_double#0;n#!!top" />
             <element signature="n#fastvelocity_remove_cssjs_ver#0;n#!!top" />
-            <element signature="e#39313#39391#0#PHP" />
             <element signature="n#fvm_get_protocol#0;n#!!top" />
-            <element signature="e#36469#36996#0#PHP" />
-            <element signature="e#36609#36993#0#PHP" />
-            <element signature="e#36796#36919#0#PHP" />
-            <element signature="e#36927#36993#0#PHP" />
-            <element signature="e#37110#37500#0#PHP" />
-            <element signature="e#37178#37438#0#PHP" />
-            <element signature="e#40811#40855#0#PHP" />
-            <element signature="e#37442#37500#0#PHP" />
             <element signature="n#fvm_safename#0;n#!!top" />
-            <element signature="e#37705#37749#0#PHP" />
-            <element signature="e#37804#37845#0#PHP" />
             <element signature="n#fastvelocity_escape_url_js#0;n#!!top" />
             <element signature="n#fastvelocity_exclude_contents#0;n#!!top" />
-            <element signature="e#38209#39049#0#PHP" />
-            <element signature="e#42659#42738#0#PHP" />
-            <element signature="e#42686#42735#0#PHP" />
-            <element signature="e#42850#42964#0#PHP" />
-            <element signature="e#42877#42961#0#PHP" />
             <element signature="n#fastvelocity_default_ignore#0;n#!!top" />
-            <element signature="e#39545#40302#0#PHP" />
-            <element signature="e#39884#40004#0#PHP" />
-            <element signature="e#43641#43756#0#PHP" />
-            <element signature="e#43703#43752#0#PHP" />
-            <element signature="e#43759#43871#0#PHP" />
-            <element signature="e#43818#43867#0#PHP" />
-            <element signature="e#43913#43940#0#PHP" />
             <element signature="n#fastvelocity_ie_blacklist#0;n#!!top" />
-            <element signature="e#44316#44381#0#PHP" />
-            <element signature="e#44356#44381#0#PHP" />
             <element signature="n#fastvelocity_download#0;n#!!top" />
-            <element signature="e#44754#44887#0#PHP" />
-            <element signature="e#44775#44885#0#PHP" />
-            <element signature="e#41269#41389#0#PHP" />
-            <element signature="e#41342#41386#0#PHP" />
-            <element signature="e#41403#41509#0#PHP" />
-            <element signature="e#41544#41611#0#PHP" />
           </folding>
         </state>
       </provider>
@@ -1150,79 +552,18 @@
           <folding>
             <element signature="n#deactivate#0;n#OptimizoClass#0;n#!!top" />
             <element signature="n#addToWPConfig#0;n#OptimizoClass#0;n#!!top" />
-            <element signature="e#318#569#0#PHP" />
-            <element signature="e#643#1442#0#PHP" />
-            <element signature="e#732#1442#0#PHP" />
-            <element signature="e#1014#1095#0#PHP" />
-            <element signature="e#1100#1442#0#PHP" />
-            <element signature="e#1357#1438#0#PHP" />
             <element signature="n#writeToHtaccess#0;n#OptimizoClass#0;n#!!top" />
-            <element signature="e#1480#2135#0#PHP" />
-            <element signature="e#2139#11347#0#PHP" />
-            <element signature="e#6965#11347#0#PHP" />
-            <element signature="e#11261#11343#0#PHP" />
             <element signature="n#removeFromWPConfig#0;n#OptimizoClass#0;n#!!top" />
-            <element signature="e#11388#11593#0#PHP" />
-            <element signature="e#11798#11938#0#PHP" />
             <element signature="n#removeFromHtaccess#0;n#OptimizoClass#0;n#!!top" />
-            <element signature="e#11978#12127#0#PHP" />
-            <element signature="e#16305#16380#0#PHP" />
             <element signature="n#minifyCSS#0;n#OptimizoClass#0;n#!!top" />
             <element signature="n#createCache#0;n#OptimizoClass#0;n#!!top" />
-            <element signature="e#17594#17765#0#PHP" />
-            <element signature="e#17779#17833#0#PHP" />
             <element signature="n#removeCache#0;n#OptimizoClass#0;n#!!top" />
             <element signature="n#getWebsiteHTTPResponse#0;n#OptimizoClass#0;n#!!top" />
-            <element signature="e#18040#18082#0#PHP" />
-            <element signature="e#18386#18494#0#PHP" />
-            <element signature="e#18467#18494#0#PHP" />
             <element signature="n#returnFullURL#0;n#OptimizoClass#0;n#!!top" />
-            <element signature="e#18616#18660#0#PHP" />
-            <element signature="e#18054#18470#0#PHP" />
-            <element signature="e#18126#18408#0#PHP" />
-            <element signature="e#18364#18408#0#PHP" />
-            <element signature="e#18412#18470#0#PHP" />
-            <element signature="e#18597#18692#0#PHP" />
-            <element signature="e#18691#18793#0#PHP" />
-            <element signature="e#18823#18957#0#PHP" />
-            <element signature="e#19186#19357#0#PHP" />
-            <element signature="e#19259#19354#0#PHP" />
-            <element signature="e#19397#19600#0#PHP" />
-            <element signature="e#19781#19879#0#PHP" />
-            <element signature="e#19900#20001#0#PHP" />
             <element signature="n#minifyInArray#0;n#OptimizoClass#0;n#!!top" />
-            <element signature="e#20420#20829#0#PHP" />
-            <element signature="e#20471#20826#0#PHP" />
-            <element signature="e#20761#20822#0#PHP" />
             <element signature="n#checkIfInternalLink#0;n#OptimizoClass#0;n#!!top" />
-            <element signature="e#20911#20991#0#PHP" />
-            <element signature="e#20994#21059#0#PHP" />
-            <element signature="e#21062#21205#0#PHP" />
-            <element signature="e#21208#21355#0#PHP" />
-            <element signature="e#21358#21505#0#PHP" />
-            <element signature="e#21553#21940#0#PHP" />
-            <element signature="e#21705#21936#0#PHP" />
-            <element signature="e#21798#21931#0#PHP" />
-            <element signature="e#21843#21925#0#PHP" />
             <element signature="n#getWPProtocol#0;n#OptimizoClass#0;n#!!top" />
-            <element signature="e#22999#23415#0#PHP" />
-            <element signature="e#23071#23353#0#PHP" />
-            <element signature="e#23309#23353#0#PHP" />
-            <element signature="e#23357#23415#0#PHP" />
-            <element signature="n#FixPermissions#0;n#OptimizoClass#0;n#!!top" />
-            <element signature="e#29423#29632#0#PHP" />
-            <element signature="e#29489#29629#0#PHP" />
-            <element signature="e#29696#29837#0#PHP" />
-            <element signature="e#29706#29791#0#PHP" />
-            <element signature="e#29841#30158#0#PHP" />
-            <element signature="e#29868#30155#0#PHP" />
-            <element signature="e#29988#30151#0#PHP" />
             <element signature="n#compatURL#0;n#OptimizoClass#0;n#!!top" />
-            <element signature="e#23714#23996#0#PHP" />
-            <element signature="e#23952#23996#0#PHP" />
-            <element signature="n#tempStore#0;n#OptimizoClass#0;n#!!top" />
-            <element signature="e#24916#24998#0#PHP" />
-            <element signature="e#24973#24998#0#PHP" />
             <element signature="n#setTempStore#0;n#OptimizoClass#0;n#!!top" />
           </folding>
         </state>
@@ -1230,11 +571,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/optimizo.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="200">
-          <caret line="34" column="91" selection-start-line="34" selection-start-column="91" selection-end-line="34" selection-end-column="91" />
-          <folding>
-            <element signature="e#2616#5120#0#PHP" />
-          </folding>
+        <state relative-caret-position="75">
+          <caret line="5" column="21" selection-start-line="5" selection-start-column="21" selection-end-line="5" selection-end-column="21" />
         </state>
       </provider>
     </entry>

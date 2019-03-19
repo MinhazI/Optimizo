@@ -2,8 +2,8 @@
 /**
  * Plugin Name: Optimizo
  * Plugin URI:  https://www.optimizo.lk
- * Description: Automatic optimization for your website
- * Version:     0.0.6
+ * Description: Automatic optimization for your website, this plugin will minify your website's HTML. It will also minify your JavaScript files and combine them as one. Optimizo will also cache your website. All of these optimizations will help your website in reducing the time it takes to load (also known as 'Page Load Time').
+ * Version:     0.0.8
  * Author:      Minhaz Irphan
  * Author URI:  https://minhaz.winauthority.com
  * License:     GPL2
@@ -32,7 +32,7 @@ class Optimizo {
 
 		$toolbar->addToolbar();
 
-		echo "<!-- The website has been optimized by Optimizo. Web: https://www.optimizo.lk -->";
+		echo "<!-- This website has been optimized by Optimizo. Web: https://www.optimizo.lk -->";
 
 	}
 
@@ -101,7 +101,7 @@ class Optimizo {
 function display_message_on_activation() {
 	?>
     <div class="notice notice-info">
-        <p><?php _e( 'Thank you for installing & activating Optimizo. Your website is in good hands!' ); ?></p>
+        <p><?php _e( "Thank you for installing & activating Optimizo. Your website is in good hands! \n Optimizo has minified your website's HTML and JavaScript and has also started caching your website on your server. "); ?></p>
     </div>
 	<?php
 }
@@ -304,7 +304,7 @@ function minifyHeaderJS() {
 			$file_url = $optimizoClass->getWPProtocol( $cacheDir . '/' . $hash . '.min.js' );
 
 			# generate a new cache file
-//				clearstatcache();
+				clearstatcache();
 			if ( ! file_exists( $file ) ) {
 
 				# code and log initialization
