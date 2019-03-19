@@ -18,6 +18,7 @@ class OptimizoClass {
 
 		$this->removeFromWPConfig();
 		$this->removeFromHtaccess();
+		$this->removeCache();
 
 	}
 
@@ -301,48 +302,61 @@ class OptimizoClass {
 
 //		$cacheDir = WP_CONTENT_DIR . '/optimizoCache';
 
-		$ctime = time();
+		$ctime  = time();
 		$upload = array();
 
-		$upload['basedir'] =  WP_CONTENT_DIR . '/optimizoCache';
-		$upload['baseurl'] =  WP_CONTENT_DIR . '/optimizoCache';
+		$upload['basedir'] = WP_CONTENT_DIR . '/optimizoCache';
+		$upload['baseurl'] = WP_CONTENT_DIR . '/optimizoCache';
 
 		# create
-		$uploadsdir  = $upload['basedir'];
-		$uploadsurl  = $upload['baseurl'];
-		$cachebase   = $uploadsdir.'/'.$ctime;
-		$cachebaseurl  = $uploadsurl.'/'.$ctime;
-		$cachedir    = $cachebase.'/out';
-		$tmpdir      = $cachebase.'/tmp';
-		$headerdir   = $cachebase.'/header';
-		$cachedirurl = $cachebaseurl.'/out';
+		$uploadsdir   = $upload['basedir'];
+		$uploadsurl   = $upload['baseurl'];
+		$cachebase    = $uploadsdir . '/' . $ctime;
+		$cachebaseurl = $uploadsurl . '/' . $ctime;
+		$cachedir     = $cachebase . '/out';
+		$tmpdir       = $cachebase . '/tmp';
+		$headerdir    = $cachebase . '/header';
+		$cachedirurl  = $cachebaseurl . '/out';
 
 		# get permissions from uploads directory
 		$dir_perms = 0777;
-		if(is_dir($uploadsdir.'/cache') && function_exists('stat')) {
-			if ($stat = @stat($uploadsdir.'/cache')) { $dir_perms = $stat['mode'] & 0007777; }
+		if ( is_dir( $uploadsdir . '/cache' ) && function_exists( 'stat' ) ) {
+			if ( $stat = @stat( $uploadsdir . '/cache' ) ) {
+				$dir_perms = $stat['mode'] & 0007777;
+			}
 		}
 
 		# mkdir and check if umask requires chmod
-		$dirs = array($cachebase, $cachedir, $tmpdir, $headerdir);
-		foreach ($dirs as $target) {
-			if(!is_dir($target)) {
-				if (@mkdir($target, $dir_perms, true)){
-					if ($dir_perms != ($dir_perms & ~umask())){
-						$folder_parts = explode( '/', substr($target, strlen(dirname($target)) + 1 ));
-						for ($i = 1, $c = count($folder_parts ); $i <= $c; $i++){
-							@chmod(dirname($target) . '/' . implode( '/', array_slice( $folder_parts, 0, $i ) ), $dir_perms );
+		$dirs = array( $cachebase, $cachedir, $tmpdir, $headerdir );
+		foreach ( $dirs as $target ) {
+			if ( ! is_dir( $target ) ) {
+				if ( @mkdir( $target, $dir_perms, true ) ) {
+					if ( $dir_perms != ( $dir_perms & ~umask() ) ) {
+						$folder_parts = explode( '/', substr( $target, strlen( dirname( $target ) ) + 1 ) );
+						for ( $i = 1, $c = count( $folder_parts ); $i <= $c; $i ++ ) {
+							@chmod( dirname( $target ) . '/' . implode( '/', array_slice( $folder_parts, 0, $i ) ), $dir_perms );
 						}
 					}
 				} else {
 					# fallback
-					wp_mkdir_p($target);
+					wp_mkdir_p( $target );
 				}
 			}
 		}
 
 		# return
-		return array('cachebase'=>$cachebase,'tmpdir'=>$tmpdir, 'cachedir'=>$cachedir, 'cachedirurl'=>$cachedirurl, 'headerdir'=>$headerdir);
+		return array( 'cachebase'   => $cachebase,
+		              'tmpdir'      => $tmpdir,
+		              'cachedir'    => $cachedir,
+		              'cachedirurl' => $cachedirurl,
+		              'headerdir'   => $headerdir
+		);
+	}
+
+	function removeCache() {
+		if ( is_dir( WP_CONTENT_DIR . '/optimizoCache' ) ) {
+			rmdir( WP_CONTENT_DIR . '/optimizoCache' );
+		}
 	}
 
 	function getWebsiteHTTPResponse( $url ) {
@@ -552,26 +566,222 @@ class OptimizoClass {
 
 	}
 
-	function getTempStore($key){
+	function getTempStore( $key ) {
 		$cachepath = $this->createCache();
-		$tmpdir = $cachepath['tmpdir'];
-		$f = $tmpdir.'/'.$key.'.transient';
+		$tmpdir    = $cachepath['tmpdir'];
+		$f         = $tmpdir . '/' . $key . '.transient';
 		clearstatcache();
-		if(file_exists($f)) {
-			return file_get_contents($f);
+		if ( file_exists( $f ) ) {
+			return file_get_contents( $f );
 		} else {
 			return false;
 		}
 	}
 
-	function setTempStore($key, $code){
-		if(is_null($code) || empty($code)) { return false; }
+	function setTempStore( $key, $code ) {
+		if ( is_null( $code ) || empty( $code ) ) {
+			return false;
+		}
 		$cachepath = $this->createCache();
-		$tmpdir = $cachepath['tmpdir'];
-		$f = $tmpdir.'/'.$key.'.transient';
-		file_put_contents($f, $code);
-		fastvelocity_fix_permission_bits($f);
+		$tmpdir    = $cachepath['tmpdir'];
+		$f         = $tmpdir . '/' . $key . '.transient';
+		file_put_contents( $f, $code );
+		$this->fixPermissions( $f );
+
 		return true;
 	}
+
+	function downloadAndMinify( $furl, $inline, $type, $handle ) {
+		global $wp_domain, $wp_home, $wp_home_path, $fvm_debug;
+
+		# must have
+		if ( is_null( $furl ) || empty( $furl ) ) {
+			return false;
+		}
+		if ( ! in_array( $type, array( 'js', 'css' ) ) ) {
+			return false;
+		}
+
+		# defaults
+		if ( is_null( $inline ) || empty( $inline ) ) {
+			$inline = '';
+		}
+		$printhandle = '';
+		if ( is_null( $handle ) || empty( $handle ) ) {
+			$handle = '';
+		} else {
+			$printhandle = "[$handle]";
+		}
+
+		# debug request
+		$dreq = array(
+			'furl'   => $furl,
+			'inline' => $inline,
+			'type'   => $type,
+			'handle' => $handle
+		);
+
+		# filters and defaults
+		$printurl = str_ireplace( array( site_url(), home_url(), 'http:', 'https:' ), '', $furl );
+
+		# linux servers
+		if ( stripos( $furl, $wp_domain ) !== false ) {
+			# default
+			$f = str_ireplace( rtrim( $wp_home, '/' ), rtrim( $wp_home_path, '/' ), $furl );
+			clearstatcache();
+			if ( file_exists( $f ) ) {
+				if ( $type == 'js' ) {
+					$code = $this->getJS( $furl, file_get_contents( $f ) );
+				} else {
+					$code = fastvelocity_min_get_css( $furl, file_get_contents( $f ) . $inline );
+				}
+
+				# log, save and return
+				$log = $printurl;
+				if ( $fvm_debug == true ) {
+					$log .= " --- Debug: $printhandle was opened from $f ---";
+				}
+				$log    .= PHP_EOL;
+				$return = array( 'request' => $dreq, 'log' => $log, 'code' => $code, 'status' => true );
+
+				return json_encode( $return );
+			}
+
+			# failover when home_url != site_url
+			$nfurl = str_ireplace( site_url(), home_url(), $furl );
+			$f     = str_ireplace( rtrim( $wp_home, '/' ), rtrim( $wp_home_path, '/' ), $nfurl );
+			clearstatcache();
+			if ( file_exists( $f ) ) {
+				if ( $type == 'js' ) {
+					$code = $this->getJS( $furl, file_get_contents( $f ) );
+				} else {
+					$code = fastvelocity_min_get_css( $furl, file_get_contents( $f ) . $inline );
+				}
+
+				# log, save and return
+				$log = $printurl;
+				if ( $fvm_debug == true ) {
+					$log .= " --- Debug: $printhandle was opened from $f ---";
+				}
+				$log    .= PHP_EOL;
+				$return = array( 'request' => $dreq, 'log' => $log, 'code' => $code, 'status' => true );
+
+				return json_encode( $return );
+			}
+		}
+
+
+		# fallback when home_url != site_url
+		if ( stripos( $furl, $wp_domain ) !== false && home_url() != site_url() ) {
+			$nfurl = str_ireplace( site_url(), home_url(), $furl );
+			$code  = fastvelocity_download( $nfurl );
+			if ( $code !== false && ! empty( $code ) && strtolower( substr( $code, 0, 9 ) ) != "<!doctype" ) {
+				if ( $type == 'js' ) {
+					$code = $this->getJS( $furl, $code );
+				} else {
+					$code = fastvelocity_min_get_css( $furl, $code . $inline );
+				}
+
+				# log, save and return
+				$log = $printurl;
+				if ( $fvm_debug == true ) {
+					$log .= " --- Debug: $printhandle was fetched from $furl ---";
+				}
+				$log    .= PHP_EOL;
+				$return = array( 'request' => $dreq, 'log' => $log, 'code' => $code, 'status' => true );
+
+				return json_encode( $return );
+			}
+		}
+
+
+		# if remote urls failed... try to open locally again, regardless of OS in use
+		if ( stripos( $furl, $wp_domain ) !== false ) {
+			# default
+			$f = str_ireplace( rtrim( $wp_home, '/' ), rtrim( $wp_home_path, '/' ), $furl );
+			clearstatcache();
+			if ( file_exists( $f ) ) {
+				if ( $type == 'js' ) {
+					$code = $this->getJS( $furl, file_get_contents( $f ) );
+				} else {
+					$code = fastvelocity_min_get_css( $furl, file_get_contents( $f ) . $inline );
+				}
+
+				# log, save and return
+				$log = $printurl;
+				if ( $fvm_debug == true ) {
+					$log .= " --- Debug: $printhandle was opened from $f ---";
+				}
+				$log    .= PHP_EOL;
+				$return = array( 'request' => $dreq, 'log' => $log, 'code' => $code, 'status' => true );
+
+				return json_encode( $return );
+			}
+
+			# failover when home_url != site_url
+			$nfurl = str_ireplace( site_url(), home_url(), $furl );
+			$f     = str_ireplace( rtrim( $wp_home, '/' ), rtrim( $wp_home_path, '/' ), $nfurl );
+			clearstatcache();
+			if ( file_exists( $f ) ) {
+				if ( $type == 'js' ) {
+					$code = $this->getJS( $furl, file_get_contents( $f ) );
+				} else {
+					$code = fastvelocity_min_get_css( $furl, file_get_contents( $f ) . $inline );
+				}
+
+				# log, save and return
+				$log = $printurl;
+				if ( $fvm_debug == true ) {
+					$log .= " --- Debug: $printhandle was opened from $f ---";
+				}
+				$log    .= PHP_EOL;
+				$return = array( 'request' => $dreq, 'log' => $log, 'code' => $code, 'status' => true );
+
+				return json_encode( $return );
+			}
+		}
+
+
+		# else fail
+		$log = $printurl;
+		if ( $fvm_debug == true ) {
+			$log .= " --- Debug: $printhandle failed. Tried wp_remote_get, curl and local file_get_contents. ---";
+		}
+		$return = array( 'request' => $dreq, 'log' => $log, 'code' => '', 'status' => false );
+
+		return json_encode( $return );
+	}
+
+	# minify js on demand (one file at one time, for compatibility)
+	function getJS( $url, $js ) {
+		global $fvm_debug;
+
+		# exclude minification on already minified files + jquery (because minification might break those)
+		$excl = array( 'jquery.js', '.min.js', '-min.js', '/uploads/fusion-scripts/', '/min/', '.packed.js' );
+		foreach ( $excl as $e ) {
+			if ( stripos( basename( $url ), $e ) !== false ) {
+				$disable_js_minification = true;
+				break;
+			}
+		}
+
+		# minify JS
+		$js = fvm_compat_urls( $js );
+
+		# try to remove source mapping files
+		$filename = basename( $url );
+		$remove   = array( "//# sourceMappingURL=$filename.map", "//# sourceMappingURL = $filename.map" );
+		$js       = str_ireplace( $remove, '', $js );
+
+		# needed when merging js files
+		$js = trim( $js );
+		if ( substr( $js, - 1 ) != ';' ) {
+			$js = $js . ';';
+		}
+
+		# return html
+		return $js . PHP_EOL;
+	}
+
 
 }

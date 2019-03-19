@@ -329,10 +329,7 @@ function minifyHeaderJS() {
 						$json = false;
 						$json = $optimizoClass->getTempStore( $tkey );
 						if ( $json === false ) {
-//							$json = fvm_download_and_minify( $furl, null, $disable_js_minification, 'js', $handle );
-//							if ( $fvm_debug == true ) {
-//								echo "<!-- FVM DEBUG: Uncached file processing now for $handle / $furl -->" . PHP_EOL;
-//							}
+							$json = $optimizoClass->downloadAndMinify( $furl, null, 'js', $handle );
 							$optimizoClass->setTempStore( $tkey, $json);
 						}
 
@@ -404,9 +401,9 @@ function minifyHeaderJS() {
 				wp_enqueue_script( "optimizo-header-$i" );
 			} else {
 				# file could not be generated, output something meaningful
-				echo "<!-- ERROR: FVM was not allowed to save it's cache on - $file -->";
+				echo "<!-- ERROR: Optimizo was not allowed to save it's cache on - $file -->";
 				echo "<!-- Please check if the path above is correct and ensure your server has writting permission there! -->";
-				echo "<!-- If you found a bug, please report this on https://wordpress.org/support/plugin/fast-velocity-minify/ -->";
+				echo "<!-- If you found a bug, please email us at hello@winauthorityinnovatives.com -->";
 			}
 
 			# other scripts need to be requeued for the order of files to be kept
