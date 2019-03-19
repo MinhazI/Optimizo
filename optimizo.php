@@ -32,6 +32,8 @@ class Optimizo {
 
 		$toolbar->addToolbar();
 
+		echo "<!-- The website has been optimized by Optimizo. Web: https://www.optimizo.lk -->";
+
 	}
 
 	function activation() {

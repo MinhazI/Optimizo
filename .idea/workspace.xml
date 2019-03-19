@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5f3587ba-2adc-43f4-a239-8b0a52445a84" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/class.optimizo.php" beforeDir="false" afterPath="$PROJECT_DIR$/class.optimizo.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/optimizo.php" beforeDir="false" afterPath="$PROJECT_DIR$/optimizo.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -26,10 +25,9 @@
       <file leaf-file-name="class.optimizo.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/class.optimizo.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1034">
-              <caret line="781" column="8" selection-start-line="781" selection-start-column="8" selection-end-line="781" selection-end-column="8" />
+            <state relative-caret-position="75">
+              <caret line="10" column="25" selection-start-line="10" selection-start-column="25" selection-end-line="10" selection-end-column="25" />
               <folding>
-                <element signature="n#activate#0;n#OptimizoClass#0;n#!!top" />
                 <element signature="n#deactivate#0;n#OptimizoClass#0;n#!!top" />
                 <element signature="n#addToWPConfig#0;n#OptimizoClass#0;n#!!top" />
                 <element signature="e#318#569#0#PHP" />
@@ -143,8 +141,8 @@
       <file leaf-file-name="optimizo.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/optimizo.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="389" column="50" lean-forward="true" selection-start-line="389" selection-start-column="50" selection-end-line="389" selection-end-column="50" />
+            <state relative-caret-position="200">
+              <caret line="34" column="91" selection-start-line="34" selection-start-column="91" selection-end-line="34" selection-end-column="91" />
               <folding>
                 <element signature="e#2616#5120#0#PHP" />
               </folding>
@@ -512,12 +510,12 @@
       <workItem from="1552560751724" duration="7260000" />
       <workItem from="1552650522916" duration="954000" />
       <workItem from="1552716626920" duration="8654000" />
-      <workItem from="1552804563474" duration="22341000" />
+      <workItem from="1552804563474" duration="22544000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="96477000" />
+    <option name="totallyTimeSpent" value="96680000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
@@ -905,96 +903,37 @@
     <entry file="file://$PROJECT_DIR$/../../optimizoCache/1552977884/tmp/js-37020f0d.js.transient">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/class.optimizo.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1034">
-          <caret line="781" column="8" selection-start-line="781" selection-start-column="8" selection-end-line="781" selection-end-column="8" />
-          <folding>
-            <element signature="n#activate#0;n#OptimizoClass#0;n#!!top" />
-            <element signature="n#deactivate#0;n#OptimizoClass#0;n#!!top" />
-            <element signature="n#addToWPConfig#0;n#OptimizoClass#0;n#!!top" />
-            <element signature="e#318#569#0#PHP" />
-            <element signature="e#643#1442#0#PHP" />
-            <element signature="e#732#1442#0#PHP" />
-            <element signature="e#1014#1095#0#PHP" />
-            <element signature="e#1100#1442#0#PHP" />
-            <element signature="e#1357#1438#0#PHP" />
-            <element signature="n#writeToHtaccess#0;n#OptimizoClass#0;n#!!top" />
-            <element signature="e#1480#2135#0#PHP" />
-            <element signature="e#2139#11347#0#PHP" />
-            <element signature="e#6965#11347#0#PHP" />
-            <element signature="e#11261#11343#0#PHP" />
-            <element signature="n#removeFromWPConfig#0;n#OptimizoClass#0;n#!!top" />
-            <element signature="e#11388#11593#0#PHP" />
-            <element signature="e#11798#11938#0#PHP" />
-            <element signature="n#removeFromHtaccess#0;n#OptimizoClass#0;n#!!top" />
-            <element signature="e#11978#12127#0#PHP" />
-            <element signature="e#16305#16380#0#PHP" />
-            <element signature="n#minifyCSS#0;n#OptimizoClass#0;n#!!top" />
-            <element signature="n#createCache#0;n#OptimizoClass#0;n#!!top" />
-            <element signature="e#17594#17765#0#PHP" />
-            <element signature="e#17779#17833#0#PHP" />
-            <element signature="n#removeCache#0;n#OptimizoClass#0;n#!!top" />
-            <element signature="n#getWebsiteHTTPResponse#0;n#OptimizoClass#0;n#!!top" />
-            <element signature="e#18040#18082#0#PHP" />
-            <element signature="e#18386#18494#0#PHP" />
-            <element signature="e#18467#18494#0#PHP" />
-            <element signature="n#returnFullURL#0;n#OptimizoClass#0;n#!!top" />
-            <element signature="e#18616#18660#0#PHP" />
-            <element signature="e#18054#18470#0#PHP" />
-            <element signature="e#18126#18408#0#PHP" />
-            <element signature="e#18364#18408#0#PHP" />
-            <element signature="e#18412#18470#0#PHP" />
-            <element signature="e#18597#18692#0#PHP" />
-            <element signature="e#18691#18793#0#PHP" />
-            <element signature="e#18823#18957#0#PHP" />
-            <element signature="e#19186#19357#0#PHP" />
-            <element signature="e#19259#19354#0#PHP" />
-            <element signature="e#19397#19600#0#PHP" />
-            <element signature="e#19781#19879#0#PHP" />
-            <element signature="e#19900#20001#0#PHP" />
-            <element signature="n#minifyInArray#0;n#OptimizoClass#0;n#!!top" />
-            <element signature="e#20420#20829#0#PHP" />
-            <element signature="e#20471#20826#0#PHP" />
-            <element signature="e#20761#20822#0#PHP" />
-            <element signature="n#checkIfInternalLink#0;n#OptimizoClass#0;n#!!top" />
-            <element signature="e#20911#20991#0#PHP" />
-            <element signature="e#20994#21059#0#PHP" />
-            <element signature="e#21062#21205#0#PHP" />
-            <element signature="e#21208#21355#0#PHP" />
-            <element signature="e#21358#21505#0#PHP" />
-            <element signature="e#21553#21940#0#PHP" />
-            <element signature="e#21705#21936#0#PHP" />
-            <element signature="e#21798#21931#0#PHP" />
-            <element signature="e#21843#21925#0#PHP" />
-            <element signature="n#getWPProtocol#0;n#OptimizoClass#0;n#!!top" />
-            <element signature="e#22999#23415#0#PHP" />
-            <element signature="e#23071#23353#0#PHP" />
-            <element signature="e#23309#23353#0#PHP" />
-            <element signature="e#23357#23415#0#PHP" />
-            <element signature="n#FixPermissions#0;n#OptimizoClass#0;n#!!top" />
-            <element signature="e#29423#29632#0#PHP" />
-            <element signature="e#29489#29629#0#PHP" />
-            <element signature="e#29696#29837#0#PHP" />
-            <element signature="e#29706#29791#0#PHP" />
-            <element signature="e#29841#30158#0#PHP" />
-            <element signature="e#29868#30155#0#PHP" />
-            <element signature="e#29988#30151#0#PHP" />
-            <element signature="n#compatURL#0;n#OptimizoClass#0;n#!!top" />
-            <element signature="e#23714#23996#0#PHP" />
-            <element signature="e#23952#23996#0#PHP" />
-            <element signature="n#tempStore#0;n#OptimizoClass#0;n#!!top" />
-            <element signature="e#24916#24998#0#PHP" />
-            <element signature="e#24973#24998#0#PHP" />
-            <element signature="n#setTempStore#0;n#OptimizoClass#0;n#!!top" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/stubs/zlib/zlib.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="274">
           <caret line="380" column="9" selection-start-line="380" selection-start-column="9" selection-end-line="380" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../fast-velocity-minify/fvm.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2465">
+          <caret line="1483" selection-start-line="1483" selection-end-line="1483" />
+          <folding>
+            <element signature="e#26191#26212#0#HTML" expanded="true" />
+            <element signature="e#50283#50304#0#HTML" expanded="true" />
+            <element signature="e#53041#53062#0#HTML" expanded="true" />
+            <element signature="e#55759#55780#0#HTML" expanded="true" />
+            <element signature="e#56694#56715#0#HTML" expanded="true" />
+            <element signature="e#57887#57908#0#HTML" expanded="true" />
+            <element signature="e#59142#59163#0#HTML" expanded="true" />
+            <element signature="e#60370#60391#0#HTML" expanded="true" />
+            <element signature="e#61622#61643#0#HTML" expanded="true" />
+            <element signature="e#62810#62831#0#HTML" expanded="true" />
+            <element signature="e#64509#64530#0#HTML" expanded="true" />
+            <element signature="e#67205#67226#0#HTML" expanded="true" />
+            <element signature="e#70826#70830#0#HTML" expanded="true" />
+            <element signature="e#70900#70904#0#HTML" expanded="true" />
+            <element signature="e#71041#71045#0#HTML" expanded="true" />
+            <element signature="e#71134#71138#0#HTML" expanded="true" />
+            <element signature="e#71387#71408#0#HTML" expanded="true" />
+            <element signature="e#73243#73264#0#HTML" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1204,37 +1143,95 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../fast-velocity-minify/fvm.php">
+    <entry file="file://$PROJECT_DIR$/class.optimizo.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2465">
-          <caret line="1483" selection-start-line="1483" selection-end-line="1483" />
+        <state relative-caret-position="75">
+          <caret line="10" column="25" selection-start-line="10" selection-start-column="25" selection-end-line="10" selection-end-column="25" />
           <folding>
-            <element signature="e#26191#26212#0#HTML" expanded="true" />
-            <element signature="e#50283#50304#0#HTML" expanded="true" />
-            <element signature="e#53041#53062#0#HTML" expanded="true" />
-            <element signature="e#55759#55780#0#HTML" expanded="true" />
-            <element signature="e#56694#56715#0#HTML" expanded="true" />
-            <element signature="e#57887#57908#0#HTML" expanded="true" />
-            <element signature="e#59142#59163#0#HTML" expanded="true" />
-            <element signature="e#60370#60391#0#HTML" expanded="true" />
-            <element signature="e#61622#61643#0#HTML" expanded="true" />
-            <element signature="e#62810#62831#0#HTML" expanded="true" />
-            <element signature="e#64509#64530#0#HTML" expanded="true" />
-            <element signature="e#67205#67226#0#HTML" expanded="true" />
-            <element signature="e#70826#70830#0#HTML" expanded="true" />
-            <element signature="e#70900#70904#0#HTML" expanded="true" />
-            <element signature="e#71041#71045#0#HTML" expanded="true" />
-            <element signature="e#71134#71138#0#HTML" expanded="true" />
-            <element signature="e#71387#71408#0#HTML" expanded="true" />
-            <element signature="e#73243#73264#0#HTML" expanded="true" />
+            <element signature="n#deactivate#0;n#OptimizoClass#0;n#!!top" />
+            <element signature="n#addToWPConfig#0;n#OptimizoClass#0;n#!!top" />
+            <element signature="e#318#569#0#PHP" />
+            <element signature="e#643#1442#0#PHP" />
+            <element signature="e#732#1442#0#PHP" />
+            <element signature="e#1014#1095#0#PHP" />
+            <element signature="e#1100#1442#0#PHP" />
+            <element signature="e#1357#1438#0#PHP" />
+            <element signature="n#writeToHtaccess#0;n#OptimizoClass#0;n#!!top" />
+            <element signature="e#1480#2135#0#PHP" />
+            <element signature="e#2139#11347#0#PHP" />
+            <element signature="e#6965#11347#0#PHP" />
+            <element signature="e#11261#11343#0#PHP" />
+            <element signature="n#removeFromWPConfig#0;n#OptimizoClass#0;n#!!top" />
+            <element signature="e#11388#11593#0#PHP" />
+            <element signature="e#11798#11938#0#PHP" />
+            <element signature="n#removeFromHtaccess#0;n#OptimizoClass#0;n#!!top" />
+            <element signature="e#11978#12127#0#PHP" />
+            <element signature="e#16305#16380#0#PHP" />
+            <element signature="n#minifyCSS#0;n#OptimizoClass#0;n#!!top" />
+            <element signature="n#createCache#0;n#OptimizoClass#0;n#!!top" />
+            <element signature="e#17594#17765#0#PHP" />
+            <element signature="e#17779#17833#0#PHP" />
+            <element signature="n#removeCache#0;n#OptimizoClass#0;n#!!top" />
+            <element signature="n#getWebsiteHTTPResponse#0;n#OptimizoClass#0;n#!!top" />
+            <element signature="e#18040#18082#0#PHP" />
+            <element signature="e#18386#18494#0#PHP" />
+            <element signature="e#18467#18494#0#PHP" />
+            <element signature="n#returnFullURL#0;n#OptimizoClass#0;n#!!top" />
+            <element signature="e#18616#18660#0#PHP" />
+            <element signature="e#18054#18470#0#PHP" />
+            <element signature="e#18126#18408#0#PHP" />
+            <element signature="e#18364#18408#0#PHP" />
+            <element signature="e#18412#18470#0#PHP" />
+            <element signature="e#18597#18692#0#PHP" />
+            <element signature="e#18691#18793#0#PHP" />
+            <element signature="e#18823#18957#0#PHP" />
+            <element signature="e#19186#19357#0#PHP" />
+            <element signature="e#19259#19354#0#PHP" />
+            <element signature="e#19397#19600#0#PHP" />
+            <element signature="e#19781#19879#0#PHP" />
+            <element signature="e#19900#20001#0#PHP" />
+            <element signature="n#minifyInArray#0;n#OptimizoClass#0;n#!!top" />
+            <element signature="e#20420#20829#0#PHP" />
+            <element signature="e#20471#20826#0#PHP" />
+            <element signature="e#20761#20822#0#PHP" />
+            <element signature="n#checkIfInternalLink#0;n#OptimizoClass#0;n#!!top" />
+            <element signature="e#20911#20991#0#PHP" />
+            <element signature="e#20994#21059#0#PHP" />
+            <element signature="e#21062#21205#0#PHP" />
+            <element signature="e#21208#21355#0#PHP" />
+            <element signature="e#21358#21505#0#PHP" />
+            <element signature="e#21553#21940#0#PHP" />
+            <element signature="e#21705#21936#0#PHP" />
+            <element signature="e#21798#21931#0#PHP" />
+            <element signature="e#21843#21925#0#PHP" />
+            <element signature="n#getWPProtocol#0;n#OptimizoClass#0;n#!!top" />
+            <element signature="e#22999#23415#0#PHP" />
+            <element signature="e#23071#23353#0#PHP" />
+            <element signature="e#23309#23353#0#PHP" />
+            <element signature="e#23357#23415#0#PHP" />
+            <element signature="n#FixPermissions#0;n#OptimizoClass#0;n#!!top" />
+            <element signature="e#29423#29632#0#PHP" />
+            <element signature="e#29489#29629#0#PHP" />
+            <element signature="e#29696#29837#0#PHP" />
+            <element signature="e#29706#29791#0#PHP" />
+            <element signature="e#29841#30158#0#PHP" />
+            <element signature="e#29868#30155#0#PHP" />
+            <element signature="e#29988#30151#0#PHP" />
+            <element signature="n#compatURL#0;n#OptimizoClass#0;n#!!top" />
+            <element signature="e#23714#23996#0#PHP" />
+            <element signature="e#23952#23996#0#PHP" />
+            <element signature="n#tempStore#0;n#OptimizoClass#0;n#!!top" />
+            <element signature="e#24916#24998#0#PHP" />
+            <element signature="e#24973#24998#0#PHP" />
+            <element signature="n#setTempStore#0;n#OptimizoClass#0;n#!!top" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/optimizo.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="389" column="50" lean-forward="true" selection-start-line="389" selection-start-column="50" selection-end-line="389" selection-end-column="50" />
+        <state relative-caret-position="200">
+          <caret line="34" column="91" selection-start-line="34" selection-start-column="91" selection-end-line="34" selection-end-column="91" />
           <folding>
             <element signature="e#2616#5120#0#PHP" />
           </folding>
