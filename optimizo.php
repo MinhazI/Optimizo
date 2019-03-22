@@ -34,6 +34,10 @@ class Optimizo {
 
 		echo "<!-- This website has been optimized by Optimizo. Web: https://www.optimizo.lk -->";
 
+		add_action( 'init', 'init_minify_html', 1 );
+		add_action( 'wp_print_scripts', 'minifyHeaderJS', PHP_INT_MAX );
+		add_action( 'wp_print_footer_scripts', 'minifyFooterJS', 9.999999 );
+
 	}
 
 	function activation() {
@@ -101,13 +105,14 @@ class Optimizo {
 function display_message_on_activation() {
 	?>
     <div class="notice notice-info">
-        <p><?php _e( "Thank you for installing & activating Optimizo. Your website is in good hands! \n Optimizo has minified your website's HTML and JavaScript and has also started caching your website on your server. "); ?></p>
+        <p><?php _e( "Thank you for installing & activating Optimizo. Your website is in good hands! \n Optimizo has minified your website's HTML and JavaScript and has also started caching your website on your server. " ); ?></p>
     </div>
 	<?php
 }
 
 if ( class_exists( 'Optimizo' ) ) {
 	add_action( 'admin_notices', 'display_message_on_activation' );
+
 	$optimizo = new Optimizo();
 }
 
@@ -117,7 +122,6 @@ register_deactivation_hook( __FILE__, array( $optimizo, 'deactivation' ) );
 /**
  * Code for minifying HTML of the website starts from here
  */
-add_action( 'init', 'init_minify_html', 1 );
 
 function init_minify_html() {
 	ob_start( 'minifyHTML' );
@@ -224,7 +228,6 @@ function minifyHTML( $buffer ) {
  * HTML minifying code ends here
  */
 
-add_action( 'wp_print_scripts', 'minifyHeaderJS', PHP_INT_MAX );
 
 function minifyHeaderJS() {
 	$optimizoClass = new OptimizoClass();
@@ -289,6 +292,9 @@ function minifyHeaderJS() {
 		}
 	endforeach;
 
+//	$cachepath = $optimizoClass->createCache();
+//	$cacheDir  = $cachepath['cachedir'];
+
 	$cacheDir = WP_CONTENT_DIR . '/optimizoCache';
 
 	# loop through header scripts and merge
@@ -303,8 +309,9 @@ function minifyHeaderJS() {
 			$file     = $cacheDir . '/' . $hash . '.min.js';
 			$file_url = $optimizoClass->getWPProtocol( $cacheDir . '/' . $hash . '.min.js' );
 
+
 			# generate a new cache file
-				clearstatcache();
+			clearstatcache();
 			if ( ! file_exists( $file ) ) {
 
 				# code and log initialization
@@ -324,7 +331,7 @@ function minifyHeaderJS() {
 						}
 
 						# print url
-						$printurl = str_ireplace( array( site_url(), home_url(), 'http:', 'https:' ), '', $furl );
+						$printurl = str_ireplace( array( site_url(), home_url(), 'http:', 'https:' ), '://', $furl );
 
 						# download, minify, cache
 						$tkey = 'js-' . hash( 'adler32', $handle . $furl ) . '.js';
@@ -332,7 +339,7 @@ function minifyHeaderJS() {
 						$json = $optimizoClass->getTempStore( $tkey );
 						if ( $json === false ) {
 							$json = $optimizoClass->downloadAndMinify( $furl, null, 'js', $handle );
-							$optimizoClass->setTempStore( $tkey, $json);
+							$optimizoClass->setTempStore( $tkey, $json );
 						}
 
 						# decode
@@ -404,7 +411,7 @@ function minifyHeaderJS() {
 			} else {
 				# file could not be generated, output something meaningful
 				echo "<!-- ERROR: Optimizo was not allowed to save it's cache on - $file -->";
-				echo "<!-- Please check if the path above is correct and ensure your server has writting permission there! -->";
+				echo "<!-- Please check if the path above is correct and ensure your server has writing permission there! -->";
 				echo "<!-- If you found a bug, please email us at hello@winauthorityinnovatives.com -->";
 			}
 
@@ -416,5 +423,183 @@ function minifyHeaderJS() {
 	}
 
 	# remove from queue
+	$wp_scripts->done = $done;
+}
+
+function minifyFooterJS() {
+	$optimizoClass = new OptimizoClass();
+
+	global $wp_scripts, $wp_domain, $wp_home, $ignore;
+
+//	$cachepath = $optimizoClass->createCache();
+//	$cachedir  = $cachepath['cachedir'];
+//	$cachedirurl = $cachepath['$cachedirurl'];
+
+	$cacheDir = WP_CONTENT_DIR . '/optimizoCache';
+
+	if ( ! is_object( $wp_scripts ) ) {
+		return false;
+	}
+	$scripts = wp_clone( $wp_scripts );
+	$scripts->all_deps( $scripts->queue );
+	$footer = array();
+
+# mark as done (as we go)
+	$done = $scripts->done;
+
+# get groups of handles
+	foreach ( $scripts->to_do as $handle ) :
+
+		# get full url
+		$furl = $optimizoClass->returnFullURL( $wp_scripts->registered[ $handle ]->src, $wp_domain, $wp_home );
+
+		# inlined scripts without file
+		if ( empty( $furl ) ) {
+			continue;
+		}
+
+		# skip ignore list, scripts with conditionals, external scripts
+		if ( ( ! $optimizoClass->minifyInArray( $furl, $ignore ) && ! isset( $wp_scripts->registered[ $handle ]->extra["conditional"] ) && $optimizoClass->checkIfInternalLink( $furl, $wp_home ) ) || empty( $furl ) ) {
+
+			# process
+			if ( isset( $footer[ count( $footer ) - 1 ]['handle'] ) || count( $footer ) == 0 ) {
+				array_push( $footer, array( 'handles' => array() ) );
+			}
+
+			# push it to the array
+			array_push( $footer[ count( $footer ) - 1 ]['handles'], $handle );
+
+			# external and ignored scripts
+		} else {
+			array_push( $footer, array( 'handle' => $handle ) );
+		}
+	endforeach;
+
+# loop through footer scripts and merge
+	for ( $i = 0, $l = count( $footer ); $i < $l; $i ++ ) {
+		if ( ! isset( $footer[ $i ]['handle'] ) ) {
+
+			# static cache file info + done
+			$done = array_merge( $done, $footer[ $i ]['handles'] );
+			$hash = 'footer-' . hash( 'adler32', implode( '', $footer[ $i ]['handles'] ) );
+
+			# create cache files and urls
+			$file     = $cacheDir . '/' . $hash . '.min.js';
+			$file_url = $optimizoClass->getWPProtocol( $cacheDir . '/' . $hash . '.min.js' );
+
+			# generate a new cache file
+			clearstatcache();
+			if ( ! file_exists( $file ) ) {
+
+				# code and log initialization
+				$log  = '';
+				$code = '';
+
+				# minify and write to file
+				foreach ( $footer[ $i ]['handles'] as $handle ) :
+					if ( ! empty( $wp_scripts->registered[ $handle ]->src ) ) {
+
+						# get hurl per handle
+						$furl = $optimizoClass->returnFullURL( $wp_scripts->registered[ $handle ]->src, $wp_domain, $wp_home );
+
+						# inlined scripts without file
+						if ( empty( $furl ) ) {
+							continue;
+						}
+
+						# print url
+						$printurl = str_ireplace( array( site_url(), home_url(), 'http:', 'https:' ), '', $furl );
+
+
+						# download, minify, cache
+						$tkey = 'js-' . hash( 'adler32', $handle . $furl ) . '.js';
+						$json = false;
+						$json = $optimizoClass->getTempStore( $tkey );
+						if ( $json === false ) {
+							$json = $optimizoClass->downloadAndMinify( $furl, null, 'js', $handle );
+							$optimizoClass->setTempStore( $tkey, $json );
+						}
+
+						# decode
+						$res = json_decode( $json, true );
+
+						# response has failed
+						if ( $res['status'] != true ) {
+							$log .= $res['log'];
+							continue;
+						}
+
+						# append code to merged file
+						$code .= $res['code'];
+						$log  .= $res['log'];
+
+						# Add extra data from wp_add_inline_script before
+						if ( ! empty( $wp_scripts->registered[ $handle ]->extra ) ) {
+							if ( ! empty( $wp_scripts->registered[ $handle ]->extra['before'] ) ) {
+								$code .= PHP_EOL . implode( PHP_EOL, $wp_scripts->registered[ $handle ]->extra['before'] );
+							}
+						}
+
+						# consider dependencies on handles with an empty src
+					} else {
+						wp_dequeue_script( $handle );
+						wp_enqueue_script( $handle );
+					}
+				endforeach;
+
+				# prepare log
+				$log = "PROCESSED on " . date( 'r' ) . PHP_EOL . $log . "PROCESSED from " . home_url( add_query_arg( null, null ) ) . PHP_EOL;
+
+				# generate cache, write log
+				if ( ! empty( $code ) ) {
+					file_put_contents( $file . '.txt', $log );
+					file_put_contents( $file, $code );
+					file_put_contents( $file . '.gz', gzencode( file_get_contents( $file ), 9 ) );
+
+					# permissions
+					$optimizoClass->fixPermissions( $file . '.txt' );
+					$optimizoClass->fixPermissions( $file );
+					$optimizoClass->fixPermissions( $file . '.gz' );
+
+					# brotli static support
+					if ( function_exists( 'brotli_compress' ) ) {
+						file_put_contents( $file . '.br', brotli_compress( file_get_contents( $file ), 11 ) );
+						$optimizoClass->fixPermissions( $file . '.br' );
+					}
+				}
+			}
+
+			# register minified file
+			wp_register_script( "optimizo-footer-$i", $file_url, array(), null, false );
+
+			# add all extra data from wp_localize_script
+			$data = array();
+			foreach ( $footer[ $i ]['handles'] as $handle ) {
+				if ( isset( $wp_scripts->registered[ $handle ]->extra['data'] ) ) {
+					$data[] = $wp_scripts->registered[ $handle ]->extra['data'];
+				}
+			}
+			if ( count( $data ) > 0 ) {
+				$wp_scripts->registered["optimizo-footer-$i"]->extra['data'] = implode( PHP_EOL, $data );
+			}
+
+			# enqueue file, if not empty
+			if ( file_exists( $file ) && ( filesize( $file ) > 0 || count( $data ) > 0 ) ) {
+				wp_enqueue_script( "optimizo-footer-$i" );
+			} else {
+				# file could not be generated, output something meaningful
+				echo "<!-- ERROR: Optimizo was not allowed to save it's cache on - $file -->";
+				echo "<!-- Please check if the path above is correct and ensure your server has writing permission there! -->";
+				echo "<!-- If you found a bug, please email us at hello@winauthorityinnovatives.com -->";
+			}
+
+			# other scripts need to be requeued for the order of files to be kept
+		} else {
+			wp_dequeue_script( $footer[ $i ]['handle'] );
+			wp_enqueue_script( $footer[ $i ]['handle'] );
+		}
+	}
+
+# remove from queue
 	$wp_scripts->done = $done;
 }

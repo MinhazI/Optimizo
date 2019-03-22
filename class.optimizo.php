@@ -345,11 +345,12 @@ class OptimizoClass {
 		}
 
 		# return
-		return array( 'cachebase'   => $cachebase,
-		              'tmpdir'      => $tmpdir,
-		              'cachedir'    => $cachedir,
-		              'cachedirurl' => $cachedirurl,
-		              'headerdir'   => $headerdir
+		return array(
+			'cachebase'   => $cachebase,
+			'tmpdir'      => $tmpdir,
+			'cachedir'    => $cachedir,
+			'cachedirurl' => $cachedirurl,
+			'headerdir'   => $headerdir
 		);
 	}
 
@@ -393,15 +394,10 @@ class OptimizoClass {
 # some fixes
 		$furl = str_ireplace( array( '&#038;', '&amp;' ), '&', $furl );
 
-		$default_protocol = get_option( 'fastvelocity_min_default_protocol', 'dynamic' );
-		if ( $default_protocol == 'dynamic' || empty( $default_protocol ) ) {
-			if ( ( isset( $_SERVER['HTTPS'] ) && ( $_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1 ) ) || ( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' ) ) {
-				$default_protocol = 'https://';
-			} else {
-				$default_protocol = 'http://';
-			}
+		if ( ( isset( $_SERVER['HTTPS'] ) && ( $_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1 ) ) || ( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' ) ) {
+			$default_protocol = 'https://';
 		} else {
-			$default_protocol = $default_protocol . '://';
+			$default_protocol = 'http://';
 		}
 
 #make sure wp_home doesn't have a forward slash
@@ -487,7 +483,7 @@ class OptimizoClass {
 
 		# allow specific external urls to be merged
 		if ( $noxtra === null ) {
-			$merge_allowed_urls = array_map( 'trim', explode( PHP_EOL, get_option( 'fastvelocity_min_merge_allowed_urls', '' ) ) );
+			$merge_allowed_urls = array_map( 'trim', explode( PHP_EOL ) );
 			if ( is_array( $merge_allowed_urls ) && strlen( implode( $merge_allowed_urls ) ) > 0 ) {
 				foreach ( $merge_allowed_urls as $e ) {
 					if ( stripos( $furl, $e ) !== false && ! empty( $e ) ) {
@@ -505,15 +501,10 @@ class OptimizoClass {
 		$url = ltrim( str_ireplace( array( 'http://', 'https://' ), '', $url ), '/' ); # better compatibility
 
 		# enforce protocol if needed
-		$default_protocol = get_option( 'fastvelocity_min_default_protocol', 'dynamic' );
-		if ( $default_protocol == 'dynamic' || empty( $default_protocol ) ) {
-			if ( ( isset( $_SERVER['HTTPS'] ) && ( $_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1 ) ) || ( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' ) ) {
-				$default_protocol = 'https://';
-			} else {
-				$default_protocol = 'http://';
-			}
+		if ( ( isset( $_SERVER['HTTPS'] ) && ( $_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1 ) ) || ( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' ) ) {
+			$default_protocol = 'https://';
 		} else {
-			$default_protocol = $default_protocol . '://';
+			$default_protocol = 'http://';
 		}
 
 		# return
@@ -526,7 +517,8 @@ class OptimizoClass {
 				$perms = $stat['mode'] & 0007777;
 				@chmod( $file, $perms );
 
-//				clearstatcache();
+				clearstatcache();
+
 				return true;
 			}
 		}
@@ -633,7 +625,7 @@ class OptimizoClass {
 				if ( $type == 'js' ) {
 					$code = $this->getJS( $furl, file_get_contents( $f ) );
 				} else {
-					$code = fastvelocity_min_get_css( $furl, file_get_contents( $f ) . $inline );
+//					$code = fastvelocity_min_get_css( $furl, file_get_contents( $f ) . $inline );
 				}
 
 				# log, save and return
@@ -655,14 +647,11 @@ class OptimizoClass {
 				if ( $type == 'js' ) {
 					$code = $this->getJS( $furl, file_get_contents( $f ) );
 				} else {
-					$code = fastvelocity_min_get_css( $furl, file_get_contents( $f ) . $inline );
+//					$code = fastvelocity_min_get_css( $furl, file_get_contents( $f ) . $inline );
 				}
 
 				# log, save and return
-				$log = $printurl;
-				if ( $fvm_debug == true ) {
-					$log .= " --- Debug: $printhandle was opened from $f ---";
-				}
+				$log    = $printurl;
 				$log    .= PHP_EOL;
 				$return = array( 'request' => $dreq, 'log' => $log, 'code' => $code, 'status' => true );
 
@@ -674,19 +663,16 @@ class OptimizoClass {
 		# fallback when home_url != site_url
 		if ( stripos( $furl, $wp_domain ) !== false && home_url() != site_url() ) {
 			$nfurl = str_ireplace( site_url(), home_url(), $furl );
-			$code  = fastvelocity_download( $nfurl );
+			$code  = downloadFunction( $nfurl );
 			if ( $code !== false && ! empty( $code ) && strtolower( substr( $code, 0, 9 ) ) != "<!doctype" ) {
 				if ( $type == 'js' ) {
 					$code = $this->getJS( $furl, $code );
 				} else {
-					$code = fastvelocity_min_get_css( $furl, $code . $inline );
+//					$code = fastvelocity_min_get_css( $furl, $code . $inline );
 				}
 
 				# log, save and return
-				$log = $printurl;
-				if ( $fvm_debug == true ) {
-					$log .= " --- Debug: $printhandle was fetched from $furl ---";
-				}
+				$log    = $printurl;
 				$log    .= PHP_EOL;
 				$return = array( 'request' => $dreq, 'log' => $log, 'code' => $code, 'status' => true );
 
@@ -704,14 +690,11 @@ class OptimizoClass {
 				if ( $type == 'js' ) {
 					$code = $this->getJS( $furl, file_get_contents( $f ) );
 				} else {
-					$code = fastvelocity_min_get_css( $furl, file_get_contents( $f ) . $inline );
+//					$code = fastvelocity_min_get_css( $furl, file_get_contents( $f ) . $inline );
 				}
 
 				# log, save and return
-				$log = $printurl;
-				if ( $fvm_debug == true ) {
-					$log .= " --- Debug: $printhandle was opened from $f ---";
-				}
+				$log    = $printurl;
 				$log    .= PHP_EOL;
 				$return = array( 'request' => $dreq, 'log' => $log, 'code' => $code, 'status' => true );
 
@@ -726,14 +709,11 @@ class OptimizoClass {
 				if ( $type == 'js' ) {
 					$code = $this->getJS( $furl, file_get_contents( $f ) );
 				} else {
-					$code = fastvelocity_min_get_css( $furl, file_get_contents( $f ) . $inline );
+//					$code = fastvelocity_min_get_css( $furl, file_get_contents( $f ) . $inline );
 				}
 
 				# log, save and return
-				$log = $printurl;
-				if ( $fvm_debug == true ) {
-					$log .= " --- Debug: $printhandle was opened from $f ---";
-				}
+				$log    = $printurl;
 				$log    .= PHP_EOL;
 				$return = array( 'request' => $dreq, 'log' => $log, 'code' => $code, 'status' => true );
 
@@ -743,10 +723,7 @@ class OptimizoClass {
 
 
 		# else fail
-		$log = $printurl;
-		if ( $fvm_debug == true ) {
-			$log .= " --- Debug: $printhandle failed. Tried wp_remote_get, curl and local file_get_contents. ---";
-		}
+		$log    = $printurl;
 		$return = array( 'request' => $dreq, 'log' => $log, 'code' => '', 'status' => false );
 
 		return json_encode( $return );
@@ -754,7 +731,6 @@ class OptimizoClass {
 
 	# minify js on demand (one file at one time, for compatibility)
 	function getJS( $url, $js ) {
-		global $fvm_debug;
 
 		# exclude minification on already minified files + jquery (because minification might break those)
 		$excl = array( 'jquery.js', '.min.js', '-min.js', '/uploads/fusion-scripts/', '/min/', '.packed.js' );
@@ -766,7 +742,7 @@ class OptimizoClass {
 		}
 
 		# minify JS
-		$js = fvm_compat_urls( $js );
+		$js = $this->compatURL( $js );
 
 		# try to remove source mapping files
 		$filename = basename( $url );
@@ -783,5 +759,37 @@ class OptimizoClass {
 		return $js . PHP_EOL;
 	}
 
+	function downloadFunction( $url ) {
+		# info (needed for google fonts woff files + hinted fonts) as well as to bypass some security filters
+		$uagent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2486.0 Safari/537.36 Edge/13.10586';
+
+		# fetch via wordpress functions
+		$response = wp_remote_get( $url, array(
+			'user-agent'  => $uagent,
+			'timeout'     => 7,
+			'httpversion' => '1.1',
+			'sslverify'   => false
+		) );
+		$res_code = wp_remote_retrieve_response_code( $response );
+		if ( $res_code == '200' ) {
+			$data = wp_remote_retrieve_body( $response );
+			if ( strlen( $data ) > 1 ) {
+				return $data;
+			}
+		}
+
+		# verify
+		if ( ! isset( $res_code ) || empty( $res_code ) || $res_code == false || is_null( $res_code ) ) {
+			return false;
+		}
+
+		# stop here, error 4xx or 5xx
+		if ( $res_code[0] == '4' || $res_code[0] == '5' ) {
+			return false;
+		}
+
+		# fallback fail
+		return false;
+	}
 
 }
