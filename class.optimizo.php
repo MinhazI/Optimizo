@@ -6,6 +6,27 @@
  * Time: 10:54 AM
  */
 
+global $pluginDirectory;
+
+$pluginDirectory = plugin_dir_(__FILE__);
+
+
+# Including the minfier library by: MatthiasMullie,
+# link: https://github.com/matthiasmullie/minify
+$pathToMatthias = $pluginDirectory . 'inc/matthiasmullie';
+
+require_once $pathToMatthias . '/minify/src/Minify.php';
+require_once $pathToMatthias . '/minify/src/CSS.php';
+require_once $pathToMatthias . '/minify/src/JS.php';
+require_once $pathToMatthias . '/minify/src/Exception.php';
+require_once $pathToMatthias . '/minify/src/Exceptions/BasicException.php';
+require_once $pathToMatthias . '/minify/src/Exceptions/FileImportException.php';
+require_once $pathToMatthias . '/minify/src/Exceptions/IOException.php';
+require_once $pathToMatthias . '/path-converter/src/ConverterInterface.php';
+require_once $pathToMatthias . '/path-converter/src/Converter.php';
+
+use MatthiasMullie\Minify;
+
 class OptimizoClass {
 
 	function activate() {
@@ -292,6 +313,38 @@ class OptimizoClass {
 		if ( ! @file_put_contents( ABSPATH . ".htaccess", $htaccess_file ) ) {
 
 		}
+	}
+
+	function getCSS( $url, $css, $disbaledCSSMinification = false ) {
+		global $wp_domain;
+
+		if ( ! empty( $url ) ) {
+			$css = preg_replace( "/url\(\s*['\"]?(?!data:)(?!http)(?![\/'\"])(.+?)['\"]?\s*\)/ui", "url(" . dirname( $url ) . "/$1)", $css );
+		}
+
+		# remove query strings from fonts (for better seo, but add a small cache buster based on most recent updates)
+		$ctime = '0'; # last update or zero
+		$css   = preg_replace( '/(.eot|.woff2|.woff|.ttf)+[?+](.+?)(\)|\'|\")/ui', "$1" . "#" . $ctime . "$3", $css ); # fonts cache buster
+
+		# minify CSS
+		$css = $this->minifyCSSWithPHP( $css );
+
+		# add css comment
+		$css = trim( $css );
+
+		# return html
+		return $css;
+	}
+
+	function minifyCSSWithPHP($css){
+		$cssMinifier = new Minify\CSS( $css );
+		$cssMinifier->setMaxImportSize( 15 ); # [css only] embed assets up to 15 Kb (default 5Kb) - processes gif, png, jpg, jpeg, svg & woff
+		$min = $cssMinifier->minify();
+		if ( $min !== false ) {
+			return $this->compatURL( $min );
+		}
+
+		return $this->compatURL( $css );
 	}
 
 	function minifyCSS() {

@@ -23,7 +23,7 @@ class Optimizo {
 		//Checking if it's installed in a sub-directory
 
 		if ( $this->is_sub_directory_install() ) {
-			$path = $this->get_ABSPATH();
+			 $path = $this->get_ABSPATH();
 		}
 
 		require_once( 'adminToolBar.php' );
