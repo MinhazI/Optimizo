@@ -8,7 +8,7 @@
 
 global $pluginDirectory;
 
-$pluginDirectory = plugin_dir_(__FILE__);
+$plugindir = plugin_dir_path( __FILE__ );
 
 
 # Including the minfier library by: MatthiasMullie,
@@ -843,6 +843,140 @@ class OptimizoClass {
 
 		# fallback fail
 		return false;
+	}
+
+	function checkIfGoogleFontsExist($font){
+		global $gfontswhitelist;
+
+		#normalize
+		$gfontswhitelist = array_map( 'strtolower', $gfontswhitelist );
+		$font            = str_ireplace( '+', ' ', strtolower( $font ) );
+
+		# check
+		if ( in_array( $font, $gfontswhitelist ) ) {
+			return true;
+		}
+
+		# fallback
+		return false;
+	}
+
+	function concatenateGoogleFonts($array){
+		# extract unique font families
+		$families = array();
+		foreach ( $array as $font ) {
+
+			# must have
+			if ( stripos( $font, 'family=' ) !== false ) {
+
+				# get fonts name, type and subset, remove wp query strings
+				$font = explode( 'family=', htmlspecialchars_decode( rawurldecode( urldecode( $font ) ) ) );
+				$a    = explode( '&v', end( $font ) );
+				$font = trim( trim( trim( current( $a ) ), ',' ) );
+
+				# reprocess if fonts are already concatenated in this url
+				if ( stristr( $font, '|' ) !== false ) {
+					$multiple = explode( '|', $font );
+					if ( count( $multiple ) > 0 ) {
+						foreach ( $multiple as $f ) {
+							$families[] = str_ireplace( 'subsets', 'subset', trim( $f ) );
+						}
+					}
+				} else {
+					$families[] = str_ireplace( 'subsets', 'subset', trim( $font ) );
+				}
+			}
+		}
+
+		# return if empty
+		if ( count( $families ) == 0 ) {
+			return false;
+		}
+
+		# process names, types, subsets
+		$fonts   = array();
+		$subsets = array();
+		foreach ( $families as $font ) {
+
+			# extract the subsets
+			if ( stripos( $font, 'subset' ) !== false ) {
+				$sub  = trim( str_ireplace( '&subset=', '', stristr( $font, '&' ) ) );      # second part of the string, after &
+				$font = stristr( $font, '&', true );                                   # font name, before &
+
+				# subsets to array, unique, trim
+				if ( stripos( $sub, ',' ) !== false ) {
+					$ft = explode( ',', $sub );
+					$ft = array_filter( array_map( 'trim', array_unique( $ft ) ) );
+					foreach ( $ft as $s ) {
+						$subsets[ $s ] = $s;
+					}
+				} else {
+					if ( ! empty( $sub ) ) {
+						$subsets[ $sub ] = $sub;
+					}
+				}
+
+			}
+
+			# check for font name and weights
+			$ftypes = array();
+			$name   = $font;
+			if ( stripos( $font, ':' ) !== false ) {
+				$name = stristr( $font, ':', true );       # font name, before :
+				$fwe  = trim( stristr( $font, ':' ), ':' );   # second part of the string, after :
+
+				# ftypes to array, unique, trim
+				if ( stripos( $font, ',' ) !== false ) {
+					$ft     = explode( ',', $fwe );
+					$ftypes = array_filter( array_map( 'trim', array_unique( $ft ) ) );
+				} else {
+					if ( ! empty( $fwe ) ) {
+						$ftypes[] = $fwe;
+					}
+				}
+
+			}
+
+			# name filter
+			$name = str_ireplace( ' ', '+', trim( $name ) );
+
+			# save fonts list, merge fontweights
+			if ( ! isset( $fonts[ $name ] ) ) {
+				$fonts[ $name ] = array( 'name' => $name, 'type' => $ftypes );
+			} else {
+				$ftypes         = array_merge( $ftypes, $fonts[ $name ]['type'] );
+				$fonts[ $name ] = array( 'name' => $name, 'type' => $ftypes );
+			}
+
+		}
+
+		# build font names with font weights, if allowed
+		$build = array();
+		foreach ( $fonts as $farr ) {
+			if ( $this->checkIfGoogleFontsExist( $farr['name'] ) == true ) {
+				$f = $farr['name'];
+				if ( count( $farr['type'] ) > 0 ) {
+					$f .= ':' . implode( ',', $farr['type'] );
+				}
+				$build[] = $f;
+			}
+		}
+
+		# merge, append subsets
+		$merge = '';
+		if ( count( $build ) > 0 ) {
+			$merge = implode( '|', $build );
+			if ( count( $subsets ) > 0 ) {
+				$merge .= '&subset=' . implode( ',', $subsets );
+			}
+		}
+
+		# return
+		if ( ! empty( $merge ) ) {
+			return 'https://fonts.googleapis.com/css?family=' . $merge;
+		} else {
+			return false;
+		}
 	}
 
 }
