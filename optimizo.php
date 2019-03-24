@@ -38,6 +38,7 @@ class Optimizo {
 		add_action( 'wp_print_scripts', 'minifyHeaderJS', PHP_INT_MAX );
 		add_action( 'wp_print_footer_scripts', 'minifyFooterJS', 9.999999 );
 		add_action( 'wp_print_styles', 'minifyCSSInHeader', PHP_INT_MAX );
+		add_action( 'wp_print_footer_scripts', 'minifyCSSinFooter', 999999 );
 
 	}
 
@@ -606,11 +607,9 @@ function minifyFooterJS() {
 }
 
 function minifyCSSInHeader() {
-	global $wp_styles, $wp_domain, $wp_home, $ignore, $skip_google_fonts, $force_inline_googlefonts, $min_async_googlefonts;
+	global $wp_styles, $wp_domain, $wp_home, $ignore;
 
-	$remove_print_mediatypes = true;
-
-	$cachedir = WP_CONTENT_DIR . '/optimizoCache';
+	$cachedir    = WP_CONTENT_DIR . '/optimizoCache';
 	$cachedirurl = WP_CONTENT_DIR . '/optimizoCache';
 
 	$optimizoClass = new OptimizoClass();
@@ -669,13 +668,8 @@ function minifyCSSInHeader() {
 
 		# google fonts to the top (collect and skip process array)
 		if ( stripos( $hurl, 'fonts.googleapis.com' ) !== false ) {
-			if ( $skip_google_fonts != true || $force_inline_googlefonts != false ) {
-				$google_fonts[ $handle ] = $hurl;
 
-			} else {
-				wp_enqueue_style( $handle ); # skip google fonts optimization?
-			}
-			continue;
+			$google_fonts[ $handle ] = $hurl;
 		}
 
 		# all else
@@ -685,70 +679,22 @@ function minifyCSSInHeader() {
 
 
 # concat google fonts, if enabled
-	if ( ! $skip_google_fonts && count( $google_fonts ) > 0 || ( $force_inline_googlefonts != false && count( $google_fonts ) > 0 ) ) {
+	if (count( $google_fonts ) > 0 ) {
 		foreach ( $google_fonts as $h => $a ) {
 			$done = array_merge( $done, array( $h ) );
 		} # mark as done
 
 		# merge google fonts if force inlining is enabled?
 		$nfonts = array();
-		if ( $skip_google_fonts != true ) {
-			$nfonts[] = $optimizoClass->getWPProtocol( $optimizoClass->concatenateGoogleFonts( $google_fonts ) );
-		} else {
-			foreach ( $google_fonts as $a ) {
-				if ( ! empty( $a ) ) {
-					$nfonts[] = $a;
-				}
-			}
-		}
+		$nfonts[] = $optimizoClass->getWPProtocol( $optimizoClass->concatenateGoogleFonts( $google_fonts ) );
+
 
 		# foreach google font (will be one if merged is not disabled)
 		if ( count( $nfonts ) > 0 ) {
 			foreach ( $nfonts as $gfurl ) {
-                if ( $min_async_googlefonts == true ) {
 					echo '<link rel="preload" href="' . $gfurl . '" as="style" media="all" onload="this.onload=null;this.rel=\'stylesheet\'" />';
 					echo '<noscript><link rel="stylesheet" href="' . $gfurl . '" media="all" /></noscript>';
 					echo '<!--[if IE]><link rel="stylesheet" href="' . $gfurl . '" media="all" /><![endif]-->';
-
-					# inline css
-				} elseif ( $force_inline_googlefonts == true ) {
-
-					# download, minify, cache
-					$tkey = 'css-' . hash( 'adler32', $gfurl ) . '.css';
-					$json = false;
-					$json = $optimizoClass->getTempStore( $tkey );
-					if ( $json === false ) {
-						$json = $optimizoClass->downloadAndMinify( $gfurl, null, 'css', null );
-						$optimizoClass->setTempStore( $tkey, $json );
-					}
-
-					# decode
-					$res = json_decode( $json, true );
-
-					# response has failed
-					if ( $res['status'] != true ) {
-						$log .= $res['log'];
-						continue;
-					}
-
-					# inline css or fail
-					if ( $res['code'] !== false ) {
-
-						# add font-display
-						# https://developers.google.com/web/updates/2016/02/font-display
-						$res['code'] = str_ireplace( 'font-style:normal;', 'font-display:block;font-style:normal;', $res['code'] );
-
-						# inline
-						echo '<style type="text/css" media="all">' . $res['code'] . '</style>' . PHP_EOL;
-					} else {
-						echo "<!-- GOOGLE FONTS REQUEST FAILED for $gfurl -->\n";
-					}
-
-					# fallback, enqueue google fonts
-				} else {
-					wp_enqueue_style( 'optimizo-fonts', $gfurl, array(), null, 'all' );
-				}
-
 			}
 		}
 	}
@@ -779,7 +725,7 @@ function minifyCSSInHeader() {
 
 		# skip ignore list, conditional css, external css, font-awesome merge
 		if ( ( ! $optimizoClass->minifyInArray( $hurl, $ignore ) && ! isset( $conditional ) && $optimizoClass->checkIfInternalLink( $hurl, $wp_home ) )
-		     || empty( $hurl )) {
+		     || empty( $hurl ) ) {
 
 			# colect inline css for this handle
 			if ( isset( $wp_styles->registered[ $handle ]->extra['after'] ) && is_array( $wp_styles->registered[ $handle ]->extra['after'] ) ) {
@@ -802,41 +748,6 @@ function minifyCSSInHeader() {
 			array_push( $header, array( 'handle' => $handle ) );
 		}
 	endforeach;
-
-//# reorder CSS by mediatypes
-//	if ( ! $skip_cssorder ) {
-//		if ( count( $header ) > 0 ) {
-//
-//			# get unique mediatypes
-//			$allmedia = array();
-//			foreach ( $header as $array ) {
-//				if ( isset( $array['media'] ) ) {
-//					$allmedia[ $array['media'] ] = '';
-//				}
-//			}
-//
-//			# extract handles by mediatype
-//			$grouphandles = array();
-//			foreach ( $allmedia as $md => $var ) {
-//				foreach ( $header as $array ) {
-//					if ( isset( $array['media'] ) && $array['media'] === $md ) {
-//						foreach ( $array['handles'] as $h ) {
-//							$grouphandles[ $md ][] = $h;
-//						}
-//					}
-//				}
-//			}
-//
-//			# reset and reorder header by mediatypes
-//			$newheader = array();
-//			foreach ( $allmedia as $md => $var ) {
-//				$newheader[] = array( 'handles' => $grouphandles[ $md ], 'media' => $md );
-//			}
-//			if ( count( $newheader ) > 0 ) {
-//				$header = $newheader;
-//			}
-//		}
-//	}
 
 # loop through header css and merge
 	for ( $i = 0, $l = count( $header ); $i < $l; $i ++ ) {
@@ -926,9 +837,9 @@ function minifyCSSInHeader() {
 					file_put_contents( $file . '.gz', gzencode( file_get_contents( $file ), 9 ) );
 
 					# permissions
-					fastvelocity_fix_permission_bits( $file . '.txt' );
-					fastvelocity_fix_permission_bits( $file );
-					fastvelocity_fix_permission_bits( $file . '.gz' );
+					$optimizoClass->fixPermissions( $file . '.txt' );
+					$optimizoClass->fixPermissions( $file );
+					$optimizoClass->fixPermissions( $file . '.gz' );
 
 					# brotli static support
 					if ( function_exists( 'brotli_compress' ) ) {
@@ -939,36 +850,22 @@ function minifyCSSInHeader() {
 			}
 
 			# register and enqueue minified file, consider excluding of mediatype "print" and inline css
-			if (( $remove_print_mediatypes == true && $header[ $i ]['media'] != 'print' ) ) {
+			if ( file_exists( $file ) && filesize( $file ) > 0 ) {
 
-				# the developers tab, takes precedence
-
-//				# Async CSS with loadCSS ?
-//				if ( $fvmloadcss != false && $fvm_remove_css != true ) {
-//					$mt = $header[ $i ]['media'];
-//					echo '<link rel="preload" href="' . $file_url . '" as="style" media="' . $mt . '" onload="this.onload=null;this.rel=\'stylesheet\'" />';
-//					echo '<noscript><link rel="stylesheet" href="' . $file_url . '" media="' . $mt . '" /></noscript>';
-//					echo '<!--[if IE]><link rel="stylesheet" href="' . $file_url . '" media="' . $mt . '" /><![endif]-->';
-//
-//					# enqueue file, if not empty
-//				} else {
-					if ( file_exists( $file ) && filesize( $file ) > 0 ) {
-
-						# inline CSS if mediatype is not of type "all" (such as mobile only), if the file is smaller than 20KB
-						if ( filesize( $file ) < 20000 && $header[ $i ]['media'] != 'all' ) {
-							echo '<style id="fvm-header-' . $i . '" media="' . $header[ $i ]['media'] . '">' . file_get_contents( $file ) . '</style>';
-						} else {
-							# enqueue it
-							wp_enqueue_style( "fvm-header-$i", $file_url, array(), null, $header[ $i ]['media'] );
-						}
-					} else {
-						# file could not be generated, output something meaningful
-						echo "<!-- ERROR: Optimzo was not allowed to save it's cache on - $file -->";
-						echo "<!-- Please check if the path above is correct and ensure your server has writting permission there! -->";
-						echo "<!-- If you found a bug, please drop us an email at hello@winauthorityinnovatives.com -->";
-					}
-//				}
+				# inline CSS if mediatype is not of type "all" (such as mobile only), if the file is smaller than 20KB
+				if ( filesize( $file ) < 20000 && $header[ $i ]['media'] != 'all' ) {
+					echo '<style id="fvm-header-' . $i . '" media="' . $header[ $i ]['media'] . '">' . file_get_contents( $file ) . '</style>';
+				} else {
+					# enqueue it
+					wp_enqueue_style( "fvm-header-$i", $file_url, array(), null, $header[ $i ]['media'] );
+				}
+			} else {
+				# file could not be generated, output something meaningful
+				echo "<!-- ERROR: Optimzo was not allowed to save it's cache on - $file -->";
+				echo "<!-- Please check if the path above is correct and ensure your server has writting permission there! -->";
+				echo "<!-- If you found a bug, please drop us an email at hello@winauthorityinnovatives.com -->";
 			}
+
 
 			# other css need to be requeued for the order of files to be kept
 		} else {
@@ -982,6 +879,280 @@ function minifyCSSInHeader() {
 
 }
 
-function minifyCSSinFooter(){
-    
+function minifyCSSinFooter() {
+	global $wp_styles, $wp_domain, $wp_home, $ignore, $remove_print_mediatypes, $force_inline_css_footer;
+
+	$remove_print_mediatypes = false;
+
+	$cachedir    = WP_CONTENT_DIR . '/optimizoCache';
+	$cachedirurl = WP_CONTENT_DIR . '/optimizoCache';
+
+	$optimizoClass = new OptimizoClass();
+
+	if ( ! is_object( $wp_styles ) ) {
+		return false;
+	}
+	$ctime  = get_option( 'fvm-last-cache-update', '0' );
+	$styles = wp_clone( $wp_styles );
+	$styles->all_deps( $styles->queue );
+	$done         = $styles->done;
+	$footer       = array();
+	$google_fonts = array();
+	$inline_css   = array();
+
+
+# google fonts to the top
+	foreach ( $styles->to_do as $handle ) :
+
+		# dequeue and get a list of google fonts, or requeue external
+		$hurl = $optimizoClass->returnFullURL( $wp_styles->registered[ $handle ]->src, $wp_domain, $wp_home );
+
+		# inlined scripts without file
+		if ( empty( $hurl ) ) {
+			continue;
+		}
+
+		if ( stripos( $hurl, 'fonts.googleapis.com' ) !== false ) {
+			wp_dequeue_style( $handle );
+			$google_fonts[ $handle ] = $hurl;
+		} else {
+			wp_dequeue_style( $handle );
+			wp_enqueue_style( $handle ); # failsafe
+		}
+
+	endforeach;
+
+
+# concat google fonts, if enabled
+	if ( count( $google_fonts ) > 0 ) {
+		foreach ( $google_fonts as $h => $a ) {
+			$done = array_merge( $done, array( $h ) );
+		} # mark as done
+
+		# merge google fonts if force inlining is enabled?
+		$nfonts   = array();
+		$nfonts[] = $optimizoClass->getWPProtocol( $optimizoClass->concatenateGoogleFonts( $google_fonts ) );
+
+
+		# foreach google font (will be one if merged is not disabled)
+		if ( count( $nfonts ) > 0 ) {
+			foreach ( $nfonts as $gfurl ) {
+				# download, minify, cache
+				$tkey = 'css-' . hash( 'adler32', $gfurl ) . '.css';
+				$json = false;
+				$json = $optimizoClass->getTempStore( $tkey );
+				if ( $json === false ) {
+					$json = $optimizoClass->downloadAndMinify( $gfurl, null, 'css', null );
+					$optimizoClass->setTempStore( $tkey, $json );
+				}
+
+				# decode
+				$res = json_decode( $json, true );
+
+				# inline css or fail
+				if ( $res['code'] !== false ) {
+					echo '<style type="text/css" media="all">' . $res['code'] . '</style>' . PHP_EOL;
+				} else {
+					echo "<!-- GOOGLE FONTS REQUEST FAILED for $gfurl -->\n";
+				}
+
+			}
+		}
+	}
+
+
+# get groups of handles
+	$uniq = array();
+	foreach ( $styles->to_do as $handle ) :
+
+		# skip already processed google fonts
+		if ( isset( $google_fonts[ $handle ] ) ) {
+			continue;
+		}
+
+		# conditionals
+		$conditional = null;
+		if ( isset( $wp_styles->registered[ $handle ]->extra["conditional"] ) ) {
+			$conditional = $wp_styles->registered[ $handle ]->extra["conditional"]; # such as ie7, ie8, ie9, etc
+		}
+
+		# mediatype
+		$mt = isset( $wp_styles->registered[ $handle ]->args ) ? $wp_styles->registered[ $handle ]->args : 'all';
+		if ( $mt == 'screen' || $mt == 'screen, print' || empty( $mt ) || is_null( $mt ) || $mt == false ) {
+			$mt = 'all';
+		}
+		$mediatype = $mt;
+
+		# get full url
+		$hurl = $optimizoClass->returnFullURL( $wp_styles->registered[ $handle ]->src, $wp_domain, $wp_home );
+
+		# inlined scripts without file
+		if ( empty( $hurl ) ) {
+			continue;
+		}
+
+		# mark duplicates as done and remove from the queue
+		if ( ! empty( $hurl ) ) {
+			$key = hash( 'adler32', $hurl );
+			if ( isset( $uniq[ $key ] ) ) {
+				$done = array_merge( $done, array( $handle ) );
+				continue;
+			} else {
+				$uniq[ $key ] = $handle;
+			}
+		}
+
+		# skip ignore list, conditional css, external css, font-awesome merge
+		if ( ( ! $optimizoClass->minifyInArray( $hurl, $ignore ) && ! isset( $conditional ) && $optimizoClass->checkIfInternalLink( $hurl, $wp_home ) )
+		     || empty( $hurl ) ) {
+
+			# colect inline css for this handle
+			if ( isset( $wp_styles->registered[ $handle ]->extra['after'] ) && is_array( $wp_styles->registered[ $handle ]->extra['after'] ) ) {
+				$inline_css[ $handle ]                            = $optimizoClass->minifyCSSWithPHP( implode( '', $wp_styles->registered[ $handle ]->extra['after'] ) ); # save
+				$wp_styles->registered[ $handle ]->extra['after'] = null; # dequeue
+			}
+
+			# process
+			if ( isset( $footer[ count( $footer ) - 1 ]['handle'] ) || count( $footer ) == 0 || $footer[ count( $footer ) - 1 ]['media'] != $wp_styles->registered[ $handle ]->args ) {
+				array_push( $footer, array( 'handles' => array(), 'media' => $mediatype ) );
+			}
+
+			# push it to the array get latest modified time
+			array_push( $footer[ count( $footer ) - 1 ]['handles'], $handle );
+
+			# external and ignored css
+		} else {
+
+			# normal enqueueing
+			array_push( $footer, array( 'handle' => $handle ) );
+		}
+	endforeach;
+
+# loop through footer css and merge
+	for ( $i = 0, $l = count( $footer ); $i < $l; $i ++ ) {
+		if ( ! isset( $footer[ $i ]['handle'] ) ) {
+
+			# get has for the inline css in this group
+			$inline_css_group = array();
+			foreach ( $footer[ $i ]['handles'] as $h ) {
+				if ( isset( $inline_css[ $h ] ) && ! empty( $inline_css[ $h ] ) ) {
+					$inline_css_group[] = $inline_css[ $h ];
+				}
+			}
+			$inline_css_hash = md5( implode( '', $inline_css_group ) );
+
+			# static cache file info + done
+			$done = array_merge( $done, $footer[ $i ]['handles'] );
+			$hash = 'footer-' . hash( 'adler32', implode( '', $footer[ $i ]['handles'] ) . $inline_css_hash );
+
+			# create cache files and urls
+			$file     = $cachedir . '/' . $hash . '.min.css';
+			$file_url = $optimizoClass->getWPProtocol( $cachedirurl . '/' . $hash . '.min.css' );
+
+			# generate a new cache file
+			clearstatcache();
+			if ( ! file_exists( $file ) ) {
+
+				# code and log initialization
+				$log  = '';
+				$code = '';
+
+				# minify and write to file
+				foreach ( $footer[ $i ]['handles'] as $handle ) :
+					if ( ! empty( $wp_styles->registered[ $handle ]->src ) ) {
+
+						# get hurl per handle
+						$hurl = $optimizoClass->returnFullURL( $wp_styles->registered[ $handle ]->src, $wp_domain, $wp_home );
+
+						# inlined scripts without file
+						if ( empty( $hurl ) ) {
+							continue;
+						}
+
+						# print url
+						$printurl = str_ireplace( array( site_url(), home_url(), 'http:', 'https:' ), '', $hurl );
+
+						# download, minify, cache
+						$tkey = 'css-' . hash( 'adler32', $handle . $hurl ) . '.css';
+						$json = false;
+						$json = $optimizoClass->getTempStore( $tkey );
+						if ( $json === false ) {
+							$json = $optimizoClass->downloadAndMinify( $hurl, null, 'css', $handle );
+
+							$optimizoClass->setTempStore( $tkey, $json );
+						}
+
+						# decode
+						$res = json_decode( $json, true );
+
+						# response has failed
+						if ( $res['status'] != true ) {
+							$log .= $res['log'];
+							continue;
+						}
+
+						# append code to merged file
+						$code .= $res['code'];
+						$log  .= $res['log'];
+
+						# append inlined styles
+						if ( isset( $inline_css[ $handle ] ) && ! empty( $inline_css[ $handle ] ) ) {
+							$code .= $inline_css[ $handle ];
+						}
+
+						# consider dependencies on handles with an empty src
+					} else {
+						wp_dequeue_script( $handle );
+						wp_enqueue_script( $handle );
+					}
+				endforeach;
+
+				# prepare log
+				$log = "PROCESSED on " . date( 'r' ) . PHP_EOL . $log . "PROCESSED from " . home_url( add_query_arg( null, null ) ) . PHP_EOL;
+
+				# generate cache, add inline css, write log
+				if ( ! empty( $code ) ) {
+					file_put_contents( $file . '.txt', $log );
+					file_put_contents( $file, $code ); # preserve style tags
+					file_put_contents( $file . '.gz', gzencode( file_get_contents( $file ), 9 ) );
+
+					# permissions
+					$optimizoClass->fixPermissions( $file . '.txt' );
+					$optimizoClass->fixPermissions( $file );
+					$optimizoClass->fixPermissions( $file . '.gz' );
+
+					# brotli static support
+					if ( function_exists( 'brotli_compress' ) ) {
+						file_put_contents( $file . '.br', brotli_compress( file_get_contents( $file ), 11 ) );
+						$optimizoClass->fixPermissions( $file . '.br' );
+					}
+				}
+			}
+
+			# register and enqueue minified file, consider excluding of mediatype "print" and inline css
+			if ( $remove_print_mediatypes != true ) {
+
+				# the developers tab, takes precedence
+
+				if ( file_exists( $file ) && filesize( $file ) > 0 ) {
+
+					# inline if the file is smaller than 20KB or option has been enabled
+					if ( filesize( $file ) < 20000 ) {
+						echo '<style id="optimizo-footer-' . $i . '" media="' . $footer[ $i ]['media'] . '">' . file_get_contents( $file ) . '</style>';
+					} else {
+						# enqueue it
+						wp_enqueue_style( "optimizo-footer-$i", $file_url, array(), null, $footer[ $i ]['media'] );
+					}
+				} else {
+					# file could not be generated, output something meaningful
+					echo "<!-- ERROR: Optimizo was not allowed to save it's cache on - $file -->";
+					echo "<!-- Please check if the path above is correct and ensure your server has writting permission there! -->";
+					echo "<!-- If you found a bug, please drop us an email at hello@winauthorityinnovatives.com -->";
+				}
+			}
+		}
+
+# remove from queue
+		$wp_styles->done = $done;
+	}
 }
