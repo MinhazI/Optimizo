@@ -234,6 +234,8 @@ function minifyHTML( $buffer ) {
 function minifyHeaderJS() {
 	$optimizoClass = new OptimizoClass();
 
+	$cacheDir    = get_home_url() . '/wp-content/optimizoCache';
+
 	global $wp_scripts, $wp_domain, $wp_home, $ignore;
 	if ( ! is_object( $wp_scripts ) ) {
 		return false;
@@ -294,10 +296,6 @@ function minifyHeaderJS() {
 		}
 	endforeach;
 
-//	$cachepath = $optimizoClass->createCache();
-//	$cacheDir  = $cachepath['cachedir'];
-
-	$cacheDir = WP_CONTENT_DIR . '/optimizoCache';
 
 	# loop through header scripts and merge
 	for ( $i = 0, $l = count( $header ); $i < $l; $i ++ ) {
@@ -433,11 +431,8 @@ function minifyFooterJS() {
 
 	global $wp_scripts, $wp_domain, $wp_home, $ignore;
 
-//	$cachepath = $optimizoClass->createCache();
-//	$cachedir  = $cachepath['cachedir'];
-//	$cachedirurl = $cachepath['$cachedirurl'];
-
-	$cacheDir = WP_CONTENT_DIR . '/optimizoCache';
+	$cacheDir    = get_home_url() . '/wp-content/optimizoCache';
+	$cachedirurl = get_home_url() . '/wp-content/optimizoCache';
 
 	if ( ! is_object( $wp_scripts ) ) {
 		return false;
@@ -609,8 +604,8 @@ function minifyFooterJS() {
 function minifyCSSInHeader() {
 	global $wp_styles, $wp_domain, $wp_home, $ignore;
 
-	$cachedir    = WP_CONTENT_DIR . '/optimizoCache';
-	$cachedirurl = WP_CONTENT_DIR . '/optimizoCache';
+	$cachedir    = get_home_url() . '/wp-content/optimizoCache';
+	$cachedirurl = get_home_url() . '/wp-content/optimizoCache';
 
 	$optimizoClass = new OptimizoClass();
 
@@ -854,10 +849,10 @@ function minifyCSSInHeader() {
 
 				# inline CSS if mediatype is not of type "all" (such as mobile only), if the file is smaller than 20KB
 				if ( filesize( $file ) < 20000 && $header[ $i ]['media'] != 'all' ) {
-					echo '<style id="fvm-header-' . $i . '" media="' . $header[ $i ]['media'] . '">' . file_get_contents( $file ) . '</style>';
+					echo '<style id="optimizo-header-' . $i . '" media="' . $header[ $i ]['media'] . '">' . file_get_contents( $file ) . '</style>';
 				} else {
 					# enqueue it
-					wp_enqueue_style( "fvm-header-$i", $file_url, array(), null, $header[ $i ]['media'] );
+					wp_enqueue_style( "optimizo-header-$i", $file_url, array(), null, $header[ $i ]['media'] );
 				}
 			} else {
 				# file could not be generated, output something meaningful
@@ -880,12 +875,12 @@ function minifyCSSInHeader() {
 }
 
 function minifyCSSinFooter() {
-	global $wp_styles, $wp_domain, $wp_home, $ignore, $remove_print_mediatypes, $force_inline_css_footer;
+	global $wp_styles, $wp_domain, $wp_home, $ignore, $remove_print_mediatypes;
 
 	$remove_print_mediatypes = false;
 
-	$cachedir    = WP_CONTENT_DIR . '/optimizoCache';
-	$cachedirurl = WP_CONTENT_DIR . '/optimizoCache';
+	$cachedir    = get_home_url() . '/wp-content/optimizoCache';
+	$cachedirurl = get_home_url() . '/wp-content/optimizoCache';
 
 	$optimizoClass = new OptimizoClass();
 

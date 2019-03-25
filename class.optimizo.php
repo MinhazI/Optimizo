@@ -1225,8 +1225,8 @@ class OptimizoClass {
 
 		# get permissions from uploads directory
 		$dir_perms = 0777;
-		if ( is_dir( $uploadsdir . '/cache' ) && function_exists( 'stat' ) ) {
-			if ( $stat = @stat( $uploadsdir . '/cache' ) ) {
+		if ( is_dir( $uploadsdir) && function_exists( 'stat' ) ) {
+			if ( $stat = @stat( $uploadsdir) ) {
 				$dir_perms = $stat['mode'] & 0007777;
 			}
 		}
@@ -1402,7 +1402,6 @@ class OptimizoClass {
 	}
 
 	function getWPProtocol( $url ) {
-		global $wp_domain;
 		$url = ltrim( str_ireplace( array( 'http://', 'https://' ), '', $url ), '/' ); # better compatibility
 
 		# enforce protocol if needed
@@ -1530,7 +1529,7 @@ class OptimizoClass {
 				if ( $type == 'js' ) {
 					$code = $this->getJS( $furl, file_get_contents( $f ) );
 				} else {
-//					$code = fastvelocity_min_get_css( $furl, file_get_contents( $f ) . $inline );
+					$code = $this->getCSS( $furl, file_get_contents( $f ) . $inline );
 				}
 
 				# log, save and return
@@ -1552,7 +1551,7 @@ class OptimizoClass {
 				if ( $type == 'js' ) {
 					$code = $this->getJS( $furl, file_get_contents( $f ) );
 				} else {
-//					$code = fastvelocity_min_get_css( $furl, file_get_contents( $f ) . $inline );
+					$code = $this->getCSS( $furl, file_get_contents( $f ) . $inline );
 				}
 
 				# log, save and return
@@ -1573,7 +1572,7 @@ class OptimizoClass {
 				if ( $type == 'js' ) {
 					$code = $this->getJS( $furl, $code );
 				} else {
-//					$code = fastvelocity_min_get_css( $furl, $code . $inline );
+					$code = $this->getCSS( $furl, $code . $inline );
 				}
 
 				# log, save and return
@@ -1595,7 +1594,7 @@ class OptimizoClass {
 				if ( $type == 'js' ) {
 					$code = $this->getJS( $furl, file_get_contents( $f ) );
 				} else {
-//					$code = fastvelocity_min_get_css( $furl, file_get_contents( $f ) . $inline );
+					$code = $this->getCSS( $furl, file_get_contents( $f ) . $inline );
 				}
 
 				# log, save and return
@@ -1614,7 +1613,7 @@ class OptimizoClass {
 				if ( $type == 'js' ) {
 					$code = $this->getJS( $furl, file_get_contents( $f ) );
 				} else {
-//					$code = fastvelocity_min_get_css( $furl, file_get_contents( $f ) . $inline );
+					$code = $this->getCSS( $furl, file_get_contents( $f ) . $inline );
 				}
 
 				# log, save and return
