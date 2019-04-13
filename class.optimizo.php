@@ -8,8 +8,11 @@
 
 global $pluginDirectory;
 
-$plugindir = plugin_dir_path( __FILE__ );
+#To avoid PHP regular expression issues
+@ini_set( 'pcre.backtrack_limit', 5000000 );
+@ini_set( 'pcre.recursion_limit', 5000000 );
 
+$pluginDirectory = plugin_dir_path( __FILE__ );
 
 # Including the minfier library by: MatthiasMullie,
 # link: https://github.com/matthiasmullie/minify
@@ -26,7 +29,7 @@ require_once $pathToMatthias . '/path-converter/src/ConverterInterface.php';
 require_once $pathToMatthias . '/path-converter/src/Converter.php';
 
 global $googleFontsWhiteList;
-#The blow list thanks to: https://www.xcartmods.co.uk/google-fonts-list.php
+#The below list is thanks to: https://www.xcartmods.co.uk/google-fonts-list.php
 $googleFontsWhiteList = array(
 	'ABeeZee',
 	'Abel',
@@ -1167,7 +1170,7 @@ class OptimizoClass {
 		}
 	}
 
-	function getCSS( $url, $css) {
+	function getCSS( $url, $css ) {
 		global $wp_domain;
 
 		if ( ! empty( $url ) ) {
@@ -1199,20 +1202,12 @@ class OptimizoClass {
 		return $this->compatURL( $css );
 	}
 
-	function minifyCSS() {
-
-	}
-
 	function createCache() {
-
 //		$cacheDir = WP_CONTENT_DIR . '/optimizoCache';
-
-		$ctime  = time();
-		$upload = array();
-
+		$ctime             = time();
+		$upload            = array();
 		$upload['basedir'] = WP_CONTENT_DIR . '/optimizoCache';
 		$upload['baseurl'] = WP_CONTENT_DIR . '/optimizoCache';
-
 		# create
 		$uploadsdir   = $upload['basedir'];
 		$uploadsurl   = $upload['baseurl'];
@@ -1222,15 +1217,13 @@ class OptimizoClass {
 		$tmpdir       = $cachebase . '/tmp';
 		$headerdir    = $cachebase . '/header';
 		$cachedirurl  = $cachebaseurl . '/out';
-
 		# get permissions from uploads directory
 		$dir_perms = 0777;
-		if ( is_dir( $uploadsdir) && function_exists( 'stat' ) ) {
-			if ( $stat = @stat( $uploadsdir) ) {
+		if ( is_dir( $uploadsdir . '/cache' ) && function_exists( 'stat' ) ) {
+			if ( $stat = @stat( $uploadsdir . '/cache' ) ) {
 				$dir_perms = $stat['mode'] & 0007777;
 			}
 		}
-
 		# mkdir and check if umask requires chmod
 		$dirs = array( $cachebase, $cachedir, $tmpdir, $headerdir );
 		foreach ( $dirs as $target ) {
@@ -1402,432 +1395,445 @@ class OptimizoClass {
 	}
 
 	function getWPProtocol( $url ) {
+
 		$url = ltrim( str_ireplace( array( 'http://', 'https://' ), '', $url ), '/' ); # better compatibility
 
 		# enforce protocol if needed
-		if ( ( isset( $_SERVER['HTTPS'] ) && ( $_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1 ) ) || ( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' ) ) {
+		if ( ( isset( $_SERVER['HTTPS'] ) && ( $_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1 ) ) ||
+		     ( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' ) ) {
 			$default_protocol = 'https://';
 		} else {
 			$default_protocol = 'http://';
 		}
 
-		# return
-		return $default_protocol . $url;
-	}
 
-	function fixPermissions( $file ) {
-		if ( function_exists( 'stat' ) ) {
-			if ( $stat = @stat( dirname( $file ) ) ) {
-				$perms = $stat['mode'] & 0007777;
-				@chmod( $file, $perms );
+	# return
+return $default_protocol . $url;
+}
 
-				clearstatcache();
+function fixPermissions( $file ) {
+	if ( function_exists( 'stat' ) ) {
+		if ( $stat = @stat( dirname( $file ) ) ) {
+			$perms = $stat['mode'] & 0007777;
+			@chmod( $file, $perms );
 
-				return true;
-			}
-		}
-
-
-		# get permissions from parent directory
-		$perms = 0777;
-		if ( function_exists( 'stat' ) ) {
-			if ( $stat = @stat( dirname( $file ) ) ) {
-				$perms = $stat['mode'] & 0007777;
-			}
-		}
-
-		if ( file_exists( $file ) ) {
-			if ( $perms != ( $perms & ~umask() ) ) {
-				$folder_parts = explode( '/', substr( $file, strlen( dirname( $file ) ) + 1 ) );
-				for ( $i = 1, $c = count( $folder_parts ); $i <= $c; $i ++ ) {
-					@chmod( dirname( $file ) . '/' . implode( '/', array_slice( $folder_parts, 0, $i ) ), $perms );
-				}
-			}
-		}
-
-		return true;
-	}
-
-	function compatURL( $code ) {
-
-		if ( ( isset( $_SERVER['HTTPS'] ) && ( $_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1 ) ) || ( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' ) ) {
-			$default_protocol = 'https://';
-		} else {
-			$default_protocol = 'http://';
-		}
-		$code = str_ireplace( array( 'http://', 'https://' ), $default_protocol, $code );
-		$code = str_ireplace( $default_protocol . 'www.w3.org', 'http://www.w3.org', $code );
-
-		return $code;
-
-	}
-
-	function getTempStore( $key ) {
-		$cachepath = $this->createCache();
-		$tmpdir    = $cachepath['tmpdir'];
-		$f         = $tmpdir . '/' . $key . '.transient';
-		clearstatcache();
-		if ( file_exists( $f ) ) {
-			return file_get_contents( $f );
-		} else {
-			return false;
-		}
-	}
-
-	function setTempStore( $key, $code ) {
-		if ( is_null( $code ) || empty( $code ) ) {
-			return false;
-		}
-		$cachepath = $this->createCache();
-		$tmpdir    = $cachepath['tmpdir'];
-		$f         = $tmpdir . '/' . $key . '.transient';
-		file_put_contents( $f, $code );
-		$this->fixPermissions( $f );
-
-		return true;
-	}
-
-	function downloadAndMinify( $furl, $inline, $type, $handle ) {
-		global $wp_domain, $wp_home, $wp_home_path, $fvm_debug;
-
-		# must have
-		if ( is_null( $furl ) || empty( $furl ) ) {
-			return false;
-		}
-		if ( ! in_array( $type, array( 'js', 'css' ) ) ) {
-			return false;
-		}
-
-		# defaults
-		if ( is_null( $inline ) || empty( $inline ) ) {
-			$inline = '';
-		}
-		$printhandle = '';
-		if ( is_null( $handle ) || empty( $handle ) ) {
-			$handle = '';
-		} else {
-			$printhandle = "[$handle]";
-		}
-
-		# debug request
-		$dreq = array(
-			'furl'   => $furl,
-			'inline' => $inline,
-			'type'   => $type,
-			'handle' => $handle
-		);
-
-		# filters and defaults
-		$printurl = str_ireplace( array( site_url(), home_url(), 'http:', 'https:' ), '', $furl );
-
-		# linux servers
-		if ( stripos( $furl, $wp_domain ) !== false ) {
-			# default
-			$f = str_ireplace( rtrim( $wp_home, '/' ), rtrim( $wp_home_path, '/' ), $furl );
 			clearstatcache();
-			if ( file_exists( $f ) ) {
-				if ( $type == 'js' ) {
-					$code = $this->getJS( $furl, file_get_contents( $f ) );
-				} else {
-					$code = $this->getCSS( $furl, file_get_contents( $f ) . $inline );
-				}
 
-				# log, save and return
-				$log = $printurl;
-				if ( $fvm_debug == true ) {
-					$log .= " --- Debug: $printhandle was opened from $f ---";
-				}
-				$log    .= PHP_EOL;
-				$return = array( 'request' => $dreq, 'log' => $log, 'code' => $code, 'status' => true );
-
-				return json_encode( $return );
-			}
-
-			# failover when home_url != site_url
-			$nfurl = str_ireplace( site_url(), home_url(), $furl );
-			$f     = str_ireplace( rtrim( $wp_home, '/' ), rtrim( $wp_home_path, '/' ), $nfurl );
-			clearstatcache();
-			if ( file_exists( $f ) ) {
-				if ( $type == 'js' ) {
-					$code = $this->getJS( $furl, file_get_contents( $f ) );
-				} else {
-					$code = $this->getCSS( $furl, file_get_contents( $f ) . $inline );
-				}
-
-				# log, save and return
-				$log    = $printurl;
-				$log    .= PHP_EOL;
-				$return = array( 'request' => $dreq, 'log' => $log, 'code' => $code, 'status' => true );
-
-				return json_encode( $return );
-			}
-		}
-
-
-		# fallback when home_url != site_url
-		if ( stripos( $furl, $wp_domain ) !== false && home_url() != site_url() ) {
-			$nfurl = str_ireplace( site_url(), home_url(), $furl );
-			$code  = downloadFunction( $nfurl );
-			if ( $code !== false && ! empty( $code ) && strtolower( substr( $code, 0, 9 ) ) != "<!doctype" ) {
-				if ( $type == 'js' ) {
-					$code = $this->getJS( $furl, $code );
-				} else {
-					$code = $this->getCSS( $furl, $code . $inline );
-				}
-
-				# log, save and return
-				$log    = $printurl;
-				$log    .= PHP_EOL;
-				$return = array( 'request' => $dreq, 'log' => $log, 'code' => $code, 'status' => true );
-
-				return json_encode( $return );
-			}
-		}
-
-
-		# if remote urls failed... try to open locally again, regardless of OS in use
-		if ( stripos( $furl, $wp_domain ) !== false ) {
-			# default
-			$f = str_ireplace( rtrim( $wp_home, '/' ), rtrim( $wp_home_path, '/' ), $furl );
-			clearstatcache();
-			if ( file_exists( $f ) ) {
-				if ( $type == 'js' ) {
-					$code = $this->getJS( $furl, file_get_contents( $f ) );
-				} else {
-					$code = $this->getCSS( $furl, file_get_contents( $f ) . $inline );
-				}
-
-				# log, save and return
-				$log    = $printurl;
-				$log    .= PHP_EOL;
-				$return = array( 'request' => $dreq, 'log' => $log, 'code' => $code, 'status' => true );
-
-				return json_encode( $return );
-			}
-
-			# failover when home_url != site_url
-			$nfurl = str_ireplace( site_url(), home_url(), $furl );
-			$f     = str_ireplace( rtrim( $wp_home, '/' ), rtrim( $wp_home_path, '/' ), $nfurl );
-			clearstatcache();
-			if ( file_exists( $f ) ) {
-				if ( $type == 'js' ) {
-					$code = $this->getJS( $furl, file_get_contents( $f ) );
-				} else {
-					$code = $this->getCSS( $furl, file_get_contents( $f ) . $inline );
-				}
-
-				# log, save and return
-				$log    = $printurl;
-				$log    .= PHP_EOL;
-				$return = array( 'request' => $dreq, 'log' => $log, 'code' => $code, 'status' => true );
-
-				return json_encode( $return );
-			}
-		}
-
-
-		# else fail
-		$log    = $printurl;
-		$return = array( 'request' => $dreq, 'log' => $log, 'code' => '', 'status' => false );
-
-		return json_encode( $return );
-	}
-
-	# minify js on demand (one file at one time, for compatibility)
-	function getJS( $url, $js ) {
-
-		# exclude minification on already minified files + jquery (because minification might break those)
-		$excl = array( 'jquery.js', '.min.js', '-min.js', '/uploads/fusion-scripts/', '/min/', '.packed.js' );
-		foreach ( $excl as $e ) {
-			if ( stripos( basename( $url ), $e ) !== false ) {
-				$disable_js_minification = true;
-				break;
-			}
-		}
-
-		# minify JS
-		$js = $this->compatURL( $js );
-
-		# try to remove source mapping files
-		$filename = basename( $url );
-		$remove   = array( "//# sourceMappingURL=$filename.map", "//# sourceMappingURL = $filename.map" );
-		$js       = str_ireplace( $remove, '', $js );
-
-		# needed when merging js files
-		$js = trim( $js );
-		if ( substr( $js, - 1 ) != ';' ) {
-			$js = $js . ';';
-		}
-
-		# return html
-		return $js . PHP_EOL;
-	}
-
-	function downloadFunction( $url ) {
-		# info (needed for google fonts woff files + hinted fonts) as well as to bypass some security filters
-		$uagent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2486.0 Safari/537.36 Edge/13.10586';
-
-		# fetch via wordpress functions
-		$response = wp_remote_get( $url, array(
-			'user-agent'  => $uagent,
-			'timeout'     => 7,
-			'httpversion' => '1.1',
-			'sslverify'   => false
-		) );
-		$res_code = wp_remote_retrieve_response_code( $response );
-		if ( $res_code == '200' ) {
-			$data = wp_remote_retrieve_body( $response );
-			if ( strlen( $data ) > 1 ) {
-				return $data;
-			}
-		}
-
-		# verify
-		if ( ! isset( $res_code ) || empty( $res_code ) || $res_code == false || is_null( $res_code ) ) {
-			return false;
-		}
-
-		# stop here, error 4xx or 5xx
-		if ( $res_code[0] == '4' || $res_code[0] == '5' ) {
-			return false;
-		}
-
-		# fallback fail
-		return false;
-	}
-
-	function checkIfGoogleFontsExist( $font ) {
-		global $googleFontsWhiteList;
-
-		#normalize
-		$googleFontsWhiteList = array_map( 'strtolower', $googleFontsWhiteList );
-		$font            = str_ireplace( '+', ' ', strtolower( $font ) );
-
-		# check
-		if ( in_array( $font, $googleFontsWhiteList ) ) {
 			return true;
 		}
+	}
 
-		# fallback
+
+	# get permissions from parent directory
+	$perms = 0777;
+	if ( function_exists( 'stat' ) ) {
+		if ( $stat = @stat( dirname( $file ) ) ) {
+			$perms = $stat['mode'] & 0007777;
+		}
+	}
+
+	if ( file_exists( $file ) ) {
+		if ( $perms != ( $perms & ~umask() ) ) {
+			$folder_parts = explode( '/', substr( $file, strlen( dirname( $file ) ) + 1 ) );
+			for ( $i = 1, $c = count( $folder_parts ); $i <= $c; $i ++ ) {
+				@chmod( dirname( $file ) . '/' . implode( '/', array_slice( $folder_parts, 0, $i ) ), $perms );
+			}
+		}
+	}
+
+	return true;
+}
+
+function compatURL( $code ) {
+
+	if ( ( isset( $_SERVER['HTTPS'] ) && ( $_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1 ) )
+	     || ( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' ) ) {
+		$default_protocol = 'https://';
+	} else {
+		$default_protocol = 'http://';
+	}
+	$code = str_ireplace( array( 'http://', 'https://' ), $default_protocol, $code );
+	$code = str_ireplace( $default_protocol . 'www.w3.org', 'http://www.w3.org', $code );
+
+//	print_r("Code: " . $code . "Ends here");
+	return $code;
+
+}
+
+
+function getTempStore( $key ) {
+	$cachepath = $this->createCache();
+	$tmpdir    = $cachepath['tmpdir'];
+	$f         = $tmpdir . '/' . $key . '.transient';
+	clearstatcache();
+	if ( file_exists( $f ) ) {
+		return file_get_contents( $f );
+	} else {
+		return false;
+	}
+}
+
+function setTempStore( $key, $code ) {
+	if ( is_null( $code ) || empty( $code ) ) {
+		return false;
+	}
+	$cachepath = $this->createCache();
+	$tmpdir    = $cachepath['tmpdir'];
+	$f         = $tmpdir . '/' . $key . '.transient';
+	file_put_contents( $f, $code );
+	$this->fixPermissions( $f );
+
+	return true;
+}
+
+
+function downloadAndMinify( $furl, $inline, $type, $handle ) {
+	global $wp_domain, $wp_home, $wp_home_path, $fvm_debug;
+
+	# must have
+	if ( is_null( $furl ) || empty( $furl ) ) {
+		return false;
+	}
+	if ( ! in_array( $type, array( 'js', 'css' ) ) ) {
 		return false;
 	}
 
-	function concatenateGoogleFonts( $array ) {
-		# extract unique font families
-		$families = array();
-		foreach ( $array as $font ) {
+	# defaults
+	if ( is_null( $inline ) || empty( $inline ) ) {
+		$inline = '';
+	}
+	$printhandle = '';
+	if ( is_null( $handle ) || empty( $handle ) ) {
+		$handle = '';
+	} else {
+		$printhandle = "[$handle]";
+	}
 
-			# must have
-			if ( stripos( $font, 'family=' ) !== false ) {
+	# debug request
+	$dreq = array(
+		'furl'   => $furl,
+		'inline' => $inline,
+		'type'   => $type,
+		'handle' => $handle
+	);
 
-				# get fonts name, type and subset, remove wp query strings
-				$font = explode( 'family=', htmlspecialchars_decode( rawurldecode( urldecode( $font ) ) ) );
-				$a    = explode( '&v', end( $font ) );
-				$font = trim( trim( trim( current( $a ) ), ',' ) );
+	# filters and defaults
+	$printurl = str_ireplace( array( site_url(), home_url(), 'http:', 'https:' ), '', $furl );
 
-				# reprocess if fonts are already concatenated in this url
-				if ( stristr( $font, '|' ) !== false ) {
-					$multiple = explode( '|', $font );
-					if ( count( $multiple ) > 0 ) {
-						foreach ( $multiple as $f ) {
-							$families[] = str_ireplace( 'subsets', 'subset', trim( $f ) );
-						}
-					}
-				} else {
-					$families[] = str_ireplace( 'subsets', 'subset', trim( $font ) );
-				}
-			}
-		}
+//	print_r("FURL: " . $furl . " && wp_domain: " . $wp_domain . " ..");
 
-		# return if empty
-		if ( count( $families ) == 0 ) {
-			return false;
-		}
+	# linux servers
+	if ( stripos( $furl, $wp_domain ) !== false ) {
+		# default
+		$f = str_ireplace( rtrim( $wp_home, '/' ), rtrim( $wp_home_path, '/' ), $furl );
+		clearstatcache();
+//		print_r($f);
 
-		# process names, types, subsets
-		$fonts   = array();
-		$subsets = array();
-		foreach ( $families as $font ) {
-
-			# extract the subsets
-			if ( stripos( $font, 'subset' ) !== false ) {
-				$sub  = trim( str_ireplace( '&subset=', '', stristr( $font, '&' ) ) );      # second part of the string, after &
-				$font = stristr( $font, '&', true );                                   # font name, before &
-
-				# subsets to array, unique, trim
-				if ( stripos( $sub, ',' ) !== false ) {
-					$ft = explode( ',', $sub );
-					$ft = array_filter( array_map( 'trim', array_unique( $ft ) ) );
-					foreach ( $ft as $s ) {
-						$subsets[ $s ] = $s;
-					}
-				} else {
-					if ( ! empty( $sub ) ) {
-						$subsets[ $sub ] = $sub;
-					}
-				}
-
-			}
-
-			# check for font name and weights
-			$ftypes = array();
-			$name   = $font;
-			if ( stripos( $font, ':' ) !== false ) {
-				$name = stristr( $font, ':', true );       # font name, before :
-				$fwe  = trim( stristr( $font, ':' ), ':' );   # second part of the string, after :
-
-				# ftypes to array, unique, trim
-				if ( stripos( $font, ',' ) !== false ) {
-					$ft     = explode( ',', $fwe );
-					$ftypes = array_filter( array_map( 'trim', array_unique( $ft ) ) );
-				} else {
-					if ( ! empty( $fwe ) ) {
-						$ftypes[] = $fwe;
-					}
-				}
-
-			}
-
-			# name filter
-			$name = str_ireplace( ' ', '+', trim( $name ) );
-
-			# save fonts list, merge fontweights
-			if ( ! isset( $fonts[ $name ] ) ) {
-				$fonts[ $name ] = array( 'name' => $name, 'type' => $ftypes );
+		if ( file_exists( $f ) ) {
+//			print_r("FURL: " . $furl . " && wp_domain: " . $wp_domain . " ..");
+			if ( $type == 'js' ) {
+				$code = $this->getJS( $furl, file_get_contents( $f ) );
 			} else {
-				$ftypes         = array_merge( $ftypes, $fonts[ $name ]['type'] );
-				$fonts[ $name ] = array( 'name' => $name, 'type' => $ftypes );
+				$code = $this->getCSS( $furl, file_get_contents( $f ) . $inline );
 			}
 
-		}
-
-		# build font names with font weights, if allowed
-		$build = array();
-		foreach ( $fonts as $farr ) {
-			if ( $this->checkIfGoogleFontsExist( $farr['name'] ) == true ) {
-				$f = $farr['name'];
-				if ( count( $farr['type'] ) > 0 ) {
-					$f .= ':' . implode( ',', $farr['type'] );
-				}
-				$build[] = $f;
+			# log, save and return
+			$log = $printurl;
+			if ( $fvm_debug == true ) {
+				$log .= " --- Debug: $printhandle was opened from $f ---";
 			}
+			$log    .= PHP_EOL;
+			$return = array( 'request' => $dreq, 'log' => $log, 'code' => $code, 'status' => true );
+
+			return json_encode( $return );
 		}
 
-		# merge, append subsets
-		$merge = '';
-		if ( count( $build ) > 0 ) {
-			$merge = implode( '|', $build );
-			if ( count( $subsets ) > 0 ) {
-				$merge .= '&subset=' . implode( ',', $subsets );
+		# failover when home_url != site_url
+		$nfurl = str_ireplace( site_url(), home_url(), $furl );
+		$f     = str_ireplace( rtrim( $wp_home, '/' ), rtrim( $wp_home_path, '/' ), $nfurl );
+		clearstatcache();
+		if ( file_exists( $f ) ) {
+			if ( $type == 'js' ) {
+				$code = $this->getJS( $furl, file_get_contents( $f ) );
+			} else {
+				$code = $this->getCSS( $furl, file_get_contents( $f ) . $inline );
 			}
-		}
 
-		# return
-		if ( ! empty( $merge ) ) {
-			return 'https://fonts.googleapis.com/css?family=' . $merge;
-		} else {
-			return false;
+			# log, save and return
+			$log    = $printurl;
+			$log    .= PHP_EOL;
+			$return = array( 'request' => $dreq, 'log' => $log, 'code' => $code, 'status' => true );
+
+			return json_encode( $return );
 		}
 	}
+
+
+	# fallback when home_url != site_url
+	if ( stripos( $furl, $wp_domain ) !== false && home_url() != site_url() ) {
+		$nfurl = str_ireplace( site_url(), home_url(), $furl );
+		$code  = $this->downloadFunction( $nfurl );
+		if ( $code !== false && ! empty( $code ) && strtolower( substr( $code, 0, 9 ) ) != "<!doctype" ) {
+			if ( $type == 'js' ) {
+				$code = $this->getJS( $furl, $code );
+			} else {
+				$code = $this->getCSS( $furl, $code . $inline );
+			}
+
+			# log, save and return
+			$log    = $printurl;
+			$log    .= PHP_EOL;
+			$return = array( 'request' => $dreq, 'log' => $log, 'code' => $code, 'status' => true );
+
+			return json_encode( $return );
+		}
+	}
+
+
+	# if remote urls failed... try to open locally again, regardless of OS in use
+	if ( stripos( $furl, $wp_domain ) !== false ) {
+
+		# default
+		$f = str_ireplace( rtrim( $wp_home, '/' ), rtrim( $wp_home_path, '/' ), $furl );
+		clearstatcache();
+		if ( file_exists( $f ) ) {
+			if ( $type == 'js' ) {
+				$code = $this->getJS( $furl, file_get_contents( $f ) );
+			} else {
+				$code = $this->getCSS( $furl, file_get_contents( $f ) . $inline );
+			}
+
+			# log, save and return
+			$log    = $printurl;
+			$log    .= PHP_EOL;
+			$return = array( 'request' => $dreq, 'log' => $log, 'code' => $code, 'status' => true );
+
+			return json_encode( $return );
+		}
+
+		# failover when home_url != site_url
+		$nfurl = str_ireplace( site_url(), home_url(), $furl );
+		$f     = str_ireplace( rtrim( $wp_home, '/' ), rtrim( $wp_home_path, '/' ), $nfurl );
+		clearstatcache();
+		if ( file_exists( $f ) ) {
+			if ( $type == 'js' ) {
+				$code = $this->getJS( $furl, file_get_contents( $f ) );
+			} else {
+				$code = $this->getCSS( $furl, file_get_contents( $f ) . $inline );
+			}
+
+			# log, save and return
+			$log    = $printurl;
+			$log    .= PHP_EOL;
+			$return = array( 'request' => $dreq, 'log' => $log, 'code' => $code, 'status' => true );
+
+			return json_encode( $return );
+		}
+	}
+
+
+	# else fail
+	$log    = $printurl;
+	$return = array( 'request' => $dreq, 'log' => $log, 'code' => '', 'status' => false );
+
+	return json_encode( $return );
+}
+
+# minify js on demand (one file at one time, for compatibility)
+function getJS( $url, $js ) {
+
+	# exclude minification on already minified files + jquery (because minification might break those)
+	$excl = array( 'jquery.js', '.min.js', '-min.js', '/uploads/fusion-scripts/', '/min/', '.packed.js' );
+	foreach ( $excl as $e ) {
+		if ( stripos( basename( $url ), $e ) !== false ) {
+			$disable_js_minification = true;
+			break;
+		}
+	}
+
+	# minify JS
+	$js = $this->compatURL( $js );
+
+	# try to remove source mapping files
+	$filename = basename( $url );
+	$remove   = array( "//# sourceMappingURL=$filename.map", "//# sourceMappingURL = $filename.map" );
+	$js       = str_ireplace( $remove, '', $js );
+
+	# needed when merging js files
+	$js = trim( $js );
+	if ( substr( $js, - 1 ) != ';' ) {
+		$js = $js . ';';
+	}
+
+	# return html
+	return $js . PHP_EOL;
+}
+
+function downloadFunction( $url ) {
+	# info (needed for google fonts woff files + hinted fonts) as well as to bypass some security filters
+	$uagent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2486.0 Safari/537.36 Edge/13.10586';
+
+	# fetch via wordpress functions
+	$response = wp_remote_get( $url, array(
+		'user-agent'  => $uagent,
+		'timeout'     => 7,
+		'httpversion' => '1.1',
+		'sslverify'   => false
+	) );
+	$res_code = wp_remote_retrieve_response_code( $response );
+	if ( $res_code == '200' ) {
+		$data = wp_remote_retrieve_body( $response );
+		if ( strlen( $data ) > 1 ) {
+			return $data;
+		}
+	}
+
+	# verify
+	if ( ! isset( $res_code ) || empty( $res_code ) || $res_code == false || is_null( $res_code ) ) {
+		return false;
+	}
+
+	# stop here, error 4xx or 5xx
+	if ( $res_code[0] == '4' || $res_code[0] == '5' ) {
+		return false;
+	}
+
+	# fallback fail
+	return false;
+}
+
+function checkIfGoogleFontsExist( $font ) {
+	global $googleFontsWhiteList;
+
+	#normalize
+	$googleFontsWhiteList = array_map( 'strtolower', $googleFontsWhiteList );
+	$font                 = str_ireplace( '+', ' ', strtolower( $font ) );
+
+	# check
+	if ( in_array( $font, $googleFontsWhiteList ) ) {
+		return true;
+	}
+
+	# fallback
+	return false;
+}
+
+function concatenateGoogleFonts( $array ) {
+	# extract unique font families
+	$families = array();
+	foreach ( $array as $font ) {
+
+		# must have
+		if ( stripos( $font, 'family=' ) !== false ) {
+
+			# get fonts name, type and subset, remove wp query strings
+			$font = explode( 'family=', htmlspecialchars_decode( rawurldecode( urldecode( $font ) ) ) );
+			$a    = explode( '&v', end( $font ) );
+			$font = trim( trim( trim( current( $a ) ), ',' ) );
+
+			# reprocess if fonts are already concatenated in this url
+			if ( stristr( $font, '|' ) !== false ) {
+				$multiple = explode( '|', $font );
+				if ( count( $multiple ) > 0 ) {
+					foreach ( $multiple as $f ) {
+						$families[] = str_ireplace( 'subsets', 'subset', trim( $f ) );
+					}
+				}
+			} else {
+				$families[] = str_ireplace( 'subsets', 'subset', trim( $font ) );
+			}
+		}
+	}
+
+	# return if empty
+	if ( count( $families ) == 0 ) {
+		return false;
+	}
+
+	# process names, types, subsets
+	$fonts   = array();
+	$subsets = array();
+	foreach ( $families as $font ) {
+
+		# extract the subsets
+		if ( stripos( $font, 'subset' ) !== false ) {
+			$sub  = trim( str_ireplace( '&subset=', '', stristr( $font, '&' ) ) );      # second part of the string, after &
+			$font = stristr( $font, '&', true );                                   # font name, before &
+
+			# subsets to array, unique, trim
+			if ( stripos( $sub, ',' ) !== false ) {
+				$ft = explode( ',', $sub );
+				$ft = array_filter( array_map( 'trim', array_unique( $ft ) ) );
+				foreach ( $ft as $s ) {
+					$subsets[ $s ] = $s;
+				}
+			} else {
+				if ( ! empty( $sub ) ) {
+					$subsets[ $sub ] = $sub;
+				}
+			}
+
+		}
+
+		# check for font name and weights
+		$ftypes = array();
+		$name   = $font;
+		if ( stripos( $font, ':' ) !== false ) {
+			$name = stristr( $font, ':', true );       # font name, before :
+			$fwe  = trim( stristr( $font, ':' ), ':' );   # second part of the string, after :
+
+			# ftypes to array, unique, trim
+			if ( stripos( $font, ',' ) !== false ) {
+				$ft     = explode( ',', $fwe );
+				$ftypes = array_filter( array_map( 'trim', array_unique( $ft ) ) );
+			} else {
+				if ( ! empty( $fwe ) ) {
+					$ftypes[] = $fwe;
+				}
+			}
+
+		}
+
+		# name filter
+		$name = str_ireplace( ' ', '+', trim( $name ) );
+
+		# save fonts list, merge fontweights
+		if ( ! isset( $fonts[ $name ] ) ) {
+			$fonts[ $name ] = array( 'name' => $name, 'type' => $ftypes );
+		} else {
+			$ftypes         = array_merge( $ftypes, $fonts[ $name ]['type'] );
+			$fonts[ $name ] = array( 'name' => $name, 'type' => $ftypes );
+		}
+
+	}
+
+	# build font names with font weights, if allowed
+	$build = array();
+	foreach ( $fonts as $farr ) {
+		if ( $this->checkIfGoogleFontsExist( $farr['name'] ) == true ) {
+			$f = $farr['name'];
+			if ( count( $farr['type'] ) > 0 ) {
+				$f .= ':' . implode( ',', $farr['type'] );
+			}
+			$build[] = $f;
+		}
+	}
+
+	# merge, append subsets
+	$merge = '';
+	if ( count( $build ) > 0 ) {
+		$merge = implode( '|', $build );
+		if ( count( $subsets ) > 0 ) {
+			$merge .= '&subset=' . implode( ',', $subsets );
+		}
+	}
+
+	# return
+	if ( ! empty( $merge ) ) {
+		return 'https://fonts.googleapis.com/css?family=' . $merge;
+	} else {
+		return false;
+	}
+}
 
 }

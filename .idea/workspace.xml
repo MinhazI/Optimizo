@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5f3587ba-2adc-43f4-a239-8b0a52445a84" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/class.optimizo.php" beforeDir="false" afterPath="$PROJECT_DIR$/class.optimizo.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/optimizo.php" beforeDir="false" afterPath="$PROJECT_DIR$/optimizo.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -17,7 +16,7 @@
       <file leaf-file-name="wp-config.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../../../wp-config.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-9">
+            <state relative-caret-position="420">
               <caret line="45" column="39" selection-start-line="45" selection-start-column="39" selection-end-line="45" selection-end-column="39" />
             </state>
           </provider>
@@ -26,8 +25,8 @@
       <file leaf-file-name="optimizo.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/optimizo.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="540">
-              <caret line="51" lean-forward="true" selection-start-line="51" selection-end-line="51" />
+            <state relative-caret-position="15">
+              <caret line="51" selection-start-line="51" selection-end-line="51" />
             </state>
           </provider>
         </entry>
@@ -35,10 +34,9 @@
       <file leaf-file-name="class.optimizo.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/class.optimizo.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="287">
+            <state relative-caret-position="13785">
               <caret line="1228" column="43" selection-start-line="1228" selection-start-column="43" selection-end-line="1228" selection-end-column="43" />
               <folding>
-                <element signature="e#1051#12918#0#PHP" />
                 <element signature="n#activate#0;n#OptimizoClass#0;n#!!top" />
                 <element signature="n#deactivate#0;n#OptimizoClass#0;n#!!top" />
                 <element signature="n#addToWPConfig#0;n#OptimizoClass#0;n#!!top" />
@@ -70,7 +68,7 @@
       <file leaf-file-name="functions.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../fast-velocity-minify/inc/functions.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="505">
+            <state relative-caret-position="16560">
               <caret line="1765" selection-start-line="1765" selection-end-line="1770" />
               <folding>
                 <element signature="e#50#136#0#PHP" />
@@ -214,37 +212,12 @@
                 <element signature="n#fastvelocity_min_remove_utf8_bom#0;n#!!top" />
                 <element signature="n#fastvelocity_remove_cssjs_ver#0;n#!!top" />
                 <element signature="e#39332#39410#0#PHP" />
-                <element signature="e#40199#40327#0#PHP" />
-                <element signature="e#40509#40791#0#PHP" />
-                <element signature="e#40747#40791#0#PHP" />
                 <element signature="n#fvm_safename#0;n#!!top" />
-                <element signature="e#41066#41113#0#PHP" />
-                <element signature="e#41167#41211#0#PHP" />
                 <element signature="n#fastvelocity_escape_url_js#0;n#!!top" />
                 <element signature="n#fastvelocity_exclude_contents#0;n#!!top" />
-                <element signature="e#41584#42492#0#PHP" />
-                <element signature="e#42595#42674#0#PHP" />
-                <element signature="e#42622#42671#0#PHP" />
-                <element signature="e#42786#42900#0#PHP" />
-                <element signature="e#42813#42897#0#PHP" />
                 <element signature="n#fastvelocity_default_ignore#0;n#!!top" />
-                <element signature="e#43025#43876#0#PHP" />
-                <element signature="e#43388#43514#0#PHP" />
-                <element signature="e#43577#43692#0#PHP" />
-                <element signature="e#43639#43688#0#PHP" />
-                <element signature="e#43695#43807#0#PHP" />
-                <element signature="e#43754#43803#0#PHP" />
-                <element signature="e#43849#43876#0#PHP" />
                 <element signature="n#fastvelocity_ie_blacklist#0;n#!!top" />
-                <element signature="e#44252#44317#0#PHP" />
-                <element signature="e#44292#44317#0#PHP" />
                 <element signature="n#fastvelocity_download#0;n#!!top" />
-                <element signature="e#44690#44823#0#PHP" />
-                <element signature="e#44711#44821#0#PHP" />
-                <element signature="e#44886#45016#0#PHP" />
-                <element signature="e#44964#45013#0#PHP" />
-                <element signature="e#45029#45145#0#PHP" />
-                <element signature="e#45179#45249#0#PHP" />
               </folding>
             </state>
           </provider>
@@ -253,7 +226,7 @@
       <file leaf-file-name="fvm.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../fast-velocity-minify/fvm.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="515">
+            <state relative-caret-position="2010">
               <caret line="214" column="52" selection-start-line="214" selection-start-column="29" selection-end-line="214" selection-end-column="52" />
               <folding>
                 <element signature="n#fvm_compat_checker#0;n#!!top" />
@@ -787,6 +760,7 @@
         <option value="$PROJECT_DIR$/../fast-velocity-minify/inc/functions.php" />
         <option value="$PROJECT_DIR$/class.optimizo.php" />
         <option value="$PROJECT_DIR$/optimizo.php" />
+        <option value="$USER_HOME$/Documents/Client's Files/Baby Island/inc/phpMail/sendMail.php" />
       </list>
     </option>
   </component>
@@ -906,16 +880,19 @@
       <workItem from="1553110311457" duration="11592000" />
       <workItem from="1553223998372" duration="5348000" />
       <workItem from="1553308313592" duration="6272000" />
-      <workItem from="1553414522458" duration="15581000" />
+      <workItem from="1553414522458" duration="15712000" />
+      <workItem from="1553531355757" duration="59000" />
+      <workItem from="1553535187871" duration="216000" />
+      <workItem from="1553537945562" duration="179000" />
+      <workItem from="1553539313436" duration="4000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="139482000" />
+    <option name="totallyTimeSpent" value="140071000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20347223" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -953,13 +930,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../autoptimize/classes/autoptimizeCSSmin.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="426">
-          <caret line="38" column="36" selection-start-line="38" selection-start-column="36" selection-end-line="38" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../autoptimize/autoptimize.php">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -1073,21 +1043,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-309">
           <caret line="4" selection-start-line="4" selection-end-line="4" />
-          <folding>
-            <element signature="n#fastvelocity_fix_permission_bits#0;n#!!top" />
-            <element signature="n#fvm_cachepath#0;n#!!top" />
-            <element signature="n#fvm_purge_all#0;n#!!top" />
-            <element signature="n#fvm_purge_all_uninstall#0;n#!!top" />
-            <element signature="n#fvm_purge_old#0;n#!!top" />
-            <element signature="n#fastvelocity_purge_onsave#0;n#!!top" />
-            <element signature="n#fastvelocity_purge_all_global#0;n#!!top" />
-            <element signature="n#fvm_get_transient#0;n#!!top" />
-            <element signature="n#fvm_set_transient#0;n#!!top" />
-            <element signature="n#fastvelocity_get_cachestats#0;n#!!top" />
-            <element signature="n#fastvelocity_rrmdir#0;n#!!top" />
-            <element signature="n#fastvelocity_format_filesize#0;n#!!top" />
-            <element signature="n#fvm_purge_others#0;n#!!top" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1110,18 +1065,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../../../wp-config.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-9">
+        <state relative-caret-position="420">
           <caret line="45" column="39" selection-start-line="45" selection-start-column="39" selection-end-line="45" selection-end-column="39" />
         </state>
       </provider>
     </entry>
-    <entry file="file:///private/var/folders/9f/168m7dcn2jjds75q34cbv6fm0000gn/T/fz3temp-2/index.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" selection-start-line="3" selection-end-line="3" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file:///private/var/folders/9f/168m7dcn2jjds75q34cbv6fm0000gn/T/fz3temp-2/index.php" />
     <entry file="file://$PROJECT_DIR$/../../optimizoCache/1553463802/tmp/css-f646222d.css.transient">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -1134,7 +1083,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../fast-velocity-minify/fvm.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="515">
+        <state relative-caret-position="2010">
           <caret line="214" column="52" selection-start-line="214" selection-start-column="29" selection-end-line="214" selection-end-column="52" />
           <folding>
             <element signature="n#fvm_compat_checker#0;n#!!top" />
@@ -1595,27 +1544,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file:///private/var/folders/9f/168m7dcn2jjds75q34cbv6fm0000gn/T/fz3temp-2/optimizo.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="274">
-          <caret line="40" column="74" lean-forward="true" selection-start-line="40" selection-start-column="74" selection-end-line="40" selection-end-column="74" />
-          <folding>
-            <element signature="n#minifyHeaderJS#0;n#!!top" />
-            <element signature="n#minifyFooterJS#0;n#!!top" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///private/var/folders/9f/168m7dcn2jjds75q34cbv6fm0000gn/T/fz3temp-2/.htaccess">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1140">
-          <caret line="76" selection-start-line="76" selection-end-line="76" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file:///private/var/folders/9f/168m7dcn2jjds75q34cbv6fm0000gn/T/fz3temp-2/optimizo.php" />
+    <entry file="file:///private/var/folders/9f/168m7dcn2jjds75q34cbv6fm0000gn/T/fz3temp-2/.htaccess" />
     <entry file="file://$PROJECT_DIR$/../fast-velocity-minify/inc/functions.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="505">
+        <state relative-caret-position="16560">
           <caret line="1765" selection-start-line="1765" selection-end-line="1770" />
           <folding>
             <element signature="e#50#136#0#PHP" />
@@ -1759,47 +1692,21 @@
             <element signature="n#fastvelocity_min_remove_utf8_bom#0;n#!!top" />
             <element signature="n#fastvelocity_remove_cssjs_ver#0;n#!!top" />
             <element signature="e#39332#39410#0#PHP" />
-            <element signature="e#40199#40327#0#PHP" />
-            <element signature="e#40509#40791#0#PHP" />
-            <element signature="e#40747#40791#0#PHP" />
             <element signature="n#fvm_safename#0;n#!!top" />
-            <element signature="e#41066#41113#0#PHP" />
-            <element signature="e#41167#41211#0#PHP" />
             <element signature="n#fastvelocity_escape_url_js#0;n#!!top" />
             <element signature="n#fastvelocity_exclude_contents#0;n#!!top" />
-            <element signature="e#41584#42492#0#PHP" />
-            <element signature="e#42595#42674#0#PHP" />
-            <element signature="e#42622#42671#0#PHP" />
-            <element signature="e#42786#42900#0#PHP" />
-            <element signature="e#42813#42897#0#PHP" />
             <element signature="n#fastvelocity_default_ignore#0;n#!!top" />
-            <element signature="e#43025#43876#0#PHP" />
-            <element signature="e#43388#43514#0#PHP" />
-            <element signature="e#43577#43692#0#PHP" />
-            <element signature="e#43639#43688#0#PHP" />
-            <element signature="e#43695#43807#0#PHP" />
-            <element signature="e#43754#43803#0#PHP" />
-            <element signature="e#43849#43876#0#PHP" />
             <element signature="n#fastvelocity_ie_blacklist#0;n#!!top" />
-            <element signature="e#44252#44317#0#PHP" />
-            <element signature="e#44292#44317#0#PHP" />
             <element signature="n#fastvelocity_download#0;n#!!top" />
-            <element signature="e#44690#44823#0#PHP" />
-            <element signature="e#44711#44821#0#PHP" />
-            <element signature="e#44886#45016#0#PHP" />
-            <element signature="e#44964#45013#0#PHP" />
-            <element signature="e#45029#45145#0#PHP" />
-            <element signature="e#45179#45249#0#PHP" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/class.optimizo.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="287">
+        <state relative-caret-position="13785">
           <caret line="1228" column="43" selection-start-line="1228" selection-start-column="43" selection-end-line="1228" selection-end-column="43" />
           <folding>
-            <element signature="e#1051#12918#0#PHP" />
             <element signature="n#activate#0;n#OptimizoClass#0;n#!!top" />
             <element signature="n#deactivate#0;n#OptimizoClass#0;n#!!top" />
             <element signature="n#addToWPConfig#0;n#OptimizoClass#0;n#!!top" />
@@ -1834,10 +1741,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$USER_HOME$/Documents/Client's Files/Baby Island/inc/phpMail/sendMail.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="885">
+          <caret line="60" column="5" selection-end-line="63" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/optimizo.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="51" lean-forward="true" selection-start-line="51" selection-end-line="51" />
+        <state relative-caret-position="15">
+          <caret line="51" selection-start-line="51" selection-end-line="51" />
         </state>
       </provider>
     </entry>
