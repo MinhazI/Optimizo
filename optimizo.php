@@ -15,12 +15,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 require_once( 'class.optimizo.php' );
 
 $optimizoClass = new OptimizoClass();
-$cachepath = $optimizoClass->createCache();
-$tmpdir      = $cachepath['tmpdir'];
-$cacheDir    = $cachepath['cachedir'];
-$cachedirurl = $cachepath['cachedirurl'];
+$cachepath     = $optimizoClass->createCache();
+$tmpdir        = $cachepath['tmpdir'];
+$cacheDir      = $cachepath['cachedir'];
+$cachedirurl   = $cachepath['cachedirurl'];
+$cacheBaseURL  = $cachepath['cachedirurl'];
 
-$wp_home = site_url();
+$wp_home      = site_url();
 $wp_domain    = trim( str_ireplace( array( 'http://', 'https://' ), '', trim( $wp_home, '/' ) ) );
 $wp_home_path = ABSPATH;
 
@@ -34,12 +35,14 @@ class Optimizo {
 		require_once( 'adminToolBar.php' );
 		$toolbar = new optimizoAdminToolbar();
 		$toolbar->addToolbar();
-		echo "<!-- This website has been optimized by Optimizo. Web: https://www.optimizo.lk -->";
-		add_action( 'init', 'init_minify_html', 1 );
-		add_action( 'wp_print_scripts', 'minifyHeaderJS', PHP_INT_MAX );
-		add_action( 'wp_print_footer_scripts', 'minifyFooterJS', 9.999999 );
-		add_action( 'wp_print_styles', 'minifyCSSInHeader', PHP_INT_MAX );
-		add_action( 'wp_print_footer_scripts', 'minifyCSSinFooter', 999999 );
+		if ( ! is_admin() ) {
+			echo "<!-- This website has been optimized by Optimizo. Web: https://www.optimizo.lk -->";
+			add_action( 'init', 'init_minify_html', 1 );
+			add_action( 'wp_print_scripts', 'minifyHeaderJS', PHP_INT_MAX );
+			add_action( 'wp_print_footer_scripts', 'minifyFooterJS', 9.999999 );
+			add_action( 'wp_print_styles', 'minifyCSSInHeader', PHP_INT_MAX );
+			add_action( 'wp_print_footer_scripts', 'minifyCSSinFooter', 999999 );
+		}
 	}
 
 	function activation() {
@@ -203,6 +206,7 @@ function minifyHTML( $buffer ) {
 		'http://' . $_SERVER['HTTP_HOST'] . '/',
 		'//' . $_SERVER['HTTP_HOST'] . '/'
 	), array( '/', '/', '/' ), $buffer );
+
 	//$buffer = str_replace( array( 'http://', 'https://' ), '//', $buffer );
 
 	return ( $buffer );
@@ -212,7 +216,7 @@ function minifyHTML( $buffer ) {
  * HTML minifying code ends here
  */
 function minifyHeaderJS() {
-    global $cacheDir, $wp_scripts, $wp_domain, $wp_home, $ignore;
+	global $cacheDir, $wp_scripts, $wp_domain, $wp_home, $ignore, $cacheBaseURL;
 
 	$optimizoClass = new OptimizoClass();
 
@@ -270,7 +274,7 @@ function minifyHeaderJS() {
 			$hash = 'header-' . hash( 'adler32', implode( '', $header[ $i ]['handles'] ) );
 			# create cache files and urls
 			$file     = $cacheDir . '/' . $hash . '.min.js';
-			$file_url = $optimizoClass->getWPProtocol( $cacheDir . '/' . $hash . '.min.js' );
+			$file_url = $optimizoClass->getWPProtocol( $cacheBaseURL . '/' . $hash . '.min.js' );
 			# generate a new cache file
 			clearstatcache();
 			if ( ! file_exists( $file ) ) {
@@ -353,9 +357,9 @@ function minifyHeaderJS() {
 				wp_enqueue_script( "optimizo-header-$i" );
 			} else {
 				# file could not be generated, output something meaningful
-				echo "<!-- ERROR: Optimizo was not allowed to save it's cache on - $file -->";
-				echo "<!-- Please check if the path above is correct and ensure your server has writing permission there! -->";
-				echo "<!-- If you found a bug, please email us at hello@winauthorityinnovatives.com -->";
+				echo "<!-- Well, this is quite embarrassing, but there seems to be an error that is not Optimizo to save your website's cache on - $file -->";
+				echo "<!-- Please check if the path mentioned is correct and ensure your server has writing permission in that directory. -->";
+				echo "<!-- If you think it's a bug, please do us a favor and email us at: hello@winauthorityinnovatives.com -->";
 			}
 			# other scripts need to be requeued for the order of files to be kept
 		} else {
@@ -368,7 +372,7 @@ function minifyHeaderJS() {
 }
 
 function minifyFooterJS() {
-	global $cacheDir;
+	global $cacheDir, $cacheBaseURL;
 
 	$optimizoClass = new OptimizoClass();
 	global $wp_scripts, $wp_domain, $wp_home, $ignore;
@@ -409,7 +413,7 @@ function minifyFooterJS() {
 			$hash = 'footer-' . hash( 'adler32', implode( '', $footer[ $i ]['handles'] ) );
 			# create cache files and urls
 			$file     = $cacheDir . '/' . $hash . '.min.js';
-			$file_url = $optimizoClass->getWPProtocol( $cacheDir . '/' . $hash . '.min.js' );
+			$file_url = $optimizoClass->getWPProtocol( $cacheBaseURL . '/' . $hash . '.min.js' );
 			# generate a new cache file
 			clearstatcache();
 			if ( ! file_exists( $file ) ) {
@@ -492,9 +496,9 @@ function minifyFooterJS() {
 				wp_enqueue_script( "optimizo-footer-$i" );
 			} else {
 				# file could not be generated, output something meaningful
-				echo "<!-- ERROR: Optimizo was not allowed to save it's cache on - $file -->";
-				echo "<!-- Please check if the path above is correct and ensure your server has writing permission there! -->";
-				echo "<!-- If you found a bug, please email us at hello@winauthorityinnovatives.com -->";
+				echo "<!-- Well, this is quite embarrassing, but there seems to be an error that is not Optimizo to save your website's cache on - $file -->";
+				echo "<!-- Please check if the path mentioned is correct and ensure your server has writing permission in that directory. -->";
+				echo "<!-- If you think it's a bug, please do us a favor and email us at: hello@winauthorityinnovatives.com -->";
 			}
 			# other scripts need to be requeued for the order of files to be kept
 		} else {
@@ -507,7 +511,7 @@ function minifyFooterJS() {
 }
 
 function minifyCSSInHeader() {
-	global $wp_styles, $wp_domain, $wp_home, $ignore, $cacheDir;
+	global $wp_styles, $wp_domain, $wp_home, $ignore, $cacheDir, $cacheBaseURL;
 
 	$optimizoClass = new OptimizoClass();
 	if ( ! is_object( $wp_styles ) ) {
@@ -602,7 +606,7 @@ function minifyCSSInHeader() {
 		     || empty( $hurl ) ) {
 			# colect inline css for this handle
 			if ( isset( $wp_styles->registered[ $handle ]->extra['after'] ) && is_array( $wp_styles->registered[ $handle ]->extra['after'] ) ) {
-				$inline_css[ $handle ]                            = fastvelocity_min_minify_css_string( implode( '', $wp_styles->registered[ $handle ]->extra['after'] ) ); # save
+				$inline_css[ $handle ]                            = $optimizoClass->minifyCSSWithPHP( implode( '', $wp_styles->registered[ $handle ]->extra['after'] ) ); # save
 				$wp_styles->registered[ $handle ]->extra['after'] = null; # dequeue
 			}
 			# process
@@ -633,7 +637,7 @@ function minifyCSSInHeader() {
 			$hash = 'header-' . hash( 'adler32', implode( '', $header[ $i ]['handles'] ) . $inline_css_hash );
 			# create cache files and urls
 			$file     = $cacheDir . '/' . $hash . '.min.css';
-			$file_url = $optimizoClass->getWPProtocol( $cacheDir . '/' . $hash . '.min.css' );
+			$file_url = $optimizoClass->getWPProtocol( $cacheBaseURL . '/' . $hash . '.min.css' );
 			# generate a new cache file
 			clearstatcache();
 			if ( ! file_exists( $file ) ) {
@@ -657,7 +661,6 @@ function minifyCSSInHeader() {
 						$json = $optimizoClass->getTempStore( $tkey );
 						if ( $json === false ) {
 							$json = $optimizoClass->downloadAndMinify( $hurl, null, 'css', $handle );
-//							print_r($json);
 							$optimizoClass->setTempStore( $tkey, $json );
 						}
 						# decode
@@ -709,9 +712,9 @@ function minifyCSSInHeader() {
 				}
 			} else {
 				# file could not be generated, output something meaningful
-				echo "<!-- ERROR: Optimzo was not allowed to save it's cache on - $file -->";
-				echo "<!-- Please check if the path above is correct and ensure your server has writting permission there! -->";
-				echo "<!-- If you found a bug, please drop us an email at hello@winauthorityinnovatives.com -->";
+				echo "<!-- Well, this is quite embarrassing, but there seems to be an error that is not Optimizo to save your website's cache on - $file -->";
+				echo "<!-- Please check if the path mentioned is correct and ensure your server has writing permission in that directory. -->";
+				echo "<!-- If you think it's a bug, please do us a favor and email us at: hello@winauthorityinnovatives.com -->";
 			}
 			# other css need to be requeued for the order of files to be kept
 		} else {
@@ -853,7 +856,7 @@ function minifyCSSinFooter() {
 			$hash = 'footer-' . hash( 'adler32', implode( '', $footer[ $i ]['handles'] ) . $inline_css_hash );
 			# create cache files and urls
 			$file     = $cacheDir . '/' . $hash . '.min.css';
-			$file_url = $optimizoClass->getWPProtocol( $cacheDir. '/' . $hash . '.min.css' );
+			$file_url = $optimizoClass->getWPProtocol( $cacheDir . '/' . $hash . '.min.css' );
 			# generate a new cache file
 			clearstatcache();
 			if ( ! file_exists( $file ) ) {
@@ -930,9 +933,9 @@ function minifyCSSinFooter() {
 					}
 				} else {
 					# file could not be generated, output something meaningful
-					echo "<!-- ERROR: Optimizo was not allowed to save it's cache on - $file -->";
-					echo "<!-- Please check if the path above is correct and ensure your server has writting permission there! -->";
-					echo "<!-- If you found a bug, please drop us an email at hello@winauthorityinnovatives.com -->";
+					echo "<!-- Well, this is quite embarrassing, but there seems to be an error that is not Optimizo to save your website's cache on - $file -->";
+					echo "<!-- Please check if the path mentioned is correct and ensure your server has writing permission in that directory. -->";
+					echo "<!-- If you think it's a bug, please do us a favor and email us at: hello@winauthorityinnovatives.com -->";
 				}
 			}
 		}
