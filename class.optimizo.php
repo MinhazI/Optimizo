@@ -932,7 +932,6 @@ class OptimizoClass {
 		 * IF the server doesn't include it, Optimizo will automatically create and save the .htaccess file on the server and it will also include the rules for caching and GZip and other stuff to reduce the PLT
 		 * IF the server does include .htaccess file, Optimizo will just add the rules that are essential to help reduction of PLT and it will save the file.
 		 */
-
 		if ( ! file_exists( ABSPATH . ".htaccess" ) ) {
 			$htaccessData = "# BEGIN WordPress" . "\n" .
 			                '<IfModule mod_rewrite.c>' . "\n" .
@@ -1203,37 +1202,33 @@ class OptimizoClass {
 	}
 
 	function createCache() {
-//		$cacheDir = WP_CONTENT_DIR . '/optimizoCache';
 		$ctime             = time();
 		$upload            = array();
 		$upload['basedir'] = WP_CONTENT_DIR . '/optimizoCache';
-//		$upload['baseurl'] = WP_CONTENT_DIR . '/optimizoCache';
 		$upload['baseurl'] = site_url().'/wp-content/optimizoCache';
 		# create
 		$uploadsdir   = $upload['basedir'];
 		$uploadsurl   = $upload['baseurl'];
-		$cachebase    = $uploadsdir . '/' . $ctime;
-		$cachebaseurl = $uploadsurl . '/' . $ctime;
-		$cachedir     = $cachebase . '/out';
-		$tmpdir       = $cachebase . '/tmp';
-		$headerdir    = $cachebase . '/header';
-		$cachedirurl  = $cachebaseurl . '/out';
+		$cachebase    = $uploadsdir;
+		$cachedir     = $cachebase;
+		$cachedirurl  = $uploadsurl;
 		# get permissions from uploads directory
-		$dir_perms = 0777;
-		if ( is_dir( $uploadsdir . '/cache' ) && function_exists( 'stat' ) ) {
-			if ( $stat = @stat( $uploadsdir . '/cache' ) ) {
-				$dir_perms = $stat['mode'] & 0007777;
-			}
+		$dirPerm = 0777;
+
+		if (is_dir($uploadsdir)){
+			@rmdir($uploadsdir);
+			@mkdir($uploadsdir);
 		}
+
 		# mkdir and check if umask requires chmod
-		$dirs = array( $cachebase, $cachedir, $tmpdir, $headerdir );
+		$dirs = array( $cachebase, $cachedir );
 		foreach ( $dirs as $target ) {
 			if ( ! is_dir( $target ) ) {
-				if ( @mkdir( $target, $dir_perms, true ) ) {
-					if ( $dir_perms != ( $dir_perms & ~umask() ) ) {
+				if ( @mkdir( $target, $dirPerm, true ) ) {
+					if ( $dirPerm != ( $dirPerm & ~umask() ) ) {
 						$folder_parts = explode( '/', substr( $target, strlen( dirname( $target ) ) + 1 ) );
 						for ( $i = 1, $c = count( $folder_parts ); $i <= $c; $i ++ ) {
-							@chmod( dirname( $target ) . '/' . implode( '/', array_slice( $folder_parts, 0, $i ) ), $dir_perms );
+							@chmod( dirname( $target ) . '/' . implode( '/', array_slice( $folder_parts, 0, $i ) ), $dirPerm );
 						}
 					}
 				} else {
@@ -1246,16 +1241,14 @@ class OptimizoClass {
 		# return
 		return array(
 			'cachebase'   => $cachebase,
-			'tmpdir'      => $tmpdir,
 			'cachedir'    => $cachedir,
-			'cachedirurl' => $cachedirurl,
-			'headerdir'   => $headerdir
+			'cachedirurl' => $cachedirurl
 		);
 	}
 
 	function removeCache() {
-		if ( is_dir( WP_CONTENT_DIR . '/optimizoCache' ) ) {
-			rmdir( WP_CONTENT_DIR . '/optimizoCache' );
+		if ( @is_dir( WP_CONTENT_DIR . '/optimizoCache' ) ) {
+			@rmdir( WP_CONTENT_DIR . '/optimizoCache' );
 		}
 	}
 
@@ -1482,7 +1475,6 @@ class OptimizoClass {
 
 		return true;
 	}
-
 
 	function downloadAndMinify( $furl, $inline, $type, $handle ) {
 		global $wp_domain, $wp_home, $wp_home_path, $fvm_debug;
@@ -1825,6 +1817,24 @@ class OptimizoClass {
 			return 'https://fonts.googleapis.com/css?family=' . $merge;
 		} else {
 			return false;
+		}
+	}
+
+	function addToLog($log){
+
+		$cachefunc = $this->createCache();
+
+		$pathToLog = $cachefunc['cachedir'];
+
+		$dataToAddToLog = $log . "\n#End of log";
+
+		if ( ! file_exists( $pathToLog . "/optimizo-log.txt" ) ) {
+			@fopen($pathToLog."/optimizo-log.txt" );
+			@file_put_contents($pathToLog . "/optimizo-log.txt" , $dataToAddToLog);
+		} else {
+			$currentLog = @file_get_contents($pathToLog."/optimizo-log.txt");
+			$newLogData = @str_replace("#End of log", $dataToAddToLog, $currentLog);
+			@file_put_contents($pathToLog . "/optimizo-log.txt", $newLogData);
 		}
 	}
 

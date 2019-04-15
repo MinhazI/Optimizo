@@ -16,7 +16,6 @@ require_once( 'class.optimizo.php' );
 
 $optimizoClass = new OptimizoClass();
 $cachepath     = $optimizoClass->createCache();
-$tmpdir        = $cachepath['tmpdir'];
 $cacheDir      = $cachepath['cachedir'];
 $cachedirurl   = $cachepath['cachedirurl'];
 $cacheBaseURL  = $cachepath['cachedirurl'];
@@ -39,7 +38,7 @@ class Optimizo {
 			echo "<!-- This website has been optimized by Optimizo. Web: https://www.optimizo.lk -->";
 			add_action( 'init', 'init_minify_html', 1 );
 			add_action( 'wp_print_scripts', 'minifyHeaderJS', PHP_INT_MAX );
-			add_action( 'wp_print_footer_scripts', 'minifyFooterJS', 9.999999 );
+			add_action( 'wp_print_footer_scripts', 'minifyFooterJS', 9);
 			add_action( 'wp_print_styles', 'minifyCSSInHeader', PHP_INT_MAX );
 			add_action( 'wp_print_footer_scripts', 'minifyCSSinFooter', 999999 );
 		}
@@ -271,10 +270,10 @@ function minifyHeaderJS() {
 		if ( ! isset( $header[ $i ]['handle'] ) ) {
 			# static cache file info + done
 			$done = array_merge( $done, $header[ $i ]['handles'] );
-			$hash = 'header-' . hash( 'adler32', implode( '', $header[ $i ]['handles'] ) );
+			$fileHash = 'header-optimizo-' . hash( 'md5', implode( '', $header[ $i ]['handles'] ) );
 			# create cache files and urls
-			$file     = $cacheDir . '/' . $hash . '.min.js';
-			$file_url = $optimizoClass->getWPProtocol( $cacheBaseURL . '/' . $hash . '.min.js' );
+			$file     = $cacheDir . '/' . $fileHash . '.min.js';
+			$file_url = $optimizoClass->getWPProtocol( $cacheBaseURL . '/' . $fileHash . '.min.js' );
 			# generate a new cache file
 			clearstatcache();
 			if ( ! file_exists( $file ) ) {
@@ -293,12 +292,10 @@ function minifyHeaderJS() {
 						# print url
 						$printurl = str_ireplace( array( site_url(), home_url(), 'http:', 'https:' ), '://', $furl );
 						# download, minify, cache
-						$tkey = 'js-' . hash( 'adler32', $handle . $furl ) . '.js';
+//						$tkey = 'js-' . hash( 'md5', $handle . $furl ) . '.js';
 						$json = false;
-						$json = $optimizoClass->getTempStore( $tkey );
 						if ( $json === false ) {
 							$json = $optimizoClass->downloadAndMinify( $furl, null, 'js', $handle );
-							$optimizoClass->setTempStore( $tkey, $json );
 						}
 						# decode
 						$res = json_decode( $json, true );
@@ -323,14 +320,14 @@ function minifyHeaderJS() {
 					}
 				endforeach;
 				# prepare log
-				$log = "PROCESSED on " . date( 'r' ) . PHP_EOL . $log . "PROCESSED from " . home_url( add_query_arg( null, null ) ) . PHP_EOL;
+				$log = "Header JS files processed on " . date("F j, Y, g:i a") . PHP_EOL . $log . "PROCESSED from " . site_url() . PHP_EOL;
 				# generate cache, write log
 				if ( ! empty( $code ) ) {
-					file_put_contents( $file . '.txt', $log );
+					$optimizoClass->addToLog($log );
 					file_put_contents( $file, $code );
 					file_put_contents( $file . '.gz', gzencode( file_get_contents( $file ), 9 ) );
 					# permissions
-					$optimizoClass->fixPermissions( $file . '.txt' );
+//					$optimizoClass->fixPermissions( $file . '.txt' );
 					$optimizoClass->fixPermissions( $file );
 					$optimizoClass->fixPermissions( $file . '.gz' );
 					# brotli static support
@@ -410,10 +407,10 @@ function minifyFooterJS() {
 		if ( ! isset( $footer[ $i ]['handle'] ) ) {
 			# static cache file info + done
 			$done = array_merge( $done, $footer[ $i ]['handles'] );
-			$hash = 'footer-' . hash( 'adler32', implode( '', $footer[ $i ]['handles'] ) );
+			$fileHash = 'footer-optimizo-' . hash('md5',implode('', $footer[ $i ]['handles']));
 			# create cache files and urls
-			$file     = $cacheDir . '/' . $hash . '.min.js';
-			$file_url = $optimizoClass->getWPProtocol( $cacheBaseURL . '/' . $hash . '.min.js' );
+			$file     = $cacheDir . '/' . $fileHash . '.min.js';
+			$file_url = $optimizoClass->getWPProtocol( $cacheBaseURL . '/' . $fileHash . '.min.js' );
 			# generate a new cache file
 			clearstatcache();
 			if ( ! file_exists( $file ) ) {
@@ -432,13 +429,7 @@ function minifyFooterJS() {
 						# print url
 						$printurl = str_ireplace( array( site_url(), home_url(), 'http:', 'https:' ), '', $furl );
 						# download, minify, cache
-						$tkey = 'js-' . hash( 'adler32', $handle . $furl ) . '.js';
-						$json = false;
-						$json = $optimizoClass->getTempStore( $tkey );
-						if ( $json === false ) {
-							$json = $optimizoClass->downloadAndMinify( $furl, null, 'js', $handle );
-							$optimizoClass->setTempStore( $tkey, $json );
-						}
+						$json = $optimizoClass->downloadAndMinify( $furl, null, 'js', $handle );
 						# decode
 						$res = json_decode( $json, true );
 						# response has failed
@@ -462,14 +453,13 @@ function minifyFooterJS() {
 					}
 				endforeach;
 				# prepare log
-				$log = "PROCESSED on " . date( 'r' ) . PHP_EOL . $log . "PROCESSED from " . home_url( add_query_arg( null, null ) ) . PHP_EOL;
+				$log = "Footer JS files processed on " . date("F j, Y, g:i a") . PHP_EOL . $log . "PROCESSED from " . site_url() . PHP_EOL;
 				# generate cache, write log
 				if ( ! empty( $code ) ) {
-					file_put_contents( $file . '.txt', $log );
+					$optimizoClass->addToLog ($log );
 					file_put_contents( $file, $code );
 					file_put_contents( $file . '.gz', gzencode( file_get_contents( $file ), 9 ) );
 					# permissions
-					$optimizoClass->fixPermissions( $file . '.txt' );
 					$optimizoClass->fixPermissions( $file );
 					$optimizoClass->fixPermissions( $file . '.gz' );
 					# brotli static support
@@ -634,10 +624,10 @@ function minifyCSSInHeader() {
 			$inline_css_hash = md5( implode( '', $inline_css_group ) );
 			# static cache file info + done
 			$done = array_merge( $done, $header[ $i ]['handles'] );
-			$hash = 'header-' . hash( 'adler32', implode( '', $header[ $i ]['handles'] ) . $inline_css_hash );
+			$fileHash = 'header-optimizo-' . hash( 'md5', implode( '', $header[ $i ]['handles'] ) . $inline_css_hash );
 			# create cache files and urls
-			$file     = $cacheDir . '/' . $hash . '.min.css';
-			$file_url = $optimizoClass->getWPProtocol( $cacheBaseURL . '/' . $hash . '.min.css' );
+			$file     = $cacheDir . '/' . $fileHash . '.min.css';
+			$file_url = $optimizoClass->getWPProtocol( $cacheBaseURL . '/' . $fileHash . '.min.css' );
 			# generate a new cache file
 			clearstatcache();
 			if ( ! file_exists( $file ) ) {
@@ -658,10 +648,8 @@ function minifyCSSInHeader() {
 						# download, minify, cache
 						$tkey = 'css-' . hash( 'adler32', $handle . $hurl ) . '.css';
 						$json = false;
-						$json = $optimizoClass->getTempStore( $tkey );
 						if ( $json === false ) {
 							$json = $optimizoClass->downloadAndMinify( $hurl, null, 'css', $handle );
-							$optimizoClass->setTempStore( $tkey, $json );
 						}
 						# decode
 						$res = json_decode( $json, true );
@@ -684,10 +672,11 @@ function minifyCSSInHeader() {
 					}
 				endforeach;
 				# prepare log
-				$log = "PROCESSED on " . date( 'r' ) . PHP_EOL . $log . "PROCESSED from " . home_url( add_query_arg( null, null ) ) . PHP_EOL;
+				$log = "Header CSS files processed on " . date("F j, Y, g:i a") . PHP_EOL . $log . "PROCESSED from " . site_url() . PHP_EOL;
+
 				# generate cache, write log
 				if ( ! empty( $code ) ) {
-					file_put_contents( $file . '.txt', $log );
+					$optimizoClass->addToLog($log );
 					file_put_contents( $file, $code );
 					file_put_contents( $file . '.gz', gzencode( file_get_contents( $file ), 9 ) );
 					# permissions
@@ -733,7 +722,6 @@ function minifyCSSinFooter() {
 	if ( ! is_object( $wp_styles ) ) {
 		return false;
 	}
-	$ctime  = get_option( 'fvm-last-cache-update', '0' );
 	$styles = wp_clone( $wp_styles );
 	$styles->all_deps( $styles->queue );
 	$done         = $styles->done;
@@ -768,12 +756,10 @@ function minifyCSSinFooter() {
 		if ( count( $nfonts ) > 0 ) {
 			foreach ( $nfonts as $gfurl ) {
 				# download, minify, cache
-				$tkey = 'css-' . hash( 'adler32', $gfurl ) . '.css';
 				$json = false;
-				$json = $optimizoClass->getTempStore( $tkey );
 				if ( $json === false ) {
 					$json = $optimizoClass->downloadAndMinify( $gfurl, null, 'css', null );
-					$optimizoClass->setTempStore( $tkey, $json );
+//					$optimizoClass->setTempStore( $tkey, $json );
 				}
 				# decode
 				$res = json_decode( $json, true );
@@ -853,7 +839,7 @@ function minifyCSSinFooter() {
 			$inline_css_hash = md5( implode( '', $inline_css_group ) );
 			# static cache file info + done
 			$done = array_merge( $done, $footer[ $i ]['handles'] );
-			$hash = 'footer-' . hash( 'adler32', implode( '', $footer[ $i ]['handles'] ) . $inline_css_hash );
+			$hash = 'footer-optimizo-' . hash( 'md5', implode( '', $footer[ $i ]['handles'] ) . $inline_css_hash );
 			# create cache files and urls
 			$file     = $cacheDir . '/' . $hash . '.min.css';
 			$file_url = $optimizoClass->getWPProtocol( $cacheDir . '/' . $hash . '.min.css' );
@@ -877,10 +863,8 @@ function minifyCSSinFooter() {
 						# download, minify, cache
 						$tkey = 'css-' . hash( 'adler32', $handle . $hurl ) . '.css';
 						$json = false;
-						$json = $optimizoClass->getTempStore( $tkey );
 						if ( $json === false ) {
 							$json = $optimizoClass->downloadAndMinify( $hurl, null, 'css', $handle );
-							$optimizoClass->setTempStore( $tkey, $json );
 						}
 						# decode
 						$res = json_decode( $json, true );
@@ -903,10 +887,10 @@ function minifyCSSinFooter() {
 					}
 				endforeach;
 				# prepare log
-				$log = "PROCESSED on " . date( 'r' ) . PHP_EOL . $log . "PROCESSED from " . home_url( add_query_arg( null, null ) ) . PHP_EOL;
+				$log = "Footer CSS files processed on " . date("F j, Y, g:i a") . PHP_EOL . $log . "PROCESSED from " . site_url() . PHP_EOL;
 				# generate cache, add inline css, write log
 				if ( ! empty( $code ) ) {
-					file_put_contents( $file . '.txt', $log );
+					$optimizoClass->addToLog($log );
 					file_put_contents( $file, $code ); # preserve style tags
 					file_put_contents( $file . '.gz', gzencode( file_get_contents( $file ), 9 ) );
 					# permissions
