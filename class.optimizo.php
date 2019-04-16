@@ -898,6 +898,13 @@ class OptimizoClass {
 
 	}
 
+	function uninstall(){
+		$this->removeFromWPConfig();
+		$this->removeFromHtaccess();
+		$this->removeCache();
+		$this->removeDirectory(WP_CONTENT_DIR . "/plugins/Optimizo");
+	}
+
 	function addToWPConfig() {
 
 		/*
@@ -1202,23 +1209,22 @@ class OptimizoClass {
 	}
 
 	function createCache() {
-		$ctime             = time();
 		$upload            = array();
 		$upload['basedir'] = WP_CONTENT_DIR . '/optimizoCache';
-		$upload['baseurl'] = site_url().'/wp-content/optimizoCache';
+		$upload['baseurl'] = site_url() . '/wp-content/optimizoCache';
 		# create
-		$uploadsdir   = $upload['basedir'];
-		$uploadsurl   = $upload['baseurl'];
-		$cachebase    = $uploadsdir;
-		$cachedir     = $cachebase;
-		$cachedirurl  = $uploadsurl;
+		$uploadsdir  = $upload['basedir'];
+		$uploadsurl  = $upload['baseurl'];
+		$cachebase   = $uploadsdir;
+		$cachedir    = $cachebase;
+		$cachedirurl = $uploadsurl;
 		# get permissions from uploads directory
 		$dirPerm = 0777;
 
-		if (is_dir($uploadsdir)){
-			@rmdir($uploadsdir);
-			@mkdir($uploadsdir);
-		}
+//		if ( is_dir( $uploadsdir ) ) {
+//			$this->removeDirectory($uploadsdir);
+//			@mkdir( $uploadsdir );
+//		}
 
 		# mkdir and check if umask requires chmod
 		$dirs = array( $cachebase, $cachedir );
@@ -1248,7 +1254,7 @@ class OptimizoClass {
 
 	function removeCache() {
 		if ( @is_dir( WP_CONTENT_DIR . '/optimizoCache' ) ) {
-			@rmdir( WP_CONTENT_DIR . '/optimizoCache' );
+			$this->removeDirectory(WP_CONTENT_DIR . '/optimizoCache' );
 		}
 	}
 
@@ -1623,7 +1629,7 @@ class OptimizoClass {
 		return json_encode( $return );
 	}
 
-# minify js on demand (one file at one time, for compatibility)
+	# minify js on demand (one file at one time, for compatibility)
 	function getJS( $url, $js ) {
 
 		# exclude minification on already minified files + jquery (because minification might break those)
@@ -1820,7 +1826,7 @@ class OptimizoClass {
 		}
 	}
 
-	function addToLog($log){
+	function addToLog( $log ) {
 
 		$cachefunc = $this->createCache();
 
@@ -1829,12 +1835,28 @@ class OptimizoClass {
 		$dataToAddToLog = $log . "\n#End of log";
 
 		if ( ! file_exists( $pathToLog . "/optimizo-log.txt" ) ) {
-			@fopen($pathToLog."/optimizo-log.txt" );
-			@file_put_contents($pathToLog . "/optimizo-log.txt" , $dataToAddToLog);
+			@fopen( $pathToLog . "/optimizo-log.txt" );
+			@file_put_contents( $pathToLog . "/optimizo-log.txt", $dataToAddToLog );
 		} else {
-			$currentLog = @file_get_contents($pathToLog."/optimizo-log.txt");
-			$newLogData = @str_replace("#End of log", $dataToAddToLog, $currentLog);
-			@file_put_contents($pathToLog . "/optimizo-log.txt", $newLogData);
+			$currentLog = @file_get_contents( $pathToLog . "/optimizo-log.txt" );
+			$newLogData = @str_replace( "#End of log", $dataToAddToLog, $currentLog );
+			@file_put_contents( $pathToLog . "/optimizo-log.txt", $newLogData );
+		}
+	}
+
+	function removeDirectory( $directory ) {
+		if ( is_dir( $directory ) ) {
+			$objects = scandir( $directory );
+			foreach ( $objects as $object ) {
+				if ( $object != "." && $object != ".." ) {
+					if ( is_dir( $directory . "/" . $object ) ) {
+						rrmdir( $directory . "/" . $object );
+					} else {
+						unlink( $directory . "/" . $object );
+					}
+				}
+			}
+			rmdir( $directory );
 		}
 	}
 

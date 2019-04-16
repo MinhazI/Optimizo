@@ -26,6 +26,8 @@ $wp_home_path = ABSPATH;
 
 class Optimizo {
 	function __construct() {
+		require_once( 'class.optimizo.php' );
+
 		$path = ABSPATH;
 		//Checking if it's installed in a sub-directory
 		if ( $this->is_sub_directory_install() ) {
@@ -59,12 +61,14 @@ class Optimizo {
 	}
 
 	function deactivation() {
-		require_once( 'class.optimizo.php' );
+//		require_once( 'class.optimizo.php' );
 		$optimizoClass = new OptimizoClass();
 		$optimizoClass->deactivate();
 	}
 
 	function uninstall() {
+		$optimizoClass = new OptimizoClass();
+		$optimizoClass->uninstall();
 	}
 
 	function is_sub_directory_install() {
