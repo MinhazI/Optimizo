@@ -6,7 +6,7 @@
  * Time: 10:54 AM
  */
 
-global $pluginDirectory;
+global $pluginDirectory, $googleFontsWhiteList;
 
 #To avoid PHP regular expression issues
 @ini_set( 'pcre.backtrack_limit', 5000000 );
@@ -28,7 +28,6 @@ require_once $pathToMatthias . '/minify/src/Exceptions/IOException.php';
 require_once $pathToMatthias . '/path-converter/src/ConverterInterface.php';
 require_once $pathToMatthias . '/path-converter/src/Converter.php';
 
-global $googleFontsWhiteList;
 #The below list is thanks to: https://www.xcartmods.co.uk/google-fonts-list.php
 $googleFontsWhiteList = array(
 	'ABeeZee',
@@ -884,13 +883,13 @@ use MatthiasMullie\Minify;
 
 class OptimizoClass {
 
-	function activate() {
+	protected function activate() {
 		$this->addToWPConfig();
 		$this->writeToHtaccess();
 		$this->createCache();
 	}
 
-	function deactivate() {
+	protected function deactivate() {
 
 		$this->removeFromWPConfig();
 		$this->removeFromHtaccess();
@@ -898,14 +897,14 @@ class OptimizoClass {
 
 	}
 
-	function uninstall(){
+	protected function uninstallPlugin() {
 		$this->removeFromWPConfig();
 		$this->removeFromHtaccess();
 		$this->removeCache();
-		$this->removeDirectory(WP_CONTENT_DIR . "/plugins/Optimizo");
+		$this->removeDirectory( WP_CONTENT_DIR . "/plugins/Optimizo" );
 	}
 
-	function addToWPConfig() {
+	protected function addToWPConfig() {
 
 		/*
 		 * This is a function which will be used to add anything to WordPress WP-Config file which includes all the configurations for a WordPress installation.
@@ -931,7 +930,7 @@ class OptimizoClass {
 		}
 	}
 
-	function writeToHtaccess() {
+	protected function writeToHtaccess() {
 
 		/*
 		 * This function will be used to write the rewrite access rules and other rules for caching and G-Zip to the server's .htaccess file
@@ -1088,7 +1087,7 @@ class OptimizoClass {
 
 	}
 
-	function removeFromWPConfig() {
+	protected function removeFromWPConfig() {
 		/*
 		 * This is the function that will be used and called upon the deactivation of the plugin.
 		 * Currently this function removes the "WP-CACHE" statement from the WP-Config file if it's available.
@@ -1101,7 +1100,7 @@ class OptimizoClass {
 		}
 	}
 
-	function removeFromHtaccess() {
+	protected function removeFromHtaccess() {
 		/*
 		 * This is the function that will remove all the custom added rules from .htaccess file which was added upon the activation of the plugin.
 		 */
@@ -1176,8 +1175,7 @@ class OptimizoClass {
 		}
 	}
 
-	function getCSS( $url, $css ) {
-		global $wp_domain;
+	protected function getCSS( $url, $css ) {
 
 		if ( ! empty( $url ) ) {
 			$css = preg_replace( "/url\(\s*['\"]?(?!data:)(?!http)(?![\/'\"])(.+?)['\"]?\s*\)/ui", "url(" . dirname( $url ) . "/$1)", $css );
@@ -1197,7 +1195,7 @@ class OptimizoClass {
 		return $css;
 	}
 
-	function minifyCSSWithPHP( $css ) {
+	protected function minifyCSSWithPHP( $css ) {
 		$cssMinifier = new Minify\CSS( $css );
 		$cssMinifier->setMaxImportSize( 15 ); # [css only] embed assets up to 15 Kb (default 5Kb) - processes gif, png, jpg, jpeg, svg & woff
 		$min = $cssMinifier->minify();
@@ -1208,7 +1206,7 @@ class OptimizoClass {
 		return $this->compatURL( $css );
 	}
 
-	function createCache() {
+	public function createCache() {
 		$upload            = array();
 		$upload['basedir'] = WP_CONTENT_DIR . '/optimizoCache';
 		$upload['baseurl'] = site_url() . '/wp-content/optimizoCache';
@@ -1252,13 +1250,13 @@ class OptimizoClass {
 		);
 	}
 
-	function removeCache() {
+	protected function removeCache() {
 		if ( @is_dir( WP_CONTENT_DIR . '/optimizoCache' ) ) {
-			$this->removeDirectory(WP_CONTENT_DIR . '/optimizoCache' );
+			$this->removeDirectory( WP_CONTENT_DIR . '/optimizoCache' );
 		}
 	}
 
-	function getWebsiteHTTPResponse( $url ) {
+	protected function getWebsiteHTTPResponse( $url ) {
 		if ( $url == null ) {
 			return false;
 		}
@@ -1282,109 +1280,128 @@ class OptimizoClass {
 
 	}
 
-	function returnFullURL( $src, $wp_domain, $wp_home ) {
+	protected function returnFullURL( $code, $wpDomain, $wpHome ) {
 		# preserve empty source handles
-		$furl = trim( $src );
-		if ( empty( $furl ) ) {
-			return $furl;
+		$url = trim( $code );
+		if ( empty( $url ) ) {
+			return $url;
 		}
 
 # some fixes
-		$furl = str_ireplace( array( '&#038;', '&amp;' ), '&', $furl );
+		$url = str_ireplace( array( '&#038;', '&amp;' ), '&', $url );
 
 		if ( ( isset( $_SERVER['HTTPS'] ) && ( $_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1 ) ) || ( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' ) ) {
-			$default_protocol = 'https://';
+			$defaultProtocol = 'https://';
 		} else {
-			$default_protocol = 'http://';
+			$defaultProtocol = 'http://';
 		}
 
 #make sure wp_home doesn't have a forward slash
-		$wp_home = rtrim( $wp_home, '/' );
+		$wpHome = rtrim( $wpHome, '/' );
 
 # apply some filters
-		if ( substr( $furl, 0, 2 ) === "//" ) {
-			$furl = $default_protocol . ltrim( $furl, "/" );
+		if ( substr( $url, 0, 2 ) === "//" ) {
+			$url = $defaultProtocol . ltrim( $url, "/" );
 		}  # protocol only
-		if ( substr( $furl, 0, 4 ) === "http" && stripos( $furl, $wp_domain ) === false ) {
-			return $furl;
+		if ( substr( $url, 0, 4 ) === "http" && stripos( $url, $wpDomain ) === false ) {
+			return $url;
 		} # return if external domain
-		if ( substr( $furl, 0, 4 ) !== "http" && stripos( $furl, $wp_domain ) !== false ) {
-			$furl = $wp_home . '/' . ltrim( $furl, "/" );
+		if ( substr( $url, 0, 4 ) !== "http" && stripos( $url, $wpDomain ) !== false ) {
+			$url = $wpHome . '/' . ltrim( $url, "/" );
 		} # protocol + home
 
 # prevent double forward slashes in the middle
-		$furl = str_ireplace( '###', '://', str_ireplace( '//', '/', str_ireplace( '://', '###', $furl ) ) );
+		$url = str_ireplace( '###', '://', str_ireplace( '//', '/', str_ireplace( '://', '###', $url ) ) );
 
 # consider different wp-content directory
 		$proceed = 0;
-		if ( ! empty( $wp_home ) ) {
-			$alt_wp_content = basename( $wp_home );
-			if ( substr( $furl, 0, strlen( $alt_wp_content ) ) === $alt_wp_content ) {
+		if ( ! empty( $wpHome ) ) {
+			$altWPContent = basename( $wpHome );
+			if ( substr( $url, 0, strlen( $altWPContent ) ) === $altWPContent ) {
 				$proceed = 1;
 			}
 		}
 
 # protocol + home for relative paths
-		if ( substr( $furl, 0, 12 ) === "/wp-includes" || substr( $furl, 0, 9 ) === "/wp-admin" || substr( $furl, 0, 11 ) === "/wp-content" || $proceed == 1 ) {
-			$furl = $wp_home . '/' . ltrim( $furl, "/" );
+		if ( substr( $url, 0, 12 ) === "/wp-includes" || substr( $url, 0, 9 ) === "/wp-admin" || substr( $url, 0, 11 ) === "/wp-content" || $proceed == 1 ) {
+			$url = $wpHome . '/' . ltrim( $url, "/" );
 		}
 
 # make sure there is a protocol prefix as required
-		$furl = $default_protocol . str_ireplace( array( 'http://', 'https://' ), '', $furl ); # enforce protocol
+		$url = $defaultProtocol . str_ireplace( array( 'http://', 'https://' ), '', $url ); # enforce protocol
 
 # no query strings
-		if ( stripos( $furl, '.js?v' ) !== false ) {
-			$furl = stristr( $furl, '.js?v', true ) . '.js';
+		if ( stripos( $url, '.js?v' ) !== false ) {
+			$url = stristr( $url, '.js?v', true ) . '.js';
 		} # no query strings
-		if ( stripos( $furl, '.css?v' ) !== false ) {
-			$furl = stristr( $furl, '.css?v', true ) . '.css';
+		if ( stripos( $url, '.css?v' ) !== false ) {
+			$url = stristr( $url, '.css?v', true ) . '.css';
 		} # no query strings
 
 # make sure there is a protocol prefix as required
-		$furl = $this->compatURL( $furl ); # enforce protocol
+		$url = $this->compatURL( $url ); # enforce protocol
 
-		return $furl;
+		return $url;
 	}
 
-	function minifyInArray( $furl, $ignore ) {
-		$furl = str_ireplace( array( 'http://', 'https://' ), '//', $furl ); # better compatibility
-		$furl = strtok( urldecode( rawurldecode( $furl ) ), '?' ); # no query string, decode entities
+	protected function minifyInArray( $url, $ignore ) {
+		$url = str_ireplace( array( 'http://', 'https://' ), '//', $url ); # better compatibility
+		$url = strtok( urldecode( rawurldecode( $url ) ), '?' ); # no query string, decode entities
 
-		if ( ! empty( $furl ) && is_array( $ignore ) ) {
+		if ( ! empty( $url ) && is_array( $ignore ) ) {
 			foreach ( $ignore as $i ) {
 				$i = str_ireplace( array( 'http://', 'https://' ), '//', $i ); # better compatibility
 				$i = strtok( urldecode( rawurldecode( $i ) ), '?' ); # no query string, decode entities
 				$i = trim( trim( trim( rtrim( $i, '/' ) ), '*' ) ); # wildcard char removal
-				if ( stripos( $furl, $i ) !== false ) {
+				if ( stripos( $url, $i ) !== false ) {
 					return true;
 				}
 			}
 		}
 	}
 
-	function checkIfInternalLink( $furl, $wp_home, $noxtra = null ) {
-		if ( substr( $furl, 0, strlen( $wp_home ) ) === $wp_home ) {
+	protected function checkIfInternalLink( $url, $wpHome, $noExtra = null ) {
+
+		if ( isset( $_SERVER['HTTP_HOST'] ) ) {
+			$serverHttpHost = $_SERVER['HTTP_HOST'];
+		} else {
+			$serverHttpHost = false;
+		}
+
+		if ( isset( $_SERVER['SERVER_NAME'] ) ) {
+			$serverName = $_SERVER['SERVER_NAME'];
+		} else {
+			$serverName = false;
+		}
+
+		if ( isset( $_SERVER['SERVER_ADDR'] ) ) {
+			$serverAddress = $_SERVER['SERVER_ADDR'];
+		} else {
+			$serverAddress = false;
+		}
+
+		if ( substr( $url, 0, strlen( $wpHome ) ) === $wpHome ) {
 			return true;
 		}
-		if ( stripos( $furl, $wp_home ) !== false ) {
+		if ( stripos( $url, $wpHome ) !== false ) {
 			return true;
 		}
-		if ( isset( $_SERVER['HTTP_HOST'] ) && stripos( $furl, preg_replace( '/:\d+$/', '', $_SERVER['HTTP_HOST'] ) ) !== false ) {
+		if ( $serverHttpHost && stripos( $url, preg_replace( '/:\d+$/', '', $_SERVER['HTTP_HOST'] ) ) !== false ) {
 			return true;
 		}
-		if ( isset( $_SERVER['SERVER_NAME'] ) && stripos( $furl, preg_replace( '/:\d+$/', '', $_SERVER['SERVER_NAME'] ) ) !== false ) {
+		if ( $serverName && stripos( $url, preg_replace( '/:\d+$/', '', $_SERVER['SERVER_NAME'] ) ) !== false ) {
 			return true;
 		}
-		if ( isset( $_SERVER['SERVER_ADDR'] ) && stripos( $furl, preg_replace( '/:\d+$/', '', $_SERVER['SERVER_ADDR'] ) ) !== false ) {
+		if ( $serverAddress && stripos( $url, preg_replace( '/:\d+$/', '', $_SERVER['SERVER_ADDR'] ) ) !== false ) {
 			return true;
 		}
 
 		# allow specific external urls to be merged
-		if ( $noxtra === null ) {
-			$merge_allowed_urls = array_map( 'trim', explode( PHP_EOL ) );
-			if ( is_array( $merge_allowed_urls ) && strlen( implode( $merge_allowed_urls ) ) > 0 ) {
-				foreach ( $merge_allowed_urls as $e ) {
-					if ( stripos( $furl, $e ) !== false && ! empty( $e ) ) {
+		if ( $noExtra === null ) {
+			$mergeAllowedURLs = array_map( 'trim', explode( PHP_EOL ) );
+			if ( is_array( $mergeAllowedURLs ) && strlen( implode( $mergeAllowedURLs ) ) > 0 ) {
+				foreach ( $mergeAllowedURLs as $e ) {
+					if ( stripos( $url, $e ) !== false && ! empty( $e ) ) {
 						return true;
 					}
 				}
@@ -1394,7 +1411,7 @@ class OptimizoClass {
 		return false;
 	}
 
-	function getWPProtocol( $url ) {
+	protected function getWPProtocol( $url ) {
 		$url = ltrim( str_ireplace( array( 'http://', 'https://' ), '', $url ), '/' ); # better compatibility
 
 		# enforce protocol if needed
@@ -1409,11 +1426,11 @@ class OptimizoClass {
 		return $default_protocol . $url;
 	}
 
-	function fixPermissions( $file ) {
+	protected function fixPermissions( $fileName ) {
 		if ( function_exists( 'stat' ) ) {
-			if ( $stat = @stat( dirname( $file ) ) ) {
-				$perms = $stat['mode'] & 0007777;
-				@chmod( $file, $perms );
+			if ( $stat = @stat( dirname( $fileName ) ) ) {
+				$permission = $stat['mode'] & 0007777;
+				@chmod( $fileName, $permission );
 
 				clearstatcache();
 
@@ -1423,18 +1440,18 @@ class OptimizoClass {
 
 
 		# get permissions from parent directory
-		$perms = 0777;
+		$permission = 0777;
 		if ( function_exists( 'stat' ) ) {
-			if ( $stat = @stat( dirname( $file ) ) ) {
-				$perms = $stat['mode'] & 0007777;
+			if ( $stat = @stat( dirname( $fileName ) ) ) {
+				$permission = $stat['mode'] & 0007777;
 			}
 		}
 
-		if ( file_exists( $file ) ) {
-			if ( $perms != ( $perms & ~umask() ) ) {
-				$folder_parts = explode( '/', substr( $file, strlen( dirname( $file ) ) + 1 ) );
-				for ( $i = 1, $c = count( $folder_parts ); $i <= $c; $i ++ ) {
-					@chmod( dirname( $file ) . '/' . implode( '/', array_slice( $folder_parts, 0, $i ) ), $perms );
+		if ( file_exists( $fileName ) ) {
+			if ( $permission != ( $permission & ~umask() ) ) {
+				$folderParts = explode( '/', substr( $fileName, strlen( dirname( $fileName ) ) + 1 ) );
+				for ( $i = 1, $c = count( $folderParts ); $i <= $c; $i ++ ) {
+					@chmod( dirname( $fileName ) . '/' . implode( '/', array_slice( $folderParts, 0, $i ) ), $permission );
 				}
 			}
 		}
@@ -1442,117 +1459,99 @@ class OptimizoClass {
 		return true;
 	}
 
-	function compatURL( $code ) {
+	protected function compatURL( $code ) {
 
 		if ( ( isset( $_SERVER['HTTPS'] ) && ( $_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1 ) )
 		     || ( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' ) ) {
-			$default_protocol = 'https://';
+			$defaultProtocol = 'https://';
 		} else {
-			$default_protocol = 'http://';
+			$defaultProtocol = 'http://';
 		}
-		$code = str_ireplace( array( 'http://', 'https://' ), $default_protocol, $code );
-		$code = str_ireplace( $default_protocol . 'www.w3.org', 'http://www.w3.org', $code );
+		$code = str_ireplace( array( 'http://', 'https://' ), $defaultProtocol, $code );
+		$code = str_ireplace( $defaultProtocol . 'www.w3.org', 'http://www.w3.org', $code );
 
 		return $code;
 
 	}
 
-	function getTempStore( $key ) {
-		$cachepath = $this->createCache();
-		$tmpdir    = $cachepath['tmpdir'];
-		$f         = $tmpdir . '/' . $key . '.transient';
-		clearstatcache();
-		if ( file_exists( $f ) ) {
-			return file_get_contents( $f );
-		} else {
-			return false;
-		}
-	}
+	protected function downloadAndMinify( $url, $isInline, $typeToMinify, $handle ) {
+		global $wpDomain, $wpHome, $wpHomePath;
 
-	function setTempStore( $key, $code ) {
-		if ( is_null( $code ) || empty( $code ) ) {
-			return false;
-		}
-		$cachepath = $this->createCache();
-		$tmpdir    = $cachepath['tmpdir'];
-		$f         = $tmpdir . '/' . $key . '.transient';
-		file_put_contents( $f, $code );
-		$this->fixPermissions( $f );
-
-		return true;
-	}
-
-	function downloadAndMinify( $furl, $inline, $type, $handle ) {
-		global $wp_domain, $wp_home, $wp_home_path, $fvm_debug;
+		$optimizoDebug = true;
 
 		# must have
-		if ( is_null( $furl ) || empty( $furl ) ) {
+		if ( is_null( $url ) || empty( $url ) ) {
 			return false;
 		}
-		if ( ! in_array( $type, array( 'js', 'css' ) ) ) {
+		if ( ! in_array( $typeToMinify, array( 'js', 'css' ) ) ) {
 			return false;
 		}
 
 		# defaults
-		if ( is_null( $inline ) || empty( $inline ) ) {
-			$inline = '';
+		if ( is_null( $isInline ) || empty( $isInline ) ) {
+			$isInline = '';
 		}
-		$printhandle = '';
+		$printHandle = '';
 		if ( is_null( $handle ) || empty( $handle ) ) {
 			$handle = '';
 		} else {
-			$printhandle = "[$handle]";
+			$printHandle = "[$handle]";
 		}
 
 		# debug request
-		$dreq = array(
-			'furl'   => $furl,
-			'inline' => $inline,
-			'type'   => $type,
+		$debugRequest = array(
+			'furl'   => $url,
+			'inline' => $isInline,
+			'type'   => $typeToMinify,
 			'handle' => $handle
 		);
 
 		# filters and defaults
-		$printurl = str_ireplace( array( site_url(), home_url(), 'http:', 'https:' ), '', $furl );
+		$printURL = str_ireplace( array( site_url(), home_url(), 'http:', 'https:' ), '', $url );
 
-		if ( stripos( $furl, $wp_domain ) !== false ) {
+		if ( stripos( $url, $wpDomain ) !== false ) {
 			# default
-			$f = str_ireplace( rtrim( $wp_home, '/' ), rtrim( $wp_home_path, '/' ), $furl );
+			$file = str_ireplace( rtrim( $wpHome, '/' ), rtrim( $wpHomePath, '/' ), $url );
 			clearstatcache();
 
-			if ( file_exists( $f ) ) {
-				if ( $type == 'js' ) {
-					$code = $this->getJS( $furl, file_get_contents( $f ) );
+			if ( file_exists( $file ) ) {
+				if ( $typeToMinify == 'js' ) {
+					$code = $this->getJS( $url, file_get_contents( $file ) );
 				} else {
-					$code = $this->getCSS( $furl, file_get_contents( $f ) . $inline );
+					$code = $this->getCSS( $url, file_get_contents( $file ) . $isInline );
 				}
 
 				# log, save and return
-				$log = $printurl;
-				if ( $fvm_debug == true ) {
-					$log .= " --- Debug: $printhandle was opened from $f ---";
+				$log = $printURL;
+				if ( $optimizoDebug == true ) {
+					$log .= "\n ===== Debug: $printHandle was opened from $file ===== \n";
 				}
 				$log    .= PHP_EOL;
-				$return = array( 'request' => $dreq, 'log' => $log, 'code' => $code, 'status' => true );
+				$return = array( 'request' => $debugRequest, 'log' => $log, 'code' => $code, 'status' => true );
 
 				return json_encode( $return );
 			}
 
 			# failover when home_url != site_url
-			$nfurl = str_ireplace( site_url(), home_url(), $furl );
-			$f     = str_ireplace( rtrim( $wp_home, '/' ), rtrim( $wp_home_path, '/' ), $nfurl );
+			$nfurl = str_ireplace( site_url(), home_url(), $url );
+			$file  = str_ireplace( rtrim( $wpHome, '/' ), rtrim( $wpHomePath, '/' ), $nfurl );
 			clearstatcache();
-			if ( file_exists( $f ) ) {
-				if ( $type == 'js' ) {
-					$code = $this->getJS( $furl, file_get_contents( $f ) );
+			if ( file_exists( $file ) ) {
+				if ( $typeToMinify == 'js' ) {
+					$code = $this->getJS( $url, file_get_contents( $file ) );
 				} else {
-					$code = $this->getCSS( $furl, file_get_contents( $f ) . $inline );
+					$code = $this->getCSS( $url, file_get_contents( $file ) . $isInline );
 				}
 
 				# log, save and return
-				$log    = $printurl;
+				$log = $printURL;
+
+				if ( $optimizoDebug == true ) {
+					$log .= "\n ===== Debug: $printHandle was opened from $file ===== \n";
+				}
+
 				$log    .= PHP_EOL;
-				$return = array( 'request' => $dreq, 'log' => $log, 'code' => $code, 'status' => true );
+				$return = array( 'request' => $debugRequest, 'log' => $log, 'code' => $code, 'status' => true );
 
 				return json_encode( $return );
 			}
@@ -1560,20 +1559,25 @@ class OptimizoClass {
 
 
 		# fallback when home_url != site_url
-		if ( stripos( $furl, $wp_domain ) !== false && home_url() != site_url() ) {
-			$nfurl = str_ireplace( site_url(), home_url(), $furl );
+		if ( stripos( $url, $wpDomain ) !== false && home_url() != site_url() ) {
+			$nfurl = str_ireplace( site_url(), home_url(), $url );
 			$code  = $this->downloadFunction( $nfurl );
 			if ( $code !== false && ! empty( $code ) && strtolower( substr( $code, 0, 9 ) ) != "<!doctype" ) {
-				if ( $type == 'js' ) {
-					$code = $this->getJS( $furl, $code );
+				if ( $typeToMinify == 'js' ) {
+					$code = $this->getJS( $url, $code );
 				} else {
-					$code = $this->getCSS( $furl, $code . $inline );
+					$code = $this->getCSS( $url, $code . $isInline );
 				}
 
 				# log, save and return
-				$log    = $printurl;
+				$log = $printURL;
+
+				if ( $optimizoDebug == true ) {
+					$log .= "\n ===== Debug: $printHandle was opened from $file ===== \n";
+				}
+
 				$log    .= PHP_EOL;
-				$return = array( 'request' => $dreq, 'log' => $log, 'code' => $code, 'status' => true );
+				$return = array( 'request' => $debugRequest, 'log' => $log, 'code' => $code, 'status' => true );
 
 				return json_encode( $return );
 			}
@@ -1581,41 +1585,51 @@ class OptimizoClass {
 
 
 		# if remote urls failed... try to open locally again, regardless of OS in use
-		if ( stripos( $furl, $wp_domain ) !== false ) {
+		if ( stripos( $url, $wpDomain ) !== false ) {
 
 			# default
-			$f = str_ireplace( rtrim( $wp_home, '/' ), rtrim( $wp_home_path, '/' ), $furl );
+			$f = str_ireplace( rtrim( $wpHome, '/' ), rtrim( $wpHomePath, '/' ), $url );
 			clearstatcache();
 			if ( file_exists( $f ) ) {
-				if ( $type == 'js' ) {
-					$code = $this->getJS( $furl, file_get_contents( $f ) );
+				if ( $typeToMinify == 'js' ) {
+					$code = $this->getJS( $url, file_get_contents( $f ) );
 				} else {
-					$code = $this->getCSS( $furl, file_get_contents( $f ) . $inline );
+					$code = $this->getCSS( $url, file_get_contents( $f ) . $isInline );
 				}
 
 				# log, save and return
-				$log    = $printurl;
+				$log = $printURL;
+
+				if ( $optimizoDebug == true ) {
+					$log .= "\n ===== Debug: $printHandle was opened from $file ===== \n";
+				}
+
 				$log    .= PHP_EOL;
-				$return = array( 'request' => $dreq, 'log' => $log, 'code' => $code, 'status' => true );
+				$return = array( 'request' => $debugRequest, 'log' => $log, 'code' => $code, 'status' => true );
 
 				return json_encode( $return );
 			}
 
 			# failover when home_url != site_url
-			$nfurl = str_ireplace( site_url(), home_url(), $furl );
-			$f     = str_ireplace( rtrim( $wp_home, '/' ), rtrim( $wp_home_path, '/' ), $nfurl );
+			$nfurl = str_ireplace( site_url(), home_url(), $url );
+			$file  = str_ireplace( rtrim( $wpHome, '/' ), rtrim( $wpHomePath, '/' ), $nfurl );
 			clearstatcache();
-			if ( file_exists( $f ) ) {
-				if ( $type == 'js' ) {
-					$code = $this->getJS( $furl, file_get_contents( $f ) );
+			if ( file_exists( $file ) ) {
+				if ( $typeToMinify == 'js' ) {
+					$code = $this->getJS( $url, file_get_contents( $file ) );
 				} else {
-					$code = $this->getCSS( $furl, file_get_contents( $f ) . $inline );
+					$code = $this->getCSS( $url, file_get_contents( $file ) . $isInline );
 				}
 
 				# log, save and return
-				$log    = $printurl;
+				$log = $printURL;
+
+				if ( $optimizoDebug == true ) {
+					$log .= "\n ===== Debug: $printHandle was opened from $file ===== \n";
+				}
+
 				$log    .= PHP_EOL;
-				$return = array( 'request' => $dreq, 'log' => $log, 'code' => $code, 'status' => true );
+				$return = array( 'request' => $debugRequest, 'log' => $log, 'code' => $code, 'status' => true );
 
 				return json_encode( $return );
 			}
@@ -1623,14 +1637,14 @@ class OptimizoClass {
 
 
 		# else fail
-		$log    = $printurl;
-		$return = array( 'request' => $dreq, 'log' => $log, 'code' => '', 'status' => false );
+		$log    = $printURL;
+		$return = array( 'request' => $debugRequest, 'log' => $log, 'code' => '', 'status' => false );
 
 		return json_encode( $return );
 	}
 
 	# minify js on demand (one file at one time, for compatibility)
-	function getJS( $url, $js ) {
+	protected function getJS( $url, $js ) {
 
 		# exclude minification on already minified files + jquery (because minification might break those)
 		$excl = array( 'jquery.js', '.min.js', '-min.js', '/uploads/fusion-scripts/', '/min/', '.packed.js' );
@@ -1659,7 +1673,7 @@ class OptimizoClass {
 		return $js . PHP_EOL;
 	}
 
-	function downloadFunction( $url ) {
+	protected function downloadFunction( $url ) {
 		# info (needed for google fonts woff files + hinted fonts) as well as to bypass some security filters
 		$uagent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2486.0 Safari/537.36 Edge/13.10586';
 
@@ -1692,7 +1706,7 @@ class OptimizoClass {
 		return false;
 	}
 
-	function checkIfGoogleFontsExist( $font ) {
+	protected function checkIfGoogleFontsExist( $font ) {
 		global $googleFontsWhiteList;
 
 		#normalize
@@ -1708,7 +1722,7 @@ class OptimizoClass {
 		return false;
 	}
 
-	function concatenateGoogleFonts( $array ) {
+	protected function concatenateGoogleFonts( $array ) {
 		# extract unique font families
 		$families = array();
 		foreach ( $array as $font ) {
@@ -1826,7 +1840,7 @@ class OptimizoClass {
 		}
 	}
 
-	function addToLog( $log ) {
+	protected function addToLog( $log ) {
 
 		$cachefunc = $this->createCache();
 
@@ -1844,7 +1858,7 @@ class OptimizoClass {
 		}
 	}
 
-	function removeDirectory( $directory ) {
+	protected function removeDirectory( $directory ) {
 		if ( is_dir( $directory ) ) {
 			$objects = scandir( $directory );
 			foreach ( $objects as $object ) {
