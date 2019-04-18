@@ -896,13 +896,26 @@ class OptimizoMinify {
 	protected function minifyCSSWithPHP( $css ) {
 		$cssMinifier = new Minify\CSS( $css );
 		$cssMinifier->setMaxImportSize( 15 ); # [css only] embed assets up to 15 Kb (default 5Kb) - processes gif, png, jpg, jpeg, svg & woff
-		$min = $cssMinifier->minify();
-		if ( $min !== false ) {
-			return $this->compatURL( $min );
+		$minifier = $cssMinifier->minify();
+		if ( $minifier !== false ) {
+			return $this->compatURL( $minifier );
 		}
-
 		return $this->compatURL( $css );
 	}
+
+	protected function minifyJSWithPHP ( $js ){
+
+	$jsMinifier = new Minify\JS( $js );
+	$minifier      = $jsMinifier->minify();
+	if ( $minifier !== false && ( strlen( trim( $js ) ) == strlen( trim( $minifier ) ) || strlen( trim( $minifier ) ) > 0 ) ) {
+		return $this->compatURL( $minifier );
+	}
+
+	# if we are here, something went  wrong and minification didn't work
+	$js = "\n/*! Optimizo: Minification of the following section failed, so it has been merged instead. */\n" . $js;
+
+	return ( $js );
+}
 
 	public function createCache() {
 		$upload            = array();
@@ -1120,17 +1133,23 @@ class OptimizoMinify {
 	# minify js on demand (one file at one time, for compatibility)
 	protected function getJS( $url, $js ) {
 
+		$disableJSMinification = false;
+
 		# exclude minification on already minified files + jquery (because minification might break those)
-		$excl = array( 'jquery.js', '.min.js', '-min.js', '/uploads/fusion-scripts/', '/min/', '.packed.js' );
-		foreach ( $excl as $e ) {
-			if ( stripos( basename( $url ), $e ) !== false ) {
-				$disable_js_minification = true;
+		$excludableJSFiles = array( 'jquery.js', '.min.js', '-min.js', '/uploads/fusion-scripts/', '/min/', '.packed.js' );
+		foreach ( $excludableJSFiles as $exclude ) {
+			if ( stripos( basename( $url ), $exclude ) !== false ) {
+				$disableJSMinification = true;
 				break;
 			}
 		}
 
-		# minify JS
-		$js = $this->compatURL( $js );
+		if ( ! $disableJSMinification ) {
+			$js = $this->minifyJSWithPHP( $js );
+		} else {
+			$js = $this->compatURL($js);
+		}
+
 
 		# try to remove source mapping files
 		$filename = basename( $url );
