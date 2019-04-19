@@ -308,7 +308,7 @@ class OptimizoFunctions extends OptimizoMinify {
 		}
 	}
 
-	protected function removeCache() {
+	public function removeCache() {
 		if ( @is_dir( WP_CONTENT_DIR . '/optimizoCache' ) ) {
 			$this->removeDirectory( WP_CONTENT_DIR . '/optimizoCache' );
 		}

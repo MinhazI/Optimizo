@@ -1166,39 +1166,6 @@ class OptimizoMinify {
 		return $js . PHP_EOL;
 	}
 
-	protected function downloadFunction( $url ) {
-		# info (needed for google fonts woff files + hinted fonts) as well as to bypass some security filters
-		$uagent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2486.0 Safari/537.36 Edge/13.10586';
-
-		# fetch via wordpress functions
-		$response = wp_remote_get( $url, array(
-			'user-agent'  => $uagent,
-			'timeout'     => 7,
-			'httpversion' => '1.1',
-			'sslverify'   => false
-		) );
-		$res_code = wp_remote_retrieve_response_code( $response );
-		if ( $res_code == '200' ) {
-			$data = wp_remote_retrieve_body( $response );
-			if ( strlen( $data ) > 1 ) {
-				return $data;
-			}
-		}
-
-		# verify
-		if ( ! isset( $res_code ) || empty( $res_code ) || $res_code == false || is_null( $res_code ) ) {
-			return false;
-		}
-
-		# stop here, error 4xx or 5xx
-		if ( $res_code[0] == '4' || $res_code[0] == '5' ) {
-			return false;
-		}
-
-		# fallback fail
-		return false;
-	}
-
 	protected function checkIfGoogleFontsExist( $font ) {
 		global $googleFontsWhiteList;
 

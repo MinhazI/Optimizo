@@ -15,10 +15,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 require_once( 'class.optimizo.php' );
 
 $optimizoFunction = new OptimizoFunctions();
-$cachePath     = $optimizoFunction->createCache();
-$cacheDir      = $cachePath['cachedir'];
-$cacheDirURL   = $cachePath['cachedirurl'];
-$cacheBaseURL  = $cachePath['cachedirurl'];
+$cachePath        = $optimizoFunction->createCache();
+$cacheDir         = $cachePath['cachedir'];
+$cacheDirURL      = $cachePath['cachedirurl'];
+$cacheBaseURL     = $cachePath['cachedirurl'];
 
 $wpHome     = site_url();
 $wpDomain   = trim( str_ireplace( array( 'http://', 'https://' ), '', trim( $wpHome, '/' ) ) );
@@ -45,6 +45,10 @@ class Optimizo extends OptimizoFunctions {
 			add_action( 'wp_print_footer_scripts', array( $this, 'minifyFooterJS' ), 9 );
 			add_action( 'wp_print_styles', array( $this, 'minifyCSSInHeader' ), PHP_INT_MAX );
 			add_action( 'wp_print_footer_scripts', array( $this, 'minifyCSSinFooter' ), 999999 );
+		} else {
+			add_action( 'after_switch_theme', array( $this, 'removeCache' ) );
+			add_action('save_post', array($this, 'removeCache'));
+			add_action('post_updated', array($this, 'removeCache'));
 		}
 	}
 
