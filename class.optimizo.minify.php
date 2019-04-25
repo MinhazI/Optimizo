@@ -879,14 +879,11 @@ class OptimizoMinify {
 			$css = preg_replace( "/url\(\s*['\"]?(?!data:)(?!http)(?![\/'\"])(.+?)['\"]?\s*\)/ui", "url(" . dirname( $url ) . "/$1)", $css );
 		}
 
-		# remove query strings from fonts (for better seo, but add a small cache buster based on most recent updates)
-		$ctime = '0'; # last update or zero
-		$css   = preg_replace( '/(.eot|.woff2|.woff|.ttf)+[?+](.+?)(\)|\'|\")/ui', "$1" . "#" . $ctime . "$3", $css ); # fonts cache buster
+		$ctime = '0';
+		$css   = preg_replace( '/(.eot|.woff2|.woff|.ttf)+[?+](.+?)(\)|\'|\")/ui', "$1" . "#" . $ctime . "$3", $css );
 
-		# minify CSS
 		$css = $this->minifyCSSWithPHP( $css );
 
-		# add css comment
 		$css = trim( $css );
 
 		# return html
@@ -895,7 +892,7 @@ class OptimizoMinify {
 
 	protected function minifyCSSWithPHP( $css ) {
 		$cssMinifier = new Minify\CSS( $css );
-		$cssMinifier->setMaxImportSize( 15 ); # [css only] embed assets up to 15 Kb (default 5Kb) - processes gif, png, jpg, jpeg, svg & woff
+		$cssMinifier->setMaxImportSize( 20 );
 		$minifier = $cssMinifier->minify();
 		if ( $minifier !== false ) {
 			return $this->compatURL( $minifier );
@@ -911,8 +908,7 @@ class OptimizoMinify {
 		return $this->compatURL( $minifier );
 	}
 
-	# if we are here, something went  wrong and minification didn't work
-	$js = "\n/*! Optimizo: Minification of the following section failed, so it has been merged instead. */\n" . $js;
+	$js = "\n/*! Optimizo: Minification of the following section failed, so it hasn't been merged instead. */\n" . $js;
 
 	return ( $js );
 }
@@ -927,15 +923,9 @@ class OptimizoMinify {
 		$cachebase   = $uploadsdir;
 		$cachedir    = $cachebase;
 		$cachedirurl = $uploadsurl;
-		# get permissions from uploads directory
+
 		$dirPerm = 0777;
 
-//		if ( is_dir( $uploadsdir ) ) {
-//			$this->removeDirectory($uploadsdir);
-//			@mkdir( $uploadsdir );
-//		}
-
-		# mkdir and check if umask requires chmod
 		$dirs = array( $cachebase, $cachedir );
 		foreach ( $dirs as $target ) {
 			if ( ! is_dir( $target ) ) {
@@ -947,7 +937,6 @@ class OptimizoMinify {
 						}
 					}
 				} else {
-					# fallback
 					wp_mkdir_p( $target );
 				}
 			}
@@ -955,9 +944,9 @@ class OptimizoMinify {
 
 		# return
 		return array(
-			'cachebase'   => $cachebase,
-			'cachedir'    => $cachedir,
-			'cachedirurl' => $cachedirurl
+			'cacheBase'   => $cachebase,
+			'cacheDir'    => $cachedir,
+			'cacheDirURL' => $cachedirurl
 		);
 	}
 
@@ -966,7 +955,6 @@ class OptimizoMinify {
 
 		$optimizoDebug = true;
 
-		# must have
 		if ( is_null( $url ) || empty( $url ) ) {
 			return false;
 		}
@@ -974,7 +962,6 @@ class OptimizoMinify {
 			return false;
 		}
 
-		# defaults
 		if ( is_null( $isInline ) || empty( $isInline ) ) {
 			$isInline = '';
 		}
@@ -987,17 +974,16 @@ class OptimizoMinify {
 
 		# debug request
 		$debugRequest = array(
-			'furl'   => $url,
+			'url'   => $url,
 			'inline' => $isInline,
 			'type'   => $typeToMinify,
 			'handle' => $handle
 		);
 
-		# filters and defaults
 		$printURL = str_ireplace( array( site_url(), home_url(), 'http:', 'https:' ), '', $url );
 
 		if ( stripos( $url, $wpDomain ) !== false ) {
-			# default
+
 			$file = str_ireplace( rtrim( $wpHome, '/' ), rtrim( $wpHomePath, '/' ), $url );
 			clearstatcache();
 
@@ -1008,7 +994,6 @@ class OptimizoMinify {
 					$code = $this->getCSS( $url, file_get_contents( $file ) . $isInline );
 				}
 
-				# log, save and return
 				$log = $printURL;
 				if ( $optimizoDebug == true ) {
 					$log .= "\n ===== Debug: $printHandle was opened from $file ===== \n";
@@ -1019,7 +1004,6 @@ class OptimizoMinify {
 				return json_encode( $return );
 			}
 
-			# failover when home_url != site_url
 			$nfurl = str_ireplace( site_url(), home_url(), $url );
 			$file  = str_ireplace( rtrim( $wpHome, '/' ), rtrim( $wpHomePath, '/' ), $nfurl );
 			clearstatcache();
@@ -1030,7 +1014,6 @@ class OptimizoMinify {
 					$code = $this->getCSS( $url, file_get_contents( $file ) . $isInline );
 				}
 
-				# log, save and return
 				$log = $printURL;
 
 				if ( $optimizoDebug == true ) {
@@ -1044,8 +1027,6 @@ class OptimizoMinify {
 			}
 		}
 
-
-		# fallback when home_url != site_url
 		if ( stripos( $url, $wpDomain ) !== false && home_url() != site_url() ) {
 			$nfurl = str_ireplace( site_url(), home_url(), $url );
 			$code  = $this->downloadFunction( $nfurl );
@@ -1070,8 +1051,6 @@ class OptimizoMinify {
 			}
 		}
 
-
-		# if remote urls failed... try to open locally again, regardless of OS in use
 		if ( stripos( $url, $wpDomain ) !== false ) {
 
 			# default
@@ -1097,7 +1076,6 @@ class OptimizoMinify {
 				return json_encode( $return );
 			}
 
-			# failover when home_url != site_url
 			$nfurl = str_ireplace( site_url(), home_url(), $url );
 			$file  = str_ireplace( rtrim( $wpHome, '/' ), rtrim( $wpHomePath, '/' ), $nfurl );
 			clearstatcache();
@@ -1108,7 +1086,6 @@ class OptimizoMinify {
 					$code = $this->getCSS( $url, file_get_contents( $file ) . $isInline );
 				}
 
-				# log, save and return
 				$log = $printURL;
 
 				if ( $optimizoDebug == true ) {
@@ -1122,20 +1099,16 @@ class OptimizoMinify {
 			}
 		}
 
-
-		# else fail
 		$log    = $printURL;
 		$return = array( 'request' => $debugRequest, 'log' => $log, 'code' => '', 'status' => false );
 
 		return json_encode( $return );
 	}
 
-	# minify js on demand (one file at one time, for compatibility)
 	protected function getJS( $url, $js ) {
 
 		$disableJSMinification = false;
 
-		# exclude minification on already minified files + jquery (because minification might break those)
 		$excludableJSFiles = array( 'jquery.js', '.min.js', '-min.js', '/uploads/fusion-scripts/', '/min/', '.packed.js' );
 		foreach ( $excludableJSFiles as $exclude ) {
 			if ( stripos( basename( $url ), $exclude ) !== false ) {
@@ -1150,19 +1123,15 @@ class OptimizoMinify {
 			$js = $this->compatURL($js);
 		}
 
-
-		# try to remove source mapping files
 		$filename = basename( $url );
 		$remove   = array( "//# sourceMappingURL=$filename.map", "//# sourceMappingURL = $filename.map" );
 		$js       = str_ireplace( $remove, '', $js );
 
-		# needed when merging js files
 		$js = trim( $js );
 		if ( substr( $js, - 1 ) != ';' ) {
 			$js = $js . ';';
 		}
 
-		# return html
 		return $js . PHP_EOL;
 	}
 
@@ -1183,48 +1152,41 @@ class OptimizoMinify {
 	}
 
 	protected function concatenateGoogleFonts( $array ) {
-		# extract unique font families
-		$families = array();
+
+		$fontFamilies = array();
 		foreach ( $array as $font ) {
 
-			# must have
 			if ( stripos( $font, 'family=' ) !== false ) {
 
-				# get fonts name, type and subset, remove wp query strings
 				$font = explode( 'family=', htmlspecialchars_decode( rawurldecode( urldecode( $font ) ) ) );
 				$a    = explode( '&v', end( $font ) );
 				$font = trim( trim( trim( current( $a ) ), ',' ) );
 
-				# reprocess if fonts are already concatenated in this url
 				if ( stristr( $font, '|' ) !== false ) {
 					$multiple = explode( '|', $font );
 					if ( count( $multiple ) > 0 ) {
 						foreach ( $multiple as $f ) {
-							$families[] = str_ireplace( 'subsets', 'subset', trim( $f ) );
+							$fontFamilies[] = str_ireplace( 'subsets', 'subset', trim( $f ) );
 						}
 					}
 				} else {
-					$families[] = str_ireplace( 'subsets', 'subset', trim( $font ) );
+					$fontFamilies[] = str_ireplace( 'subsets', 'subset', trim( $font ) );
 				}
 			}
 		}
 
-		# return if empty
-		if ( count( $families ) == 0 ) {
+		if ( count( $fontFamilies ) == 0 ) {
 			return false;
 		}
 
-		# process names, types, subsets
 		$fonts   = array();
 		$subsets = array();
-		foreach ( $families as $font ) {
+		foreach ( $fontFamilies as $font ) {
 
-			# extract the subsets
 			if ( stripos( $font, 'subset' ) !== false ) {
-				$sub  = trim( str_ireplace( '&subset=', '', stristr( $font, '&' ) ) );      # second part of the string, after &
-				$font = stristr( $font, '&', true );                                   # font name, before &
+				$sub  = trim( str_ireplace( '&subset=', '', stristr( $font, '&' ) ) );
+				$font = stristr( $font, '&', true );
 
-				# subsets to array, unique, trim
 				if ( stripos( $sub, ',' ) !== false ) {
 					$ft = explode( ',', $sub );
 					$ft = array_filter( array_map( 'trim', array_unique( $ft ) ) );
@@ -1239,20 +1201,18 @@ class OptimizoMinify {
 
 			}
 
-			# check for font name and weights
-			$ftypes = array();
+			$fontTypes = array();
 			$name   = $font;
 			if ( stripos( $font, ':' ) !== false ) {
-				$name = stristr( $font, ':', true );       # font name, before :
-				$fwe  = trim( stristr( $font, ':' ), ':' );   # second part of the string, after :
+				$name = stristr( $font, ':', true );
+				$fontWeight  = trim( stristr( $font, ':' ), ':' );
 
-				# ftypes to array, unique, trim
 				if ( stripos( $font, ',' ) !== false ) {
-					$ft     = explode( ',', $fwe );
-					$ftypes = array_filter( array_map( 'trim', array_unique( $ft ) ) );
+					$ft     = explode( ',', $fontWeight );
+					$fontTypes = array_filter( array_map( 'trim', array_unique( $ft ) ) );
 				} else {
-					if ( ! empty( $fwe ) ) {
-						$ftypes[] = $fwe;
+					if ( ! empty( $fontWeight ) ) {
+						$fontTypes[] = $fontWeight;
 					}
 				}
 
@@ -1263,10 +1223,10 @@ class OptimizoMinify {
 
 			# save fonts list, merge fontweights
 			if ( ! isset( $fonts[ $name ] ) ) {
-				$fonts[ $name ] = array( 'name' => $name, 'type' => $ftypes );
+				$fonts[ $name ] = array( 'name' => $name, 'type' => $fontTypes );
 			} else {
-				$ftypes         = array_merge( $ftypes, $fonts[ $name ]['type'] );
-				$fonts[ $name ] = array( 'name' => $name, 'type' => $ftypes );
+				$fontTypes         = array_merge( $fontTypes, $fonts[ $name ]['type'] );
+				$fonts[ $name ] = array( 'name' => $name, 'type' => $fontTypes );
 			}
 
 		}

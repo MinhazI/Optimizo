@@ -319,22 +319,15 @@ class OptimizoFunctions extends OptimizoMinify {
 			return false;
 		}
 
-		$curl = curl_init( url );
-		curl_setopt( $curl, CURLOPT_TIMEOUT, 5 );
-		curl_setopt( $curl, CURLOPT_CONNECTTIMEOUT, 3 );
-		curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
-
-		$websiteData = curl_exec( $curl );
-
-		$httpResponseCode = curl_getinfo( $curl, $websiteData );
-
-		curl_close( $curl );
+		$httpResponseCode = http_response_code();
 
 		if ( $httpResponseCode >= 200 && $httpResponseCode < 300 ) {
 			return true;
 		} else {
 			return false;
 		}
+
+		return true;
 
 	}
 
@@ -345,7 +338,6 @@ class OptimizoFunctions extends OptimizoMinify {
 			return $url;
 		}
 
-# some fixes
 		$url = str_ireplace( array( '&#038;', '&amp;' ), '&', $url );
 
 		if ( ( isset( $_SERVER['HTTPS'] ) && ( $_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1 ) ) || ( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' ) ) {
@@ -354,24 +346,20 @@ class OptimizoFunctions extends OptimizoMinify {
 			$defaultProtocol = 'http://';
 		}
 
-#make sure wp_home doesn't have a forward slash
 		$wpHome = rtrim( $wpHome, '/' );
 
-# apply some filters
 		if ( substr( $url, 0, 2 ) === "//" ) {
 			$url = $defaultProtocol . ltrim( $url, "/" );
-		}  # protocol only
+		}
 		if ( substr( $url, 0, 4 ) === "http" && stripos( $url, $wpDomain ) === false ) {
 			return $url;
-		} # return if external domain
+		}
 		if ( substr( $url, 0, 4 ) !== "http" && stripos( $url, $wpDomain ) !== false ) {
 			$url = $wpHome . '/' . ltrim( $url, "/" );
-		} # protocol + home
+		}
 
-# prevent double forward slashes in the middle
 		$url = str_ireplace( '###', '://', str_ireplace( '//', '/', str_ireplace( '://', '###', $url ) ) );
 
-# consider different wp-content directory
 		$proceed = 0;
 		if ( ! empty( $wpHome ) ) {
 			$altWPContent = basename( $wpHome );
@@ -380,24 +368,20 @@ class OptimizoFunctions extends OptimizoMinify {
 			}
 		}
 
-# protocol + home for relative paths
 		if ( substr( $url, 0, 12 ) === "/wp-includes" || substr( $url, 0, 9 ) === "/wp-admin" || substr( $url, 0, 11 ) === "/wp-content" || $proceed == 1 ) {
 			$url = $wpHome . '/' . ltrim( $url, "/" );
 		}
 
-# make sure there is a protocol prefix as required
 		$url = $defaultProtocol . str_ireplace( array( 'http://', 'https://' ), '', $url ); # enforce protocol
 
-# no query strings
 		if ( stripos( $url, '.js?v' ) !== false ) {
 			$url = stristr( $url, '.js?v', true ) . '.js';
-		} # no query strings
+		}
 		if ( stripos( $url, '.css?v' ) !== false ) {
 			$url = stristr( $url, '.css?v', true ) . '.css';
-		} # no query strings
+		}
 
-# make sure there is a protocol prefix as required
-		$url = $this->compatURL( $url ); # enforce protocol
+		$url = $this->compatURL( $url );
 
 		return $url;
 	}
@@ -438,7 +422,6 @@ class OptimizoFunctions extends OptimizoMinify {
 			return true;
 		}
 
-		# allow specific external urls to be merged
 		if ( $noExtra === null ) {
 			$mergeAllowedURLs = array_map( 'trim', explode( PHP_EOL ) );
 			if ( is_array( $mergeAllowedURLs ) && strlen( implode( $mergeAllowedURLs ) ) > 0 ) {
@@ -520,7 +503,7 @@ class OptimizoFunctions extends OptimizoMinify {
 
 		$cachefunc = $this->createCache();
 
-		$pathToLog = $cachefunc['cachedir'];
+		$pathToLog = $cachefunc['cacheDir'];
 
 		$dataToAddToLog = $log . "\n#End of log";
 
