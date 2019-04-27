@@ -296,12 +296,17 @@ class Optimizo extends OptimizoFunctions {
 
 		foreach ( $headerStyles->to_do as $headerStyleHandle ):
 
-			$conditional = null;
+			$cssConditional = null;
 			if ( isset( $wp_styles->registered[ $headerStyleHandle ]->extra["conditional"] ) ) {
-				$conditional = $wp_styles->registered[ $headerStyleHandle ]->extra["conditional"];
+				$cssConditional = $wp_styles->registered[ $headerStyleHandle ]->extra["conditional"];
 			}
 
-			$currentMediaType = isset( $wp_styles->registered[ $headerStyleHandle ]->args ) ? $wp_styles->registered[ $headerStyleHandle ]->args : 'all';
+			if ( isset( $wp_styles->registered[ $headerStyleHandle ]->args ) ) {
+				$currentMediaType = $wp_styles->registered[ $headerStyleHandle ]->args;
+			} else {
+				$currentMediaType = 'all';
+			}
+
 			if ( $currentMediaType == 'screen, print' || $currentMediaType == 'screen' || is_null( $currentMediaType ) || empty( $currentMediaType || $currentMediaType == false ) ) {
 				$currentMediaType = 'all';
 			}
@@ -327,7 +332,7 @@ class Optimizo extends OptimizoFunctions {
 			$infoArray = array(
 				'handle'      => $headerStyleHandle,
 				'url'         => $url,
-				'conditional' => $conditional,
+				'cssConditional' => $cssConditional,
 				'mediaType'   => $mediaType
 			);
 
@@ -371,10 +376,10 @@ class Optimizo extends OptimizoFunctions {
 			}
 
 			$url         = $process[ $headerStyleHandle ]['url'];
-			$conditional = $process[ $headerStyleHandle ]['conditional'];
+			$cssConditional = $process[ $headerStyleHandle ]['cssConditional'];
 			$mediaType   = $process[ $headerStyleHandle ]['mediaType'];
 
-			if ( ( ! $this->minifyInArray( $url, $ignore ) && ! isset( $conditional ) && $this->checkIfInternalLink( $url, $wpHome ) )
+			if ( ( ! $this->minifyInArray( $url, $ignore ) && ! isset( $cssConditional ) && $this->checkIfInternalLink( $url, $wpHome ) )
 			     || empty( $url ) ) {
 
 				if ( isset( $wp_styles->registered[ $headerStyleHandle ]->extra['after'] ) && is_array( $wp_styles->registered[ $headerStyleHandle ]->extra['after'] ) ) {
@@ -401,15 +406,15 @@ class Optimizo extends OptimizoFunctions {
 			if ( ! isset( $headerArray[ $count ]['handle'] ) ) {
 
 				$inlineCSSGroup = array();
-				foreach ( $headerArray[ $count ]['handles'] as $h ) {
-					if ( isset( $inlineCSS[ $h ] ) && ! empty( $inlineCSS[ $h ] ) ) {
-						$inlineCSSGroup[] = $inlineCSS[ $h ];
+				foreach ( $headerArray[ $count ]['handles'] as $handles ) {
+					if ( isset( $inlineCSS[ $handles ] ) && ! empty( $inlineCSS[ $handles ] ) ) {
+						$inlineCSSGroup[] = $inlineCSS[ $handles ];
 					}
 				}
-				$inlineCSS_hash = md5( implode( '', $inlineCSSGroup ) );
+				$inlineCSSHash = md5( implode( '', $inlineCSSGroup ) );
 
 				$isDone   = array_merge( $isDone, $headerArray[ $count ]['handles'] );
-				$fileHash = 'header-optimizo-' . hash( 'md5', implode( '', $headerArray[ $count ]['handles'] ) . $inlineCSS_hash );
+				$fileHash = 'header-optimizo-' . hash( 'md5', implode( '', $headerArray[ $count ]['handles'] ) . $inlineCSSHash );
 
 				$headerStyleSheet = $cacheDir . '/' . $fileHash . '.min.css';
 				$fileURL          = $this->getWPProtocol( $cacheBaseURL . '/' . $fileHash . '.min.css' );
@@ -618,20 +623,21 @@ class Optimizo extends OptimizoFunctions {
 
 	public function minifyCSSinFooter() {
 		global $wp_styles, $wpDomain, $wpHome, $cacheDir;
-		$removePrintMediatypes = false;
-		$ignore                = false;
 
 		if ( ! is_object( $wp_styles ) ) {
 			return false;
 		}
-		$styles = wp_clone( $wp_styles );
-		$styles->all_deps( $styles->queue );
-		$isDone      = $styles->done;
+
+		$removePrintMediatypes = false;
+		$ignore                = false;
+		$footerStyleSheets = wp_clone( $wp_styles );
+		$footerStyleSheets->all_deps( $footerStyleSheets->queue );
+		$isDone      = $footerStyleSheets->done;
 		$footer      = array();
 		$googleFonts = array();
 		$inlineCSS   = array();
 
-		foreach ( $styles->to_do as $footerStyleHandle ) :
+		foreach ( $footerStyleSheets->to_do as $footerStyleHandle ) :
 
 			$url = $this->returnFullURL( $wp_styles->registered[ $footerStyleHandle ]->src, $wpDomain, $wpHome );
 
@@ -648,8 +654,8 @@ class Optimizo extends OptimizoFunctions {
 		endforeach;
 
 		if ( count( $googleFonts ) > 0 ) {
-			foreach ( $googleFonts as $h => $a ) {
-				$isDone = array_merge( $isDone, array( $h ) );
+			foreach ( $googleFonts as $f => $x ) {
+				$isDone = array_merge( $isDone, array( $f ) );
 			}
 
 			$newGoogleFonts   = array();
@@ -672,22 +678,23 @@ class Optimizo extends OptimizoFunctions {
 		}
 
 		$uniqueArray = array();
-		foreach ( $styles->to_do as $footerStyleHandle ) :
+		foreach ( $footerStyleSheets->to_do as $footerStyleHandle ) :
 
 			if ( isset( $googleFonts[ $footerStyleHandle ] ) ) {
 				continue;
 			}
 
-			$conditional = null;
-			if ( isset( $wp_styles->registered[ $footerStyleHandle ]->extra["conditional"] ) ) {
-				$conditional = $wp_styles->registered[ $footerStyleHandle ]->extra["conditional"];
+			if ( isset( $wp_styles->registered[ $footerStyleHandle ]->args ) ) {
+				$currentMediaType = $wp_styles->registered[ $footerStyleHandle ]->args;
+			} else {
+				$currentMediaType = 'all';
 			}
 
-			$mediaType = isset( $wp_styles->registered[ $footerStyleHandle ]->args ) ? $wp_styles->registered[ $footerStyleHandle ]->args : 'all';
-			if ( $mediaType == 'screen' || $mediaType == 'screen, print' || empty( $mediaTypes ) || is_null( $mediaType ) || $mediaType == false ) {
-				$mediaType = 'all';
+			if ( $currentMediaType == 'screen, print' || $currentMediaType == 'screen' || is_null( $currentMediaType ) || empty( $currentMediaType || $currentMediaType == false ) ) {
+				$currentMediaType = 'all';
 			}
-			$mediaType = $mediaType;
+
+			$mediaType = $currentMediaType;
 
 			$url = $this->returnFullURL( $wp_styles->registered[ $footerStyleHandle ]->src, $wpDomain, $wpHome );
 
@@ -724,7 +731,8 @@ class Optimizo extends OptimizoFunctions {
 			}
 		endforeach;
 
-		for ( $count = 0, $x = count( $footer ); $count < $x; $count ++ ) {
+		$count = 0; $c = count( $footer );
+		while ( $count < $c) {
 			if ( ! isset( $footer[ $count ]['handle'] ) ) {
 
 				$inlineCSSGroup = array();
@@ -785,23 +793,24 @@ class Optimizo extends OptimizoFunctions {
 
 					if ( ! empty( $minifiedCode ) ) {
 						$this->addToLog( $log );
+
 						file_put_contents( $footerCSSFile, $minifiedCode );
-						file_put_contents( $footerCSSFile . '.gz', gzencode( file_get_contents( $footerCSSFile ), 9 ) );
-
-						$this->fixPermissions( $footerCSSFile . '.txt' );
 						$this->fixPermissions( $footerCSSFile );
-						$this->fixPermissions( $footerCSSFile . '.gz' );
 
-						if ( function_exists( 'brotli_compress' ) ) {
-							file_put_contents( $footerCSSFile . '.br', brotli_compress( file_get_contents( $footerCSSFile ), 11 ) );
-							$this->fixPermissions( $footerCSSFile . '.br' );
-						}
+						file_put_contents( $footerCSSFile . '.gz', gzencode( file_get_contents( $footerCSSFile ), 9 ) );
+						$this->fixPermissions( $footerCSSFile . '.gz' );
 					}
 				}
 
 				if ( $removePrintMediatypes != true ) {
 
-					if ( file_exists( $footerCSSFile ) && filesize( $footerCSSFile ) > 0 ) {
+					if ( !file_exists( $footerCSSFile ) && filesize( $footerCSSFile ) == 0 ) {
+
+						echo "<!-- Well, this is quite embarrassing, but there seems to be an error that is not Optimizo to save your website's cache on - $footerCSSFile -->";
+						echo "<!-- Please check if the mentioned path is correct and that it has writing permissions in that directory. -->";
+						echo "<!-- If you think it's a bug, please do us a favor and email us at: hello@winauthorityinnovatives.com -->";
+
+					} else {
 
 						if ( filesize( $footerCSSFile ) < 20000 ) {
 							echo '<style id="optimizo-footer-' . $count . '" media="' . $footer[ $count ]['media'] . '">' . file_get_contents( $footerCSSFile ) . '</style>';
@@ -809,15 +818,14 @@ class Optimizo extends OptimizoFunctions {
 
 							wp_enqueue_style( "optimizo-footer-$count", $fileURL, array(), null, $footer[ $count ]['media'] );
 						}
-					} else {
-						echo "<!-- Well, this is quite embarrassing, but there seems to be an error that is not Optimizo to save your website's cache on - $footerCSSFile -->";
-						echo "<!-- Please check if the path mentioned is correct and ensure your server has writing permission in that directory. -->";
-						echo "<!-- If you think it's a bug, please do us a favor and email us at: hello@winauthorityinnovatives.com -->";
+
 					}
 				}
 			}
 
 			$wp_styles->done = $isDone;
+
+			$count ++;
 		}
 	}
 
