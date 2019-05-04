@@ -145,8 +145,6 @@ class OptimizoFunctions extends OptimizoMinify {
 
 			fopen( ABSPATH . ".htaccess", "r+" );
 			file_put_contents( ABSPATH . ".htaccess", $htaccessData );
-
-
 			fclose( ABSPATH . ".htaccess" );
 		} else {
 			$htaccessData = "#BEGIN Optimizo's rules" . "\n" .
@@ -213,7 +211,9 @@ class OptimizoFunctions extends OptimizoMinify {
 			$htaccessContents    = @file_get_contents( ABSPATH . ".htaccess" );
 			$htaccessReplacement = str_replace( "# END WordPress", "# END WordPress\n\n" . $htaccessData, $htaccessContents );
 
-			if ( ! @file_put_contents( ABSPATH . ".htaccess", $htaccessReplacement ) ) {
+			if (str_replace("#END Optimiz's rules", '', $htaccessContents)){
+
+			} elseif ( ! @file_put_contents( ABSPATH . ".htaccess", $htaccessReplacement ) ) {
 
 			}
 		}
@@ -238,7 +238,9 @@ class OptimizoFunctions extends OptimizoMinify {
 		 * This is the function that will remove all the custom added rules from .htaccess file which was added upon the activation of the plugin.
 		 */
 
-		$htaccess_file = @file_get_contents( ABSPATH . ".htaccess" );
+		$htaccessFile = @file_get_contents( ABSPATH . ".htaccess" );
+
+		var_dump($htaccessFile);
 
 		$htaccessData = "#BEGIN Optimizo's rules" . "\n" .
 		                '<FilesMatch "\.(webm|ogg|mp4|ico|pdf|flv|jpg|jpeg|png|gif|webp|js|css|swf|x-html|css|xml|js|woff|woff2|ttf|svg|eot)(\.gz)?$">' . "\n" .
@@ -301,9 +303,9 @@ class OptimizoFunctions extends OptimizoMinify {
 		                '</IfModule>' . "\n" .
 		                "# END Optimizo's rules" . "\n";
 
-		$htaccess_file = str_replace( $htaccessData, null, $htaccess_file );
+		$htaccess_file = str_replace( $htaccessData, null, $htaccessFile );
 
-		if ( ! @file_put_contents( ABSPATH . ".htaccess", $htaccess_file ) ) {
+		if ( ! @file_put_contents( ABSPATH . ".htaccess", $htaccessFile ) ) {
 
 		}
 	}
@@ -332,7 +334,6 @@ class OptimizoFunctions extends OptimizoMinify {
 	}
 
 	protected function returnFullURL( $code, $wpDomain, $wpHome ) {
-		# preserve empty source handles
 		$url = trim( $code );
 		if ( empty( $url ) ) {
 			return $url;
@@ -372,7 +373,7 @@ class OptimizoFunctions extends OptimizoMinify {
 			$url = $wpHome . '/' . ltrim( $url, "/" );
 		}
 
-		$url = $defaultProtocol . str_ireplace( array( 'http://', 'https://' ), '', $url ); # enforce protocol
+		$url = $defaultProtocol . str_ireplace( array( 'http://', 'https://' ), '', $url );
 
 		if ( stripos( $url, '.js?v' ) !== false ) {
 			$url = stristr( $url, '.js?v', true ) . '.js';

@@ -33,7 +33,7 @@ $wpHomePath = ABSPATH;
 class Optimizo extends OptimizoFunctions {
 	function __construct() {
 
-		global $wpHome;
+		global $wpHome, $post;
 
 		require_once( 'adminToolBar.php' );
 		$toolbar = new optimizoAdminToolbar();
@@ -54,14 +54,11 @@ class Optimizo extends OptimizoFunctions {
 			if ( ! $this->getWebsiteHTTPResponse( $wpHome ) ) {
 				remove_action( 'wp_print_footer_scripts', array( $this, 'minifyFooterJS' ), 9 );
 			}
-			add_action( 'wp_print_styles', array( $this, 'minifyCSSInHeader' ), PHP_INT_MAX );
+			add_action( 'wp_print_styles', array( $this, 'minifyCSS' ), PHP_INT_MAX );
 			if ( ! $this->getWebsiteHTTPResponse( $wpHome ) ) {
-				remove_action( 'wp_print_styles', array( $this, 'minifyCSSInHeader' ), PHP_INT_MAX );
+				remove_action( 'wp_print_styles', array( $this, 'minifyCSSI' ), PHP_INT_MAX );
 			}
-			add_action( 'wp_print_footer_scripts', array( $this, 'minifyCSSinFooter' ), 999999 );
-			if ( ! $this->getWebsiteHTTPResponse( $wpHome ) ) {
-				remove_action( 'wp_print_footer_scripts', array( $this, 'minifyCSSinFooter' ), 999999 );
-			}
+
 		} else {
 			add_action( 'after_switch_theme', array( $this, 'removeCache' ) );
 			add_action( 'save_post', array( $this, 'removeCache' ) );
@@ -109,14 +106,16 @@ class Optimizo extends OptimizoFunctions {
 	#Code for minifying HTML of the website starts from here
 
 	public function initializeMinifyHTML() {
+
 		ob_start( array( $this, 'minifyHTML' ) );
+
 	}
 
 	# Adding a callback function to get access to the website's source code.
 	protected function minifyHTML( $websiteHTMLContent ) {
 
-		$newWebsiteHTMLContent = preg_replace( array( "/[[:blank:]]+/" ), array( ' ' ),
-			str_replace( array( "\n", "\r", "\t" ), null, $websiteHTMLContent ) );
+		$newWebsiteHTMLContent = preg_replace( array( "/[[:blank:]]+/", "/\s+|\n+|\r/"), array(' ', ' '),
+			str_replace( array("\t"), null, $websiteHTMLContent ) );
 
 		$websiteHTMLContent = str_replace( array(
 			'https://' . $_SERVER['HTTP_HOST'] . '/',
@@ -124,14 +123,40 @@ class Optimizo extends OptimizoFunctions {
 			'//' . $_SERVER['HTTP_HOST'] . '/'
 		), array( '/', '/', '/' ), $newWebsiteHTMLContent );
 
+		$websiteHTMLContent = str_replace( array(
+			'</p>',
+			'</li>',
+			'</img>'
+		), null, $websiteHTMLContent );
+
+		if (isset($_SERVER['HTTPS'])){
+			$websiteHTMLContent = str_replace('http://', 'https://', $websiteHTMLContent);
+		}
+
 		return $websiteHTMLContent;
 	}
 
 	#HTML minifying code ends here
 
-
 	public function minifyHeaderJS() {
 		global $cacheDir, $wp_scripts, $wpDomain, $wpHome, $ignore, $cacheBaseURL;
+
+		$query_images_args = array(
+			'post_type'      => 'attachment',
+			'post_mime_type' => 'image',
+			'post_status'    => 'inherit',
+			'posts_per_page' => - 1,
+		);
+
+		$query_images = new WP_Query( $query_images_args );
+
+		$images = array();
+		foreach ( $query_images->posts as $image ) {
+			$images[] = wp_get_attachment_url( $image->ID );
+			var_dump($images);
+		}
+
+
 
 		$headerScripts = wp_clone( $wp_scripts );
 		$headerScripts->all_deps( $headerScripts->queue );
@@ -278,7 +303,7 @@ class Optimizo extends OptimizoFunctions {
 		$wp_scripts->done = $isDone;
 	}
 
-	public function minifyCSSInHeader() {
+	public function minifyCSS() {
 		global $wp_styles, $wpDomain, $wpHome, $ignore, $cacheDir, $cacheBaseURL;
 
 		if ( ! is_object( $wp_styles ) ) {
@@ -414,7 +439,7 @@ class Optimizo extends OptimizoFunctions {
 				$inlineCSSHash = md5( implode( '', $inlineCSSGroup ) );
 
 				$isDone   = array_merge( $isDone, $headerArray[ $count ]['handles'] );
-				$fileHash = 'header-optimizo-' . hash( 'md5', implode( '', $headerArray[ $count ]['handles'] ) . $inlineCSSHash );
+				$fileHash = 'css-optimizo-' . hash( 'md5', implode( '', $headerArray[ $count ]['handles'] ) . $inlineCSSHash );
 
 				$headerStyleSheet = $cacheDir . '/' . $fileHash . '.min.css';
 				$fileURL          = $this->getWPProtocol( $cacheBaseURL . '/' . $fileHash . '.min.css' );
@@ -456,7 +481,7 @@ class Optimizo extends OptimizoFunctions {
 						}
 					endforeach;
 
-					$log = "Header CSS files processed on " . date( "F j, Y, g:i a" ) . PHP_EOL . $log . "PROCESSED from " . site_url() . PHP_EOL;
+					$log = "CSS files processed on " . date( "F j, Y, g:i a" ) . PHP_EOL . $log . "PROCESSED from " . site_url() . PHP_EOL;
 
 					if ( ! empty( $minifiedCode ) ) {
 						$this->addToLog( $log );
@@ -477,9 +502,9 @@ class Optimizo extends OptimizoFunctions {
 
 				} else {
 					if ( filesize( $headerStyleSheet ) < 20000 && $headerArray[ $count ]['media'] != 'all' ) {
-						echo '<style id="optimizo-header-' . $count . '" media="' . $headerArray[ $count ]['media'] . '">' . file_get_contents( $headerStyleSheet ) . '</style>';
+						echo '<style id="optimizo-css-' . $count . '" media="' . $headerArray[ $count ]['media'] . '">' . file_get_contents( $headerStyleSheet ) . '</style>';
 					} else {
-						wp_enqueue_style( "optimizo-header-$count", $fileURL, array(), null, $headerArray[ $count ]['media'] );
+						wp_enqueue_style( "css-optimizo-$count", $fileURL, array(), null, $headerArray[ $count ]['media'] );
 					}
 				}
 
@@ -621,214 +646,6 @@ class Optimizo extends OptimizoFunctions {
 		$wp_scripts->done = $isDone;
 	}
 
-	public function minifyCSSinFooter() {
-		global $wp_styles, $wpDomain, $wpHome, $cacheDir;
-
-		if ( ! is_object( $wp_styles ) ) {
-			return false;
-		}
-
-		$removePrintMediatypes = false;
-		$ignore                = false;
-		$footerStyleSheets = wp_clone( $wp_styles );
-		$footerStyleSheets->all_deps( $footerStyleSheets->queue );
-		$isDone      = $footerStyleSheets->done;
-		$footer      = array();
-		$googleFonts = array();
-		$inlineCSS   = array();
-
-		foreach ( $footerStyleSheets->to_do as $footerStyleHandle ) :
-
-			$url = $this->returnFullURL( $wp_styles->registered[ $footerStyleHandle ]->src, $wpDomain, $wpHome );
-
-			if ( empty( $url ) ) {
-				continue;
-			}
-			if ( stripos( $url, 'fonts.googleapis.com' ) !== false ) {
-				wp_dequeue_style( $footerStyleHandle );
-				$googleFonts[ $footerStyleHandle ] = $url;
-			} else {
-				wp_dequeue_style( $footerStyleHandle );
-				wp_enqueue_style( $footerStyleHandle );
-			}
-		endforeach;
-
-		if ( count( $googleFonts ) > 0 ) {
-			foreach ( $googleFonts as $f => $x ) {
-				$isDone = array_merge( $isDone, array( $f ) );
-			}
-
-			$newGoogleFonts   = array();
-			$newGoogleFonts[] = $this->getWPProtocol( $this->concatenateGoogleFonts( $googleFonts ) );
-
-			if ( count( $newGoogleFonts ) > 0 ) {
-				foreach ( $newGoogleFonts as $googleFontURL ) {
-					$json = false;
-					if ( $json === false ) {
-						$json = $this->downloadAndMinify( $googleFontURL, null, 'css', null );
-					}
-					$decoded = json_decode( $json, true );
-					if ( $decoded['code'] !== false ) {
-						echo '<style type="text/css" media="all">' . $decoded['code'] . '</style>' . PHP_EOL;
-					} else {
-						echo "<!-- GOOGLE FONTS REQUEST FAILED for $googleFontURL -->\n";
-					}
-				}
-			}
-		}
-
-		$uniqueArray = array();
-		foreach ( $footerStyleSheets->to_do as $footerStyleHandle ) :
-
-			if ( isset( $googleFonts[ $footerStyleHandle ] ) ) {
-				continue;
-			}
-
-			if ( isset( $wp_styles->registered[ $footerStyleHandle ]->args ) ) {
-				$currentMediaType = $wp_styles->registered[ $footerStyleHandle ]->args;
-			} else {
-				$currentMediaType = 'all';
-			}
-
-			if ( $currentMediaType == 'screen, print' || $currentMediaType == 'screen' || is_null( $currentMediaType ) || empty( $currentMediaType || $currentMediaType == false ) ) {
-				$currentMediaType = 'all';
-			}
-
-			$mediaType = $currentMediaType;
-
-			$url = $this->returnFullURL( $wp_styles->registered[ $footerStyleHandle ]->src, $wpDomain, $wpHome );
-
-			if ( empty( $url ) ) {
-				continue;
-			}
-
-			if ( ! empty( $url ) ) {
-				$key = hash( 'md5', $url );
-				if ( isset( $uniqueArray[ $key ] ) ) {
-					$isDone = array_merge( $isDone, array( $footerStyleHandle ) );
-					continue;
-				} else {
-					$uniqueArray[ $key ] = $footerStyleHandle;
-				}
-			}
-
-			if ( ( ! $this->minifyInArray( $url, $ignore ) && ! isset( $conditional ) && $this->checkIfInternalLink( $url, $wpHome ) )
-			     || empty( $url ) ) {
-
-				if ( isset( $wp_styles->registered[ $footerStyleHandle ]->extra['after'] ) && is_array( $wp_styles->registered[ $footerStyleHandle ]->extra['after'] ) ) {
-					$inlineCSS[ $footerStyleHandle ]                             = $this->minifyCSSWithPHP( implode( '', $wp_styles->registered[ $footerStyleHandle ]->extra['after'] ) );
-					$wp_styles->registered[ $footerStyleHandle ]->extra['after'] = null;
-				}
-
-				if ( isset( $footer[ count( $footer ) - 1 ]['handle'] ) || count( $footer ) == 0 || $footer[ count( $footer ) - 1 ]['media'] != $wp_styles->registered[ $footerStyleHandle ]->args ) {
-					array_push( $footer, array( 'handles' => array(), 'media' => $mediaType ) );
-				}
-
-				array_push( $footer[ count( $footer ) - 1 ]['handles'], $footerStyleHandle );
-			} else {
-
-				array_push( $footer, array( 'handle' => $footerStyleHandle ) );
-			}
-		endforeach;
-
-		$count = 0; $c = count( $footer );
-		while ( $count < $c) {
-			if ( ! isset( $footer[ $count ]['handle'] ) ) {
-
-				$inlineCSSGroup = array();
-				foreach ( $footer[ $count ]['handles'] as $footerHandle ) {
-					if ( isset( $inlineCSS[ $footerHandle ] ) && ! empty( $inlineCSS[ $footerHandle ] ) ) {
-						$inlineCSSGroup[] = $inlineCSS[ $footerHandle ];
-					}
-				}
-				$inlineCSSHash = md5( implode( '', $inlineCSSGroup ) );
-
-				$isDone = array_merge( $isDone, $footer[ $count ]['handles'] );
-				$hash   = 'footer-optimizo-' . hash( 'md5', implode( '', $footer[ $count ]['handles'] ) . $inlineCSSHash );
-
-				$footerCSSFile = $cacheDir . '/' . $hash . '.min.css';
-				$fileURL       = $this->getWPProtocol( $cacheDir . '/' . $hash . '.min.css' );
-
-				clearstatcache();
-				if ( ! file_exists( $footerCSSFile ) ) {
-
-					$log          = '';
-					$minifiedCode = '';
-
-					foreach ( $footer[ $count ]['handles'] as $footerStyleHandle ) :
-						if ( ! empty( $wp_styles->registered[ $footerStyleHandle ]->src ) ) {
-
-							$url = $this->returnFullURL( $wp_styles->registered[ $footerStyleHandle ]->src, $wpDomain, $wpHome );
-
-							if ( empty( $url ) ) {
-								continue;
-							}
-
-							$json = false;
-							if ( $json === false ) {
-								$json = $this->downloadAndMinify( $url, null, 'css', $footerStyleHandle );
-							}
-
-							$decoded = json_decode( $json, true );
-
-							if ( $decoded['status'] != true ) {
-								$log .= $decoded['log'];
-								continue;
-							}
-
-							$minifiedCode .= $decoded['code'];
-							$log          .= $decoded['log'];
-
-							if ( isset( $inlineCSS[ $footerStyleHandle ] ) && ! empty( $inlineCSS[ $footerStyleHandle ] ) ) {
-								$minifiedCode .= $inlineCSS[ $footerStyleHandle ];
-							}
-
-						} else {
-							wp_dequeue_script( $footerStyleHandle );
-							wp_enqueue_script( $footerStyleHandle );
-						}
-					endforeach;
-
-					$log = "Footer CSS files processed on " . date( "F j, Y, g:i a" ) . PHP_EOL . $log . "PROCESSED from " . site_url() . PHP_EOL;
-
-					if ( ! empty( $minifiedCode ) ) {
-						$this->addToLog( $log );
-
-						file_put_contents( $footerCSSFile, $minifiedCode );
-						$this->fixPermissions( $footerCSSFile );
-
-						file_put_contents( $footerCSSFile . '.gz', gzencode( file_get_contents( $footerCSSFile ), 9 ) );
-						$this->fixPermissions( $footerCSSFile . '.gz' );
-					}
-				}
-
-				if ( $removePrintMediatypes != true ) {
-
-					if ( !file_exists( $footerCSSFile ) && filesize( $footerCSSFile ) == 0 ) {
-
-						echo "<!-- Well, this is quite embarrassing, but there seems to be an error that is not Optimizo to save your website's cache on - $footerCSSFile -->";
-						echo "<!-- Please check if the mentioned path is correct and that it has writing permissions in that directory. -->";
-						echo "<!-- If you think it's a bug, please do us a favor and email us at: hello@winauthorityinnovatives.com -->";
-
-					} else {
-
-						if ( filesize( $footerCSSFile ) < 20000 ) {
-							echo '<style id="optimizo-footer-' . $count . '" media="' . $footer[ $count ]['media'] . '">' . file_get_contents( $footerCSSFile ) . '</style>';
-						} else {
-
-							wp_enqueue_style( "optimizo-footer-$count", $fileURL, array(), null, $footer[ $count ]['media'] );
-						}
-
-					}
-				}
-			}
-
-			$wp_styles->done = $isDone;
-
-			$count ++;
-		}
-	}
-
 	public function displayMessageOnActivation() {
 		?>
         <div class="notice notice-info is-dismissible">
@@ -844,7 +661,6 @@ if ( class_exists( 'Optimizo' ) ) {
 	die;
 }
 
-register_activation_hook( __FILE__, array( $optimizo, 'activation' ) );
-register_deactivation_hook( __FILE__, array( $optimizo, 'deactivation' ) );
-register_uninstall_hook( __FILE__, array( $optimizo, 'uninstall' ) );
-
+register_activation_hook( __FILE__, array( 'Optimizo', 'activation' ) );
+register_deactivation_hook( __FILE__, array( 'Optimizo', 'deactivation' ) );
+register_uninstall_hook( __FILE__, array( 'Optimizo', 'uninstall' ) );

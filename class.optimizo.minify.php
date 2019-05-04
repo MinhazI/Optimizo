@@ -873,7 +873,6 @@ use MatthiasMullie\Minify;
 
 class OptimizoMinify {
 
-
 	protected function getCSS( $url, $css ) {
 
 		if ( ! empty( $url ) ) {
@@ -1111,8 +1110,6 @@ class OptimizoMinify {
 	}
 
 	protected function getJS( $url, $js ) {
-
-
 		$optimizoFunctions = new OptimizoFunctions();
 
 		$disableJSMinification = false;
