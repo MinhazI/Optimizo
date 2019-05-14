@@ -56,7 +56,7 @@ class Optimizo extends OptimizoFunctions {
 			}
 			add_action( 'wp_print_styles', array( $this, 'minifyCSS' ), PHP_INT_MAX );
 			if ( ! $this->getWebsiteHTTPResponse( $wpHome ) ) {
-				remove_action( 'wp_print_styles', array( $this, 'minifyCSSI' ), PHP_INT_MAX );
+				remove_action( 'wp_print_styles', array( $this, 'minifyCSS' ), PHP_INT_MAX );
 			}
 
 		} else {
@@ -140,23 +140,6 @@ class Optimizo extends OptimizoFunctions {
 
 	public function minifyHeaderJS() {
 		global $cacheDir, $wp_scripts, $wpDomain, $wpHome, $ignore, $cacheBaseURL;
-
-		$query_images_args = array(
-			'post_type'      => 'attachment',
-			'post_mime_type' => 'image',
-			'post_status'    => 'inherit',
-			'posts_per_page' => - 1,
-		);
-
-		$query_images = new WP_Query( $query_images_args );
-
-		$images = array();
-		foreach ( $query_images->posts as $image ) {
-			$images[] = wp_get_attachment_url( $image->ID );
-			var_dump($images);
-		}
-
-
 
 		$headerScripts = wp_clone( $wp_scripts );
 		$headerScripts->all_deps( $headerScripts->queue );
