@@ -33,7 +33,7 @@ $wpHomePath = ABSPATH;
 class Optimizo extends OptimizoFunctions {
 	function __construct() {
 
-		global $wpHome, $post;
+		global $wpHome;
 
 		require_once( 'adminToolBar.php' );
 		$toolbar = new optimizoAdminToolbar();
@@ -66,16 +66,15 @@ class Optimizo extends OptimizoFunctions {
 		}
 	}
 
-	protected function activation() {
-
+	function activation() {
 		$this->activate();
 	}
 
-	protected function deactivation() {
+	function deactivation() {
 		$this->deactivate();
 	}
 
-	protected function uninstall() {
+	function uninstall() {
 		$this->uninstallPlugin();
 	}
 
@@ -644,6 +643,6 @@ if ( class_exists( 'Optimizo' ) ) {
 	die;
 }
 
-register_activation_hook( __FILE__, array( 'Optimizo', 'activation' ) );
-register_deactivation_hook( __FILE__, array( 'Optimizo', 'deactivation' ) );
-register_uninstall_hook( __FILE__, array( 'Optimizo', 'uninstall' ) );
+register_activation_hook( __FILE__, array( $optimizo, 'activation' ) );
+register_deactivation_hook( __FILE__, array( $optimizo, 'deactivation' ) );
+register_uninstall_hook( __FILE__, array( $optimizo, 'uninstall' ) );

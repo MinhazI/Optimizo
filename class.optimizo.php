@@ -211,10 +211,7 @@ class OptimizoFunctions extends OptimizoMinify {
 			$htaccessContents    = @file_get_contents( ABSPATH . ".htaccess" );
 			$htaccessReplacement = str_replace( "# END WordPress", "# END WordPress\n\n" . $htaccessData, $htaccessContents );
 
-			if (str_replace("#END Optimiz's rules", '', $htaccessContents)){
-
-			} elseif ( ! @file_put_contents( ABSPATH . ".htaccess", $htaccessReplacement ) ) {
-
+			if ( ! @file_put_contents( ABSPATH . ".htaccess", $htaccessReplacement ) ) {
 			}
 		}
 
@@ -239,8 +236,6 @@ class OptimizoFunctions extends OptimizoMinify {
 		 */
 
 		$htaccessFile = @file_get_contents( ABSPATH . ".htaccess" );
-
-		var_dump($htaccessFile);
 
 		$htaccessData = "#BEGIN Optimizo's rules" . "\n" .
 		                '<FilesMatch "\.(webm|ogg|mp4|ico|pdf|flv|jpg|jpeg|png|gif|webp|js|css|swf|x-html|css|xml|js|woff|woff2|ttf|svg|eot)(\.gz)?$">' . "\n" .
@@ -303,7 +298,7 @@ class OptimizoFunctions extends OptimizoMinify {
 		                '</IfModule>' . "\n" .
 		                "# END Optimizo's rules" . "\n";
 
-		$htaccess_file = str_replace( $htaccessData, null, $htaccessFile );
+		$htaccessFile = str_replace( $htaccessData, null, $htaccessFile );
 
 		if ( ! @file_put_contents( ABSPATH . ".htaccess", $htaccessFile ) ) {
 
