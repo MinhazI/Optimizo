@@ -107,7 +107,7 @@ class Optimizo extends OptimizoFunctions {
 	public function initializeMinifyHTML() {
 
 		ob_start( array( $this, 'minifyHTML' ) );
-
+		
 	}
 
 	# Adding a callback function to get access to the website's source code.

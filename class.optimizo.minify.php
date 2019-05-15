@@ -920,11 +920,11 @@ class OptimizoMinify {
 
 	public function createCache() {
 		$upload            = array();
-		$upload['basedir'] = WP_CONTENT_DIR . '/optimizoCache';
-		$upload['baseurl'] = site_url() . '/wp-content/optimizoCache';
+		$upload['baseDir'] = WP_CONTENT_DIR . '/optimizoCache';
+		$upload['baseURL'] = site_url() . '/wp-content/optimizoCache';
 
-		$uploadsDir  = $upload['basedir'];
-		$uploadsURL  = $upload['baseurl'];
+		$uploadsDir  = $upload['baseDir'];
+		$uploadsURL  = $upload['baseURL'];
 		$cacheBase   = $uploadsDir;
 		$cacheDir    = $cacheBase;
 		$cacheDirURL = $uploadsURL;
