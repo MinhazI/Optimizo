@@ -19,6 +19,7 @@ $cachePath        = $optimizoFunction->createCache();
 $cacheDir         = $cachePath['cacheDir'];
 $cacheDirURL      = $cachePath['cacheDirURL'];
 $cacheBaseURL     = $cachePath['cacheDirURL'];
+$webpCache = $cachePath['$webpCache'];
 
 $wpHome     = site_url();
 $wpDomain   = trim( str_ireplace( array( 'http://', 'https://' ), '', trim( $wpHome, '/' ) ) );
@@ -107,7 +108,7 @@ class Optimizo extends OptimizoFunctions {
 	public function initializeMinifyHTML() {
 
 		ob_start( array( $this, 'minifyHTML' ) );
-		
+
 	}
 
 	# Adding a callback function to get access to the website's source code.

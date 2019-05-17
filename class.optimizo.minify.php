@@ -928,10 +928,11 @@ class OptimizoMinify {
 		$cacheBase   = $uploadsDir;
 		$cacheDir    = $cacheBase;
 		$cacheDirURL = $uploadsURL;
+		$webpCache = $uploadsDir . '/webp-images';
 
 		$dirPerm = 0777;
 
-		$dirs = array( $cacheBase, $cacheDir );
+		$dirs = array( $cacheBase, $cacheDir, $webpCache );
 		foreach ( $dirs as $target ) {
 			if ( ! is_dir( $target ) ) {
 				if ( @mkdir( $target, $dirPerm, true ) ) {
@@ -951,7 +952,8 @@ class OptimizoMinify {
 		return array(
 			'cacheBase'   => $cacheBase,
 			'cacheDir'    => $cacheDir,
-			'cacheDirURL' => $cacheDirURL
+			'cacheDirURL' => $cacheDirURL,
+			'webpCache' => $webpCache
 		);
 	}
 
