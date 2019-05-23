@@ -150,7 +150,6 @@ class Optimizo extends OptimizoFunctions {
 		}
 
 		$isDone = $headerScripts->done;
-
 		foreach ( $headerScripts->to_do as $headerScriptHandle ) :
 
 			$isFooterScript = 0;
@@ -170,7 +169,6 @@ class Optimizo extends OptimizoFunctions {
 
 			} else {
 				$url = $this->returnFullURL( $wp_scripts->registered[ $headerScriptHandle ]->src, $wpDomain, $wpHome );
-
 				if ( empty( $url ) ) {
 					continue;
 				}
@@ -200,6 +198,7 @@ class Optimizo extends OptimizoFunctions {
 			} else {
 
 				$isDone   = array_merge( $isDone, $headerArray[ $count ]['handles'] );
+
 				$fileHash = 'header-optimizo-' . hash( 'md5', implode( '', $headerArray[ $count ]['handles'] ) );
 
 				$headerScriptFile = $cacheDir . '/' . $fileHash . '.min.js';
@@ -207,7 +206,6 @@ class Optimizo extends OptimizoFunctions {
 
 				clearstatcache();
 				if ( ! file_exists( $headerScriptFile ) ) {
-
 					$log          = '';
 					$minifiedCode = '';
 
@@ -305,6 +303,7 @@ class Optimizo extends OptimizoFunctions {
 		foreach ( $headerStyles->to_do as $headerStyleHandle ):
 
 			$cssConditional = null;
+
 			if ( isset( $wp_styles->registered[ $headerStyleHandle ]->extra["conditional"] ) ) {
 				$cssConditional = $wp_styles->registered[ $headerStyleHandle ]->extra["conditional"];
 			}
@@ -412,18 +411,17 @@ class Optimizo extends OptimizoFunctions {
 
 		while ( $count < $x ) {
 			if ( ! isset( $headerArray[ $count ]['handle'] ) ) {
-
 				$inlineCSSGroup = array();
 				foreach ( $headerArray[ $count ]['handles'] as $handles ) {
 					if ( isset( $inlineCSS[ $handles ] ) && ! empty( $inlineCSS[ $handles ] ) ) {
 						$inlineCSSGroup[] = $inlineCSS[ $handles ];
 					}
 				}
+
 				$inlineCSSHash = md5( implode( '', $inlineCSSGroup ) );
 
 				$isDone   = array_merge( $isDone, $headerArray[ $count ]['handles'] );
 				$fileHash = 'css-optimizo-' . hash( 'md5', implode( '', $headerArray[ $count ]['handles'] ) . $inlineCSSHash );
-
 				$headerStyleSheet = $cacheDir . '/' . $fileHash . '.min.css';
 				$fileURL          = $this->getWPProtocol( $cacheBaseURL . '/' . $fileHash . '.min.css' );
 

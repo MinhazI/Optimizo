@@ -1033,30 +1033,6 @@ class OptimizoMinify {
 			}
 		}
 
-		if ( stripos( $url, $wpDomain ) !== false && home_url() != site_url() ) {
-			$newURL = str_ireplace( site_url(), home_url(), $url );
-			$code   = $this->downloadFunction( $newURL );
-			if ( $code !== false && ! empty( $code ) && strtolower( substr( $code, 0, 9 ) ) != "<!doctype" ) {
-				if ( $typeToMinify == 'js' ) {
-					$code = $this->getJS( $url, $code );
-				} else {
-					$code = $this->getCSS( $url, $code . $isInline );
-				}
-
-				# log, save and return
-				$log = $printURL;
-
-				if ( $optimizoDebug == true ) {
-					$log .= "\n ===== Debug: $printHandle was opened from $file ===== \n";
-				}
-
-				$log    .= PHP_EOL;
-				$return = array( 'request' => $debugRequest, 'log' => $log, 'code' => $code, 'status' => true );
-
-				return json_encode( $return );
-			}
-		}
-
 		if ( stripos( $url, $wpDomain ) !== false ) {
 
 			# default
@@ -1268,14 +1244,14 @@ class OptimizoMinify {
 	}
 
 	protected function minifyInArray( $url, $ignore ) {
-		$url = str_ireplace( array( 'http://', 'https://' ), '//', $url ); # better compatibility
-		$url = strtok( urldecode( rawurldecode( $url ) ), '?' ); # no query string, decode entities
+		$url = str_ireplace( array( 'http://', 'https://' ), '//', $url );
+		$url = strtok( urldecode( rawurldecode( $url ) ), '?' );
 
 		if ( ! empty( $url ) && is_array( $ignore ) ) {
 			foreach ( $ignore as $i ) {
-				$i = str_ireplace( array( 'http://', 'https://' ), '//', $i ); # better compatibility
-				$i = strtok( urldecode( rawurldecode( $i ) ), '?' ); # no query string, decode entities
-				$i = trim( trim( trim( rtrim( $i, '/' ) ), '*' ) ); # wildcard char removal
+				$i = str_ireplace( array( 'http://', 'https://' ), '//', $i );
+				$i = strtok( urldecode( rawurldecode( $i ) ), '?' );
+				$i = trim( trim( trim( rtrim( $i, '/' ) ), '*' ) ); 
 				if ( stripos( $url, $i ) !== false ) {
 					return true;
 				}
